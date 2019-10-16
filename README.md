@@ -1,4 +1,4 @@
-# STIX data web browsers 
+# STIX web data browsers 
 
 based on MongoDB, Python-Flask, bootstrap4  and JQuery.
 
