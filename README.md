@@ -1,8 +1,8 @@
-# STIX data web browsers 
+# STIX web data browsers 
 
 based on MongoDB, Python-Flask, bootstrap4  and JQuery.
 
-The test server is at:  http://108.61.164.149/
+The server used to test the web browsers is at:  http://108.61.164.149/
 
 ## Enviroment setup
 
