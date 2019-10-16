@@ -166,15 +166,9 @@ gunicorn --bind 127.0.0.1:8001 wsgi:app --daemon
 
 
 
-## Security
-
-Change the mongodb port 
-mongodb ip local only
+## Security issues
 
 
-
-
-It will reduce database query time significantly (e.g. from 10 seconds to 5 ms)
 
 ## TODOs
  
