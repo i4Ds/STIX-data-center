@@ -12,7 +12,7 @@ The test server is at:  http://108.61.164.149/
 sudo apt-get install python3
 pip3 install flask werkzeug 
 ```
-To install mongodb, please follow the manual at:
+To install mongodb, please follow the manual at 
 
  https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
  
