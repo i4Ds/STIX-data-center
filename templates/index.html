@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}STIX {% endblock %}
+{% block head %}
+<style type="text/css">
+section {
+  border-bottom: 1px solid #ccc;
+  margin-top: 1em;
+}
+
+section .col-md-3 {
+  border-left: 1px solid #ccc;
+}
+
+section .col-md-3:first-child {
+  border: none;
+}
+</style>
+{% endblock %}
+{% block  container %} 
+
+
+	<section id="sec1">
+
+		<h4>Data products</h4>
+		<div class="row">
+
+			<div class="col-md-3">
+				<ul>
+					<li><a href="#">Solar flare list</a></li>
+				</ul>
+			</div>
+			<div class="col-md-3">
+				<ul>
+					<li><a href="#">Level 0</a></li>
+				</ul>
+			</div>
+
+			<div class="col-md-3">
+				<ul>
+					<li><a href="#">Level 1</a></li>
+				</ul>
+			</div>
+			<div class="col-md-3">
+				<ul>
+					<li><a href="#">Level 2</a></li>
+				</ul>
+			</div>
+
+
+
+		</div>
+	</section>
+	<section id="sec2">
+
+		<h4>Data browsers</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<ul>
+					<li><a href="/view/list/files">Telemetry files</a></li>
+					<li><a href="/view/packet/request">Telemetry packets</a></li>
+				</ul>
+			</div>
+			<div class="col-md-3">
+				<ul>
+					<li><a href="/plot/housekeeping">Housekeeping data</a></li>
+					<li><a href="/plot/calibration">Calibration data</a></li>
+				</ul>
+			</div>
+			<div class="col-md-3">
+				<ul>
+					<li><a href="#">QL light curves</a></li>
+					<li><a href="/plot/calibration">Calibration data</a></li>
+				</ul>
+			</div>
+
+			<div class="col-md-3">
+				<ul>
+					<li><a href="#">Aspect data</a></li>
+				</ul>
+			</div>
+
+
+		</div>
+	</section>
+
+
+
+{% endblock %}
+

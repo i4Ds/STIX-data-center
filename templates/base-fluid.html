@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>{% block title %}{% endblock %}  </title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/bootstrap.min.css')}}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/font-awesome.min.css')}}">
+		<script src="{{ url_for('static', filename='vendor/js/jquery-3.4.1.min.js')}}"></script>
+		<script src="{{ url_for('static', filename='vendor/js/bootstrap.min.js')}}"></script>
+		{% block head %} {% endblock %}
+	</head>
+	<body class="">
+			{% include "navi.html" %}
+		<div class="container-fluid">
+			{% block container %}
+			{% endblock %}
+		</div>
+
+		{% include "footer.html" %}
+
+	
+		{% block jscript %}  
+		{% endblock %}
+	</body>
+</html>

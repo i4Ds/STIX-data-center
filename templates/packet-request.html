@@ -1,0 +1,149 @@
+{% extends "base-packet-view.html" %}
+{% block title %}STIX Packet viewer{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/bootstrap-datetimepicker.min.css')}}">
+<script src="{{ url_for('static', filename='vendor/js/bootstrap-datetimepicker.js')}}"></script>
+{% endblock %}
+{% block  before_packet_view%} 
+
+<div class="d-flex flex-sm-row">
+	<div class="d-flex p-1 mr-auto">
+		<button class="btn btn-outline-secondary btn-sm mr-2" data-toggle="collapse" href="#collapseForm" role="button" aria-expanded="false" aria-controls="collapseForm">
+			Query Form
+		</button>
+		<button class="btn btn-outline-secondary btn-sm" data-toggle="collapse" href="#collapseFilter" role="button" aria-expanded="false" aria-controls="collapseFilter">
+			Filter
+		</button>
+	</div>
+	<div class="d-flex p-1">
+		<p class="font-weight-light" id="msg"></p>
+	</div>
+	<div class="d-flex p-1">
+		<div id="shareLink" class="float-right ml-2 font-weight-light" style="display:none;"><a href="#" id="packetShare">
+				<i class="fa fa-chain" style="color:green"></i>Share</a></div>
+	</div>
+
+</div>
+
+<div class="collapse" id="collapseForm">
+	<div class="card card-body">
+		<form  id="reqform" action="#" >
+			<div class="form-group row ">
+				<div class="col-lg-2">
+					<input  type="text" id="utc-input" placeholder="Start UTC" class="form_datetime form-control form-control-sm" name="start_utc" >
+				</div >
+				<div class="col-lg-2">
+					<input type="number" id="span-input" name="span_min" placeholder="Time span(min)" min="0" max="1440" class="form-control form-control-sm" >
+				</div >
+				<div class="col-lg-2">
+					<div class="form-check form-check-inline">
+						<input class="form-check-input radio-group"  type="radio"  name="seltype" id="service" value="service" checked>
+						<label class="form-check-label ">Service</label>
+					</div>
+
+					<div class="form-check form-check-inline">
+						<input class="form-check-input radio-group" type="radio" name="seltype" id="spid" value="SPID">
+						<label class="form-check-label">SPID</label>
+					</div>
+
+					<div class="form-check form-check-inline">
+						<input class="form-check-input radio-group" type="radio" name="seltype" id="tc" value="TC">
+						<label class="form-check-label">TC</label>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<select class="form-control form-control-sm" name="service_type" id="service-option">
+						<option value="5" selected>Service 5 (Event reporting)</option>
+						<option value="1">Service 1 (TC verification)</option>
+						<option value="3">Service 3 (HK)</option>
+						<option value="6">Service 6 (memory)</option>
+						<option value="17">Service 17 (connection test)</option>
+						<option value="21">Service 21 (science)</option>
+						<option value="22">Service 22 (context)</option>
+						<option value="236">Service 236 (configuration)</option>
+						<option value="237">Service 237 (parameters)</option>
+						<option value="238">Service 238 (archive)</option>
+						<option value="239">Service 239 (test and debug)</option>
+						<option value="0" >All services</option>
+					</select>
+				</div >
+				<div class="col-lg-2">
+					<input type="text" placeholder="SPID" class="form-control form-control-sm" name="SPID" id="spid-input" readonly>
+				</div >
+				<div class="col-lg-1">
+					<button type="submit" class="btn btn-sm btn-outline-secondary">Query</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<div class="collapse" id="collapseFilter">
+	<div class="card card-body">
+		<div class="row " >
+			<div class="col-md-12">
+				<div class="input-group input-group-sm mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="inputGroup-sizing-sm">Filter</span>
+					</div>
+					<input id="search" placeholder="Search..." type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+{% block before_jscript %}
+<script>
+
+	{% if packet_id is not defined%}
+{% set packet_id=-1 %}
+{% endif %}
+var packetId={{packet_id}};
+
+{% if file_id is not defined%}
+{% set file_id=-1 %}
+{% endif %}
+var fileId={{file_id}};
+
+{% if calibration_id is not defined%}
+{% set calibration_id=-1 %}
+{% endif %}
+var calibrationId={{calibration_id}};
+
+$(function () {
+	$('.form_datetime').datetimepicker( {format: "yyyy-mm-ddThh:ii:ss"});
+	$( ".radio-group" ).change(function() {
+		switch($(this).val()) {
+			case 'SPID' :
+				$("#service-option").attr("readonly", true);
+				$("#spid-input").attr("readonly", false);
+				break;
+			case 'service' :
+				$("#service-option").attr("readonly", false);
+				$("#spid-input").attr("readonly", true);
+				break;
+			case 'TC' :
+				$("#service-option").attr("readonly", true);
+				$("#spid-input").attr("readonly", true);
+				break;
+		}            
+	});
+	$("#search").on("keyup", function() {
+		var value = $(this).val().toLowerCase();
+		$("#headerTreeView tr").filter(function() {
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		});
+	});
+
+});
+
+</script>
+{% endblock %}
+
+
+{% block after_jscript %}
+<script src="{{ url_for('static', filename='js/packet.treeview.form.js')}}"></script>
+<script src="{{ url_for('static', filename='js/packet.treeview.request.js')}}"></script>
+{% endblock %}
+

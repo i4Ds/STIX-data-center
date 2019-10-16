@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>{% block title %}{% endblock %}  </title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/font-awesome.min.css')}}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/bootstrap.min.css')}}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/dashboard.css')}}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/stix.plot.css')}}">
+		<script src="{{ url_for('static', filename='vendor/js/jquery-3.4.1.min.js')}}"></script>
+		<script src="{{ url_for('static', filename='vendor/js/bootstrap.min.js')}}"></script>
+		<script src="{{ url_for('static', filename='vendor/js/popper.min.js')}}"></script>
+		<script src="{{ url_for('static', filename='vendor/js/plotly-latest.min.js')}}"></script>
+		<script src="{{ url_for('static', filename='vendor/js/is.js')}}"></script>
+		{% block head %} {% endblock %}
+
+	</head>
+	<body>
+		{% set navi_bottom_margin='mb-1' %}
+		{% include 'navi.html' %}
+	
+		<div class="container-fluid">
+			<div class="row">
+
+				{% include "dashboard-left-sidebar.html" %}
+
+				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+				<div class="shadow-sm p-3 mb-2 bg-light rounded">
+						<span class="font-weight-light" id="status"> 
+						{% block main_title_bar %}
+						{%endblock%}
+						</span>
+						<div class="float-right" id="right-buttons" style="display:none"> 
+							<a class="mr-1" id="previous" href="#">Previous</a>
+							<a class="mr-2" id="next" href="#">Next</a>
+							<a href="#" id="share">
+								<i class="fa fa-chain" style="font-size:14;color:green">Share</i>
+							</a>
+							
+						</div>
+				</div>
+				{% block main_container%} {% endblock %}
+
+				</main>
+			</div>
+		</div>
+		{% include "footer.html" %}
+
+		{% block before_js%}  	{% endblock %}
+		<script src="{{ url_for('static', filename='js/stix.idb.js')}}"></script>
+		<script src="{{ url_for('static', filename='js/stix.common.js')}}"></script>
+		<script src="{{ url_for('static', filename='js/stix.datetime.js')}}"></script>
+		<script src="{{ url_for('static', filename='js/stix.packet.analyzer.js')}}"></script>
+		<script src="{{ url_for('static', filename='js/stix.plot.js')}}"></script>
+		{% block after_js%}  	{% endblock %}
+
+
+	</body>
+</html>
+

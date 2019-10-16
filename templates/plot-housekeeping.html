@@ -1,0 +1,58 @@
+{% extends "base-plotting.html" %}
+{% block title %}STIX housekeeping data monitor{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/bootstrap-datetimepicker.min.css')}}">
+<script src="{{ url_for('static', filename='vendor/js/bootstrap-datetimepicker.js')}}"></script>
+{% endblock %}
+{% block top_navi_title%} 
+Housekeeping data
+{% endblock %}
+
+{% block main_title_bar%} 
+{% if message|length %}
+{{ message }}
+{% else %}
+Housekeeping data 
+{% endif %}
+
+{% endblock %}
+
+
+{% block  main_container%} 
+{%include 'housekeeping-tabs.html'%}
+{% endblock %}
+
+
+{% block before_js%}
+<script>
+{% if start_unix is not defined%}
+{% set start_unix=0 %}
+{% endif %}
+{% if span_sec is not defined%}
+{% set span_sec=0 %}
+{% endif %}
+{% if file_id is not defined%}
+{% set file_id=-1 %}
+{% endif %}
+window.startUnix={{start_unix}};
+window.timeSpanSeconds={{span_sec}};
+window.fileId={{file_id}};
+</script>
+
+{% endblock %}
+
+
+{% block after_js %}
+<script src="{{ url_for('static', filename='js/housekeeping.plot.js')}}"></script>
+<script src="{{ url_for('static', filename='js/housekeeping.plot.request.js')}}"></script>
+<script>
+	$(function () {
+		$('.form_datetime').datetimepicker( {format: "yyyy-mm-ddThh:ii:ss"});
+		$(".nav-tabs a").click(function(){
+			$(this).tab('show'); });
+	});
+</script>
+{% endblock %}
+
+
+
