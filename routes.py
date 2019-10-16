@@ -164,18 +164,7 @@ def render_housekeeping(start_unix=0,span_sec=0, message=""):
 
 @app.route("/request/headers/latest/<int:service_type>/<int:num>")
 def request_latest_packets(service_type,num):
-    result={'status':'unknown','packets':[]}
-    headers=[]
-    status="invalid request"
-    if num < 1000:
-        try:
-            packets=STIX_MDB.select_last_packet_headers_by_service_type(service_type, num)
-            status="OK"
-        except Exception as e:
-            status=str(e)
-    else:
-        status="Too many packets requested"
-    result={'status':status,'packets':packets}
+    result=STIX_MDB.select_last_packet_headers_by_service_type(service_type, num)
     return json_util.dumps(result)
 
 
@@ -201,10 +190,12 @@ def request_packets():
             elif selection_type=='service':
                 val=request.form['service_type']
                 if val:
-                    service=int(val)
-                    if service == 0:
+                    services=[]
+                    if int(val)== 0:
                         services=[1,3,5,6,17,21,22,236,237,238,239]
-                        #select all services
+                    else:
+                        services=[int(val)]
+
                     status, packets=STIX_MDB.select_packets_by_services(services, start_unix,span_sec,header_only=True)
             elif selection_type=='TC':
                 status, packets=STIX_MDB.select_telecommand_packets(start_unix,span_sec,header_only=True)
