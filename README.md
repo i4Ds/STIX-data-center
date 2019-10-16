@@ -2,6 +2,8 @@
 
 based on MongoDB, Python-Flask and JQuery.
 
+The test server is at:  http://108.61.164.149/
+
 ## Enviroment setup
 
 
