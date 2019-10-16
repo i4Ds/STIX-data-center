@@ -1,4 +1,8 @@
-# STIX data web browsers
+# STIX data web browsers 
+
+based on MongoDB, Python-Flask, bootstrap4  and JQuery.
+
+The test server is at:  http://108.61.164.149/
 
 ## Enviroment setup
 
@@ -8,25 +12,37 @@
 sudo apt-get install python3
 pip3 install flask werkzeug 
 ```
-Install mongodb, see:
+To install mongodb, please follow the manual at 
 
  https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
  
  
-##  Data import
+##  Test data import
 
 Raw data packets are stored in the MongoDB. 
+
 ```
-python application/parser -i test.dat  --wdb
+./application/parser.py   -i test.dat  --wdb
 ```
 
-## MongoDB opitmiization
 
-Open mongodb shell then run 
+ 
+## Start the web server for testing purporses
+
 ```
- db.getCollection('<collection_name>').CreateIndex({<index>: 1})
+ python wsgi.py
 ```
- The following indexes must be created for packets:
+
+
+## MongoDB performance opitmization
+
+
+Some third-party GUIs are recommended in order to to interact with MongoDB,  for example, Robo3T which is available at:
+https://robomongo.org/
+
+Indexes support the efficient execution of queries in MongoDB. Without indexes, MongoDB must perform a collection scan, i.e. scan every document in a collection, to select those documents that match the query statement.
+
+ Make sure that the following indexes are created for the collection packets:
 ```
 header.UTC
 header.SPID
@@ -37,19 +53,23 @@ header.TMTC
 run_id
 
 ```
-For more see https://docs.mongodb.com/manual/core/query-optimization/
 
+If not , open mongodb shell then run
+```
+ db.getCollection('<collection_name>').CreateIndex({<index>: 1})
+```
  
-## Run the server for testing purporses
 
-```
- python wsgi.py
- 
-```
+For more optimizations, see https://docs.mongodb.com/manual/core/query-optimization/
+
+
 
 ## Deployment
 
-ngnix and gunicore are recommanded for the final server. 
+
+ngnix and gunicore are recommanded for the final server as described at 
+https://flask.palletsprojects.com/en/1.1.x/deploying/
+
 ### Installation
 ```
 sudo apt-get install nginx
@@ -146,15 +166,9 @@ gunicorn --bind 127.0.0.1:8001 wsgi:app --daemon
 
 
 
-## Security
-
-Change the mongodb port 
-mongodb ip local only
+## Security issues
 
 
-
-
-It will reduce database query time significantly (e.g. from 10 seconds to 5 ms)
 
 ## TODOs
  
