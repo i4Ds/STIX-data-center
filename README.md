@@ -1,4 +1,4 @@
-# STIX raw data web viewer 
+# STIX data web browsers
 
 ## Enviroment setup
 
