@@ -236,6 +236,20 @@ def load_packet_of_id(packet_id):
     return json_util.dumps(packet)
 
 
+@app.route("/request/packets/spid-tw",methods=['GET'])
+def request_packets_by_spid_tw():
+    result={'status':'Invalid request','packets':[]}
+    try:
+        start_unix=float(request.values['start'])
+        span_seconds=float(request.values['span'])
+        spids=[int(request.values['spid'])]
+        if start_unix> 0 and span_seconds>0 and spids:
+            status, packets=STIX_MDB.select_packets_by_SPIDs(spids, start_unix,span_seconds, header_only=False)
+            result={'status':status,'packets':packets}
+    except Exception as e:
+        result={'status':str(e),'packets':[]}
+    return json_util.dumps(result)
+
 
 
 
