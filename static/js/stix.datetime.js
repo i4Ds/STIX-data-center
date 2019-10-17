@@ -40,6 +40,10 @@ var StixDateTime={
 		}
 
 	},
+	SCET2unixtimestamp: function(coarse_time,fine_time=0)
+	{
+		return coarse_time + fine_time / 65536. + SCET_OFFSET;
+	},
 
 
 	SCET2ISOString: function(coarse_time, fine_time=0)

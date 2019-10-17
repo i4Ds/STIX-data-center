@@ -1,4 +1,7 @@
 var StixCommon={
+	toHex: function(value){
+		return '0x'+(Number(value).toString(16)).toUpperCase();
+	},
 	viridis:
 		[[0.0, 'rgb(255, 255, 255)'], 
 			[0.003937007874015748, 'rgb(68, 2, 85)'],
@@ -254,6 +257,7 @@ var StixCommon={
 			[0.9921259842519685, 'rgb(248, 230, 33)'],
 			[0.9960629921259843, 'rgb(250, 230, 34)'], [1.0, 'rgb(253, 231, 36)']],
 			plotlyConfig:{showLink: false, displaylogo: false, sendDataToCloud:false, sendData: false, modeBarButtonsToRemove: ['sendDataToCloud','toImage'],  linkText: false}
+
 
 };
 

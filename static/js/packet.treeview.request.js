@@ -5,7 +5,6 @@ $(function() {
 
 		loadStixPacket(packetId,true);
 	}
-
 	else if(calibrationId>=0)
 	{
 
@@ -41,7 +40,6 @@ $(function() {
 
 		});
 	}
-
 	else
 	{
 		loadStixLatestPacketHeaders(5,200);

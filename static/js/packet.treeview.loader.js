@@ -256,8 +256,7 @@ loadStixLatestPacketHeaders=function(service,num)
 {
 	$('#leftloader').show();
 	$.ajax({
-		//load service 5 by default
-		url: '/request/headers/latest/5/200',
+		url: '/request/headers/latest/0/200',
 		dataType:"json",
 		success: function (data) {
 			$('#leftloader').hide();

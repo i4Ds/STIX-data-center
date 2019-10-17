@@ -17,8 +17,6 @@ $(function() {
 	if(window.startUnix>0 && window.timeSpanSeconds>0)
 	{
 
-		//ajaxHousekeepingRequest(startUnix,timeSpanSeconds);
-
 	}
 	else if(window.calibrationId>=-1)
 	{
@@ -77,8 +75,8 @@ $(function() {
 			' <td>'+data.auxiliary.NIX00123+'</td> <td>'+
 			'<p class="font-weight-bolder">Live time(s)<p></td>'+
 			' <td>'+liveTime+'</td><td><p class="font-weight-bolder">Detector mask </p></td>'+
-			' <td>'+data.auxiliary.NIX00407+'</td> <td><p class="font-weight-bolder">Pixel mask </p>'+
-			'</td> <td>'+data.auxiliary.NIXD0407+'</td><td> <a href="/view/packet/calibration/'+data._id+'">  Packets'+
+			' <td>'+StixCommon.toHex(data.auxiliary.NIX00407)+'</td> <td><p class="font-weight-bolder">Pixel mask </p>'+
+			'</td> <td>'+StixCommon.toHex(data.auxiliary.NIXD0407)+'</td><td> <a href="/view/packet/calibration/'+data._id+'">  Packets'+
 			'</a> </td> </tr>');
 		$('#share').attr('href','/plot/calibration/'+data._id);
 		$('#status').html('Showing calibration run # '+data._id);
@@ -111,7 +109,7 @@ $(function() {
 		}
 		var pdata=[trace];
 		var layout={
-			title: 'Total compressed counts ', 
+			title: 'Total counts (decompressed) ', 
 			xaxis: {
 				title:'Detector #',
 				range: [0,32], 
@@ -191,12 +189,10 @@ $(function() {
 	{
 		pktAna.load(packet);
 		var result=pktAna.toArray('NIX00159/NIXD0155');
-
-
 		var detectorIds = result[0];
 		var  result= pktAna.toArray('NIX00159/NIXD0156');
 		var  pixelsIds = result[0];
-		var  result= pktAna.toArray('NIX00159/NIX00146/*');
+		var  result= pktAna.toArray('NIX00159/NIX00146/*',null, engParam='*');
 		var  spectra = result[0];
 		var det, pix;
 		for (var i=0;i<spectra.length;i++)

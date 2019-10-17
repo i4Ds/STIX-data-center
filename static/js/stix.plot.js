@@ -151,7 +151,6 @@ var StixPlot={
 		};
 
 		Plotly.newPlot(div, dataPlot, layout, StixCommon.plotlyConfig);
-
 	}
 
 };

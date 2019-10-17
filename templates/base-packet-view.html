@@ -36,16 +36,8 @@
 		<script src="{{ url_for('static', filename='js/stix.datetime.js')}}"></script>
 		<script src="{{ url_for('static', filename='js/stix.idb.js')}}"></script>
 		<script src="{{ url_for('static', filename='vendor/js/jquery.treetable.js')}}"></script>
-		<script src="{{ url_for('static', filename='vendor/js/split.min.js')}}"></script>
 		<script src="{{ url_for('static', filename='js/packet.treeview.loader.js')}}"></script>
 		<script src="{{ url_for('static', filename='js/packet.treeview.response.js')}}"></script>
-		<script>
-			var splitobj = Split(["#one","#two"], {
-				sizes: [40,60],
-				minSize: 200,
-				gutterSize: 10,
-			});
-		</script>
 		{% block after_jscript %}  
 		{% endblock %}
 	</body>

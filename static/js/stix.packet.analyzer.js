@@ -130,7 +130,7 @@ class StixPacketAnalyzer
 	{
 		var	parameters=packet['parameters'];
 		var header=packet['header'];
-		var i, param,name,raw_value, eng_value, value;
+		var i, param,name,rawValue, engValue, value;
 
 		var unixTimestamp=header['unix_time'];
 		if (!('unix_time' in this._parameter_vector))
@@ -148,13 +148,13 @@ class StixPacketAnalyzer
 			if (name.includes('NIXG'))continue;
 			value=this.getRawInt(param);
 
-			eng_value=this.getEng(param);
+			engValue=this.getEng(param);
 			if(default_value_type=='eng'){
-				if(eng_value!='' && !(typeof eng_value ==='undefined'))
+				if(engValue!='' && !(typeof engValue ==='undefined'))
 				{
-					if (!isNaN(eng_value))
+					if (!isNaN(engValue))
 					{
-						value=eng_value;
+						value=engValue;
 					}
 				}
 			}
@@ -189,7 +189,7 @@ class StixPacketAnalyzer
 		this._header=packet['header'];
 	}
 
-	toArray(pattern,parameters=null, dtype='raw')
+	toArray(pattern,parameters=null, engParam='', traverseChildren=true, once=false)
 	{
 		/*
 		pattern examples:
@@ -197,6 +197,8 @@ class StixPacketAnalyzer
 		return the values of all NIX00146 under NIX00159
 		pattern='NIX00159/NIX00146/*'
 		return the children's value of all NIX00146 
+		dType is used to define whether retuning  raw or eng value
+
 		*/
 
 		var i;
@@ -221,7 +223,7 @@ class StixPacketAnalyzer
 
 		var pname=pnames.shift();
 		var ret=[];
-		var raw_value, eng_value;
+		var rawValue, engValue;
 		var length=plist.length;
 
 		for(var i=0;i<length;i++)
@@ -230,10 +232,10 @@ class StixPacketAnalyzer
 			var paramName=this.getName(param);
 			if (paramName== pname || pname=='*')
 			{
-				if (pnames.length>0)
+				if (pnames.length>0 && traverseChildren)
 				{
 					var newPattern=pnames.join('/');
-					ret=this.toArray(newPattern,this.getChildren(param),   dtype);
+					ret=this.toArray(newPattern,this.getChildren(param),   engParam, traverseChildren, once);
 					if (ret.length>0)
 					{
 						results.push(ret);
@@ -241,15 +243,16 @@ class StixPacketAnalyzer
 				}
 				else{
 
-					raw_value=this.getRawInt(param);
-					eng_value=this.getEng(param);
-					if (dtype == 'eng' && !isNaN(eng_value))
+					rawValue=this.getRawInt(param);
+					engValue=this.getEng(param);
+					if (engParam==pname)
 					{
-						results.push(eng_value);
+						results.push(engValue);
 					}
 					else{
-						results.push(raw_value);
+						results.push(rawValue);
 					}
+					if(once)break;
 				}
 
 			}

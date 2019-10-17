@@ -1,0 +1,64 @@
+
+
+{% extends "base-plotting.html" %}
+{% block title %}STIX calibration data browser{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/bootstrap-datetimepicker.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/jquery.dataTables.min.css')}}">
+<script src="{{ url_for('static', filename='vendor/js/bootstrap-datetimepicker.js')}}"></script>
+{% endblock %}
+{% block top_navi_title%} 
+Quick-look light-curves
+{% endblock %}
+{% block main_title_bar%} 
+{% if message is defined %}
+{{message}}
+{% else %}
+Quick-look light-curves
+{%endif%}
+
+{% endblock %}
+
+
+{% block  main_container%} 
+
+<div id="" class="d-flex flex-wrap">
+	<div id="lightcurves"></div>
+	<div id="triggers"></div>
+	<div id="rcr"></div>
+
+</div>
+
+
+
+
+{% endblock %}
+
+
+{% block before_js%}
+{% if start_unix is not defined%}
+{% set start_unix=0 %}
+{% endif %}
+{% if span_seconds is not defined%}
+{% set span_seconds=0 %}
+{% endif %}
+
+<script>
+	window.startUnix={{start_unix}};
+window.timeSpanSeconds={{span_seconds}};
+</script>
+
+{% endblock %}
+
+{% block after_js %}
+<script src="{{ url_for('static', filename='js/lightcurve.plot.response.js')}}"></script>
+<script>
+	$(function () {
+		$('.form_datetime').datetimepicker( {format: "yyyy-mm-ddThh:ii:ss"});
+	});
+
+</script>
+{% endblock %}
+
+
+
