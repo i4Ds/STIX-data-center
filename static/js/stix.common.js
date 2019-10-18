@@ -256,7 +256,8 @@ var StixCommon={
 			[0.9881889763779528, 'rgb(246, 230, 31)'],
 			[0.9921259842519685, 'rgb(248, 230, 33)'],
 			[0.9960629921259843, 'rgb(250, 230, 34)'], [1.0, 'rgb(253, 231, 36)']],
-			plotlyConfig:{showLink: false, displaylogo: false, sendDataToCloud:false, sendData: false, modeBarButtonsToRemove: ['sendDataToCloud','toImage'],  linkText: false}
+			plotlyConfigAllowSharing:{showLink: true, displaylogo: false, sendDataToCloud:true, sendData: true},
+			plotlyConfig:{showLink: false, displaylogo: false, sendDataToCloud:false, sendData: false, modeBarButtonsToRemove: ['sendDataToCloud'],  linkText: false}
 
 
 };

@@ -73,7 +73,7 @@ $(function() {
 			'<td> <p class="font-weight-bolder"> Duration (s)</p>  </td> <td>'+ 
 			data.duration +'</td><td><p class="font-weight-bolder">Quiet time</p></td>'+
 			' <td>'+data.auxiliary.NIX00123+'</td> <td>'+
-			'<p class="font-weight-bolder">Live time(s)<p></td>'+
+			'<p class="font-weight-bolder">Live time (s)<p></td>'+
 			' <td>'+liveTime+'</td><td><p class="font-weight-bolder">Detector mask </p></td>'+
 			' <td>'+StixCommon.toHex(data.auxiliary.NIX00407)+'</td> <td><p class="font-weight-bolder">Pixel mask </p>'+
 			'</td> <td>'+StixCommon.toHex(data.auxiliary.NIXD0407)+'</td><td> <a href="/view/packet/calibration/'+data._id+'">  Packets'+
@@ -203,7 +203,7 @@ $(function() {
 			{
 				var title='Energy spectrum (Detector # '+det+' Pixel # '+pix+')';
 				var xlabel='Energy channel';
-				var ylabel='Compressed counts';
+				var ylabel='Counts';
 				var ydata=spectra[i];
 				var div='spectrum';
 				StixPlot.plot1DArray(ydata, title, xlabel, ylabel, div, width=700, height=400, 0, 1);

@@ -79,15 +79,17 @@ $(function() {
 		var xData=timeObj.time;
 		var T0_UTC=timeObj.T0_UTC;
 		var T0=timeObj.T0;
-		var hints=timeObj.hint;
-		var startUTC=hints[0];
-		var endUTC=hints[hints.length-1];
+		var utcArray=timeObj.hint;
+		var startUTC=utcArray[0];
+		//var endUTC=hints[hints.length-1];
+		var endUTC=utcArray[utcArray.length-1];
 		var timeRangeString=startUTC+' - ' + endUTC;
 		$('#status').html('Showing data from '+timeRangeString);
 
 
 		var ylabel='Counts in '+ integrationTime +' s';
-		var xlabel='Time [s] (T0: ' +T0_UTC+')';
+		//var xlabel='Time [s] (T0: ' +T0_UTC+')';
+		var xlabel='UTC';
 
 		var yData=energySpectra;
 		var lcTraces=[];
@@ -96,9 +98,8 @@ $(function() {
 		for (var ii=0;ii<5;ii++)
 		{
 			lcTraces.push({
-				x: xData,
+				x: utcArray,
 				y: yData[ii],
-				text: hints,
 				line:{shape:'hvh'},
 				name:  names[ii],
 				type: 'Scatter+Lines'
@@ -141,12 +142,11 @@ $(function() {
 			yaxis: yAxisConfig
 
 		};
-	Plotly.newPlot('lightcurves', lcTraces, lcLayout, config=StixCommon.plotlyConfig);
+	Plotly.newPlot('lightcurves', lcTraces, lcLayout, config=StixCommon.plotlyConfigAllowSharing);
 
 	var trigTrace=[{
-				x: xData,
+				x: utcArray,
 				y: trigRates,
-				text: hints,
 				line:{shape:'hvh'},
 				type: 'Scatter+Lines'
 			}];
@@ -169,11 +169,10 @@ $(function() {
 
 		};
 
-		Plotly.newPlot('triggers', trigTrace, trigLayout, config=StixCommon.plotlyConfig);
+		Plotly.newPlot('triggers', trigTrace, trigLayout, config=StixCommon.plotlyConfigAllowSharing);
 			var rcrTrace=[{
-				x: xData,
+				x: utcArray,
 				y: rcrArray,
-				text: hints,
 				line:{shape:'hvh'},
 				type: 'Scatter+Lines'
 			}];
@@ -206,7 +205,7 @@ $(function() {
 
 		};
 
-		Plotly.newPlot('rcr', rcrTrace, rcrLayout, config=StixCommon.plotlyConfig);
+		Plotly.newPlot('rcr', rcrTrace, rcrLayout, config=StixCommon.plotlyConfigAllowSharing);
 
 
 	}
@@ -261,7 +260,6 @@ $(function() {
 
 	function requestLightCurvePackets(start, span)
 	{
-		console.log('Loading '+start+' '+span);
 		if(span>MAX_TIME_SPAN)
 		{
 			span=MAX_TIME_SPAN;
