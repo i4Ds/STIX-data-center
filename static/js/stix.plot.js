@@ -150,7 +150,7 @@ var StixPlot={
 			}
 		};
 
-		Plotly.newPlot(div, dataPlot, layout, StixCommon.plotlyConfig);
+		Plotly.newPlot(div, dataPlot, layout, StixCommon.plotlyConfigAllowSharing);
 	}
 
 };

@@ -30,16 +30,18 @@ $(function() {
 		{
 
 			var packet=packets[i];
+			var parameters=packet['parameters'];
 			pktAna.load(packet);
-			var startCoarseTime=pktAna.toArray('NIX00445', null,'',false,true)[0];
-			var startFineTime=pktAna.toArray('NIX00446', null,'',false,true)[0];
+			var startCoarseTime=parameters[1][1][0];
+			var startFineTime=parameters[2][1][0];
+			integrations=parameters[3][1][0];
+			detectorMask=parameters[4][1][0];
+			pixelMask=parameters[5][1][0];
+
 			var startUnixTime=StixDateTime.SCET2unixtimestamp(startCoarseTime,startFineTime);
-			integrations=pktAna.toArray('NIX00405',null,'',false,true)[0];
 
 			integrationTime=(integrations+1)*0.1;
 
-			detectorMask=pktAna.toArray('NIX00407',null,'',false,true)[0];
-			pixelMask=pktAna.toArray('NIXD0407',null,'',false,true)[0];
 			var energies=pktAna.toArray('NIX00270/NIX00271/*',null, engParam='*')[0];
 			numEnergies=energies.length;
 			var trig=pktAna.toArray('NIX00273/*',null, engParam='*')[0];

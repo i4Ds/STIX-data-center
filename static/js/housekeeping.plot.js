@@ -97,18 +97,6 @@ function plotAllParameters(data, msgContainer)
 }
 
 
-/*function setPreviousNextFromUTC(t0,t1)
-{
-	var span=(t1-t0);
-	var preT0=t0-span;
-	var preT1=t1;
-	var preUrl='/plot/housekeeping?start_unix='+preT0+'&span_sec='+span;
-	var nextUrl='/plot/housekeeping?start_unix='+t1+'&span_sec='+span;
-	$('#previous').attr('href',preUrl);
-	$('#next').attr('href',nextUrl);
-}
-*/
-
 function analyzeHousekeeping(data)
 {
 	analyzer.reset();
