@@ -40,10 +40,32 @@ var StixDateTime={
 		}
 
 	},
-	SCET2unixtimestamp: function(coarse_time,fine_time=0)
+	
+	SCET2Unixtime: function(coarse_time,fine_time=0)
 	{
 		return coarse_time + fine_time / 65536. + SCET_OFFSET;
 	},
+
+	SCETArray2UnixTimeArray: function(scet, T0=0)
+	{
+		var unixTimeArray=[];
+		for(var i =0; i<scet.length;i++)
+		{
+			unixTimeArray[i]=scet[i] + SCET_OFFSET-T0;
+		}
+		return unixTimeArray;
+	},
+	SCETArray2ISOStringArray: function(scet)
+	{
+		var utcTimeArray=[];
+		for(var i =0; i<scet.length;i++)
+		{
+			utcTimeArray[i]=this.SCET2ISOString(scet[i]);
+		}
+		return utcTimeArray;
+	},
+
+
 
 
 	SCET2ISOString: function(coarse_time, fine_time=0)
@@ -51,41 +73,28 @@ var StixDateTime={
 		var unixtimestamp = coarse_time + fine_time / 65536. + SCET_OFFSET;
 		return StixDateTime.unixTime2ISOstring(unixtimestamp);
 	},
-	resetUnixTimestamp:function(data)
+	formatUnixTimeAxis:function(data)
 	{
 			var l=data.length;
 			ts={};
 			ts.T0=data[0];
 			ts.T0_UTC=StixDateTime.unixTime2ISOstring(data[0]);
-			ts.time=[];
+			ts.unixTime=[];
 			ts.time[0]=0;
-			ts.hint=[];
-			ts.hint[0]=ts.T0_UTC;
+			ts.utc=[];
+			ts.utc[0]=ts.T0_UTC;
+			//ts.SCET=[];
 			for(var i=1;i<data.length;i++)
 			{
-				ts.time[i]=data[i]-data[0];
-				ts.hint[i]=StixDateTime.unixTime2ISOstring(data[i]);
+				ts.unixTime[i]=data[i]-data[0];
+				//ts.SCET[i]=data[i]-SCET_OFFSET;
+				ts.utc[i]=StixDateTime.unixTime2ISOstring(data[i]);
 			}
 			return ts;
 	},
 
-	resetSCET:function(data)
-	{
-			var l=data.length;
-			ts={};
-			ts.T0=data[0];
-			ts.T0_UTC=StixDateTime.SCET2ISOString(data[0]);
-			ts.time=[];
-			ts.time[0]=0;
-			ts.hint=[];
-			ts.hint[0]=ts.T0_UTC;
-			for(var i=1;i<data.length;i++)
-			{
-				ts.time[i]=data[i]-data[0];
-				ts.hint[i]=StixDateTime.SCET2ISOString(data[i]);
-			}
-			return ts;
-	},
+	
+
 
 	getUTCArray:function(timestamps)
 	{

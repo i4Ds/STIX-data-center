@@ -10,13 +10,13 @@ var analyzer=new StixPacketAnalyzer();
 function plotAllParameters(data, msgContainer)
 {
 	var paramNames=Object.keys(data);
-	var timeObj=StixDateTime.resetUnixTimestamp(data['unix_time']);
-	var timestamp=timeObj.time;
+	var timeObj=StixDateTime.formatUnixTimeAxis(data['unix_time']);
+	var timestamp=timeObj.unixTime;
 	var T0_UTC=timeObj.T0_UTC;
 	var T0=timeObj.T0;
-	var hints=timeObj.hint;
-	var startUTC=hints[0];
-	var endUTC=hints[hints.length-1];
+	var utcs=timeObj.utc;
+	var startUTC=utcs[0];
+	var endUTC=utcs[utcs.length-1];
 
 	var ydata ;
 	var trace, traces;
@@ -39,7 +39,7 @@ function plotAllParameters(data, msgContainer)
 			trace = {
 				x: timestamp,
 				y: timeSeries,
-				text: hints,
+				text: utcs,
 				line:{shape:'hvh'},
 				type: 'Scatter+Lines'
 

@@ -22,7 +22,7 @@ To install mongodb, please follow the manual at
 Raw data packets are stored in the MongoDB. 
 
 ```
-./apps/parser.py   -i test.dat  --wdb
+./application/parser.py   -i test.dat  --wdb
 ```
 
 

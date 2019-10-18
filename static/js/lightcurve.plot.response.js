@@ -7,25 +7,34 @@ $(function() {
 
 	$('#right-buttons').show();
 	var pktAna=new StixPacketAnalyzer();
+	window.lightcurveData={};
 	if(window.startUnix>=0 && window.timeSpanSeconds>=0)
 	{
 
-			requestLightCurvePackets(window.startUnix,window.timeSpanSeconds);
+		requestLightCurvePackets(window.startUnix,window.timeSpanSeconds);
 	}
+	window.currentXaxisType=0;
+	window.currentLogy=false;
 
-	function plotLightCurves(data, start, span)
+
+	function getLightCurveData(data, start, span)
 	{
 
+		var lightcurve={};
 
 		var packets=data['data'];
-		var energySpectra={};
-		var trigRates=[];
-		var rcrArray=[];
-		var timestamps=[];
-		var integrationTime,integrations;
-		var detectorMask;
-		var pixelMask;
-		var numEnergies;
+
+		lightcurve.energySpectra={};
+		lightcurve.trigRates=[];
+		lightcurve.rcrArray=[];
+		//window.lightcurveData.unixTimestamps=[];
+		lightcurve.scTimestamps=[];
+
+		lightcurve.integrationTime=0;
+		var integrations=0;
+		var detectorMask=0;
+		var pixelMask=0;
+
 		for (var i=0;i<packets.length;i++)
 		{
 
@@ -38,12 +47,12 @@ $(function() {
 			detectorMask=parameters[4][1][0];
 			pixelMask=parameters[5][1][0];
 
-			var startUnixTime=StixDateTime.SCET2unixtimestamp(startCoarseTime,startFineTime);
+			var startSCET=startCoarseTime+startFineTime/65536.;
+			var	dataStartUnixTime=StixDateTime.SCET2Unixtime(startSCET);
 
-			integrationTime=(integrations+1)*0.1;
+			lightcurve.integrationTime=(integrations+1)*0.1;
 
 			var energies=pktAna.toArray('NIX00270/NIX00271/*',null, engParam='*')[0];
-			numEnergies=energies.length;
 			var trig=pktAna.toArray('NIX00273/*',null, engParam='*')[0];
 			var rcr=pktAna.toArray('NIX00275/*',null, engParam='*')[0];
 
@@ -51,65 +60,129 @@ $(function() {
 			{
 				$('#status').html('Invalid light curve data.');
 			}
+			var unixTime;
+
+
 			for (var j=0;j<trig.length;j++)
 			{
-				timestamps.push(startUnixTime + j* (integrations+1)*0.1);
-				trigRates.push(trig[j]);
-				rcrArray.push(rcr[j]);
+				unixTime=dataStartUnixTime+ j* (integrations+1)*0.1;
+
+				if(start!=0&&span!=0)
+				{
+					//not default
+					if(unixTime<start)continue;
+					if(unixTime>start+span)break;
+				}
+
+
+				//window.lightcurveData.unixTimestamps.push(startUnixTime + j* (integrations+1)*0.1);
+				lightcurve.scTimestamps.push(startSCET+ j* (integrations+1)*0.1);
+				lightcurve.trigRates.push(trig[j]);
+				lightcurve.rcrArray.push(rcr[j]);
 
 			}
 
 			for (var j=0;j<energies.length;j++)
 			{
 				energyLC=energies[j];
-				if (!(j in energySpectra))
+				if (!(j in lightcurve.energySpectra))
 				{
-					energySpectra[j]=[];
+					lightcurve.energySpectra[j]=[];
 				}
 
 				for(var k=0;k<energyLC.length;k++)
 				{
-					energySpectra[j].push(energyLC[k]);
+					unixTime=dataStartUnixTime+ k* (integrations+1)*0.1;
+					if(start!=0&&span!=0)
+					{
+						if(unixTime<start)continue;
+						if(unixTime>start+span)break;
+					}
+					lightcurve.energySpectra[j].push(energyLC[k]);
 				}
 			}
-
-
-
-
 		}
-		var timeObj=StixDateTime.resetUnixTimestamp(timestamps);
-		var xData=timeObj.time;
-		var T0_UTC=timeObj.T0_UTC;
-		var T0=timeObj.T0;
-		var utcArray=timeObj.hint;
-		var startUTC=utcArray[0];
-		//var endUTC=hints[hints.length-1];
-		var endUTC=utcArray[utcArray.length-1];
+		if(start==0&&span==0)
+		{
+			window.startUnix=dataStartUnixTime;
+			window.timeSpanSeconds=unixTime-dataStartUnixTime;
+		}
+
+
+		return lightcurve;
+	}
+
+	function plotLightCurves(data,xaxisType, logy=false)
+	{
+
+
+		if(StixCommon.isObjectEmpty(data))
+		{
+			return;
+		}
+
+
+		if(data.scTimestamps.length==0)
+		{
+			$('#status').html('No data in the requested time window:  '+StixDateTime.unixTime2ISOstring(window.startUnix)+ " - "+
+				StixDateTime.unixTime2ISOstring(window.startUnix+window.timeSpanSeconds));
+			return;
+		}
+
+		var startUnixTime=StixDateTime.SCET2Unixtime(data.scTimestamps[0]);
+		var length=data.scTimestamps.length;
+		var endUnix=StixDateTime.SCET2Unixtime(data.scTimestamps[length-1]);
+
+	
+
+		var startUTC=StixDateTime.unixTime2ISOstring(startUnixTime);
+		var endUTC=StixDateTime.unixTime2ISOstring(endUnix);
+
+
+		var xlabel;
+		var yData=data.energySpectra;
+
+		switch(xaxisType){
+			case 0:
+				xlabel="UTC";
+				timeArray=StixDateTime.SCETArray2ISOStringArray(data.scTimestamps);
+				break;
+			case 1:
+				timeArray=StixDateTime.SCETArray2UnixTimeArray(data.scTimestamps, startUnixTime);
+				xlabel="T - T0 (s) [T0: "+startUTC+"]";
+				break;
+			case 2:
+				xlabel="SCET (s) [T0: "+startUTC+"]";
+				timeArray=data.scTimestamps;
+				break;
+		}
+
 		var timeRangeString=startUTC+' - ' + endUTC;
 		$('#status').html('Showing data from '+timeRangeString);
+		var ylabel='Counts in '+ data.integrationTime +' s';
 
 
-		var ylabel='Counts in '+ integrationTime +' s';
-		//var xlabel='Time [s] (T0: ' +T0_UTC+')';
-		var xlabel='UTC';
 
-		var yData=energySpectra;
+
+
+
 		var lcTraces=[];
-		numEnergies=energies.length;
 		var names=['LC 0 - 10 keV', 'LC 10 - 15 keV' , 'LC 15 - 25 keV','LC 25 - 50 keV' , 'LC 50 - 150 keV'];
 		for (var ii=0;ii<5;ii++)
 		{
 			lcTraces.push({
-				x: utcArray,
+				x: timeArray,
 				y: yData[ii],
+				showline:true,
 				line:{shape:'hvh'},
 				name:  names[ii],
 				type: 'Scatter+Lines'
 			});
 		}
-
 		var xAxisConfig={
 			title: xlabel,
+			mirror: 'ticks',
+			showline:true,
 			titlefont: {
 				family: 'Arial, monospace',
 				size: 14,
@@ -118,6 +191,8 @@ $(function() {
 		};
 		var yAxisConfig={
 			title: ylabel,
+			mirror: 'ticks',
+			showline:true,
 			titlefont: {
 				family: 'Arial, monospace',
 				size: 14,
@@ -125,11 +200,19 @@ $(function() {
 			}
 		};
 
-		var plotTitle='QL LC('+ timeRangeString+')';
+		if(logy){
+			yAxisConfig['type']='log';
+		}
 
+		var plotTitle='QL LC('+ timeRangeString+')';
 		var lcLayout = {
 			title: {
 				text:plotTitle,
+				showlegend: true,
+				legend: {
+					x: 1,
+					y: 0.5
+				},
 				font: {
 					family: 'Courier New, monospace',
 					size:18 
@@ -144,16 +227,16 @@ $(function() {
 			yaxis: yAxisConfig
 
 		};
-	Plotly.newPlot('lightcurves', lcTraces, lcLayout, config=StixCommon.plotlyConfigAllowSharing);
+		Plotly.newPlot('lightcurves', lcTraces, lcLayout, config=StixCommon.plotlyConfigAllowSharing);
 
-	var trigTrace=[{
-				x: utcArray,
-				y: trigRates,
-				line:{shape:'hvh'},
-				type: 'Scatter+Lines'
-			}];
+		var trigTrace=[{
+			x: timeArray,
+			y: data.trigRates,
+			line:{shape:'hvh'},
+			type: 'Scatter+Lines'
+		}];
 
-	var trigLayout = {
+		var trigLayout = {
 			title: {
 				text:'Triggers ('+timeRangeString+')',
 				font: {
@@ -172,16 +255,18 @@ $(function() {
 		};
 
 		Plotly.newPlot('triggers', trigTrace, trigLayout, config=StixCommon.plotlyConfigAllowSharing);
-			var rcrTrace=[{
-				x: utcArray,
-				y: rcrArray,
-				line:{shape:'hvh'},
-				type: 'Scatter+Lines'
-			}];
+		var rcrTrace=[{
+			x: timeArray,
+			y: data.rcrArray,
+			line:{shape:'hvh'},
+			type: 'Scatter+Lines'
+		}];
 
 
 		var yAxisConfig={
 			title: 'RCR',
+			showline:true,
+			mirror: 'ticks',
 			titlefont: {
 				family: 'Arial, monospace',
 				size: 14,
@@ -189,7 +274,11 @@ $(function() {
 			}
 		};
 
-	var rcrLayout = {
+		if(logy){
+			yAxisConfig['type']='log';
+		}
+
+		var rcrLayout = {
 			title: {
 				text:'RCR',
 				font: {
@@ -209,7 +298,8 @@ $(function() {
 
 		Plotly.newPlot('rcr', rcrTrace, rcrLayout, config=StixCommon.plotlyConfigAllowSharing);
 
-
+		window.currentXaxisType=xaxisType;
+		window.currentLogy=logy;
 	}
 
 	$('#previous').click(function(e) {
@@ -220,6 +310,26 @@ $(function() {
 		e.preventDefault();
 		requestLightCurvePackets(window.startUnix+window.timeSpanSeconds, window.timeSpanSeconds);
 	});
+
+	$('#x-utc').click(function(e) {
+		e.preventDefault();
+		plotLightCurves(window.lightcurveData,0,false);
+	});
+	$('#x-t0').click(function(e) {
+		e.preventDefault();
+		plotLightCurves(window.lightcurveData,1,false);
+	});
+	$('#x-scet').click(function(e) {
+		e.preventDefault();
+		plotLightCurves(window.lightcurveData,2, false);
+	});
+	$('#set-logy').click(function(e) {
+		e.preventDefault();
+		plotLightCurves(window.lightcurveData,window.currentXaxisType, !window.currentLogy);
+	});
+
+
+
 	$("#share").on('click',function(e){
 		e.preventDefault();
 		var href= $('#share').prop('href');
@@ -272,8 +382,16 @@ $(function() {
 			start_unix:start, //unix_time
 			span_seconds:span//seconds
 		};
-		window.startUnix=start;
-		window.timeSpanSeconds=span;
+
+		if(start>0&span>0)
+		{
+			window.startUnix=start;
+			window.timeSpanSeconds=span;
+		}
+
+
+
+
 		$.ajax({
 			url: '/request/qllc/tw',
 			type:"POST",
@@ -287,14 +405,15 @@ $(function() {
 
 				if(data['data'].length>0)
 				{
-					plotLightCurves(data,start,span);
+					window.lightcurveData=getLightCurveData(data,start,span);
+					plotLightCurves(window.lightcurveData, 0,false);
 					var shareURL='/plot/lightcurves?start='+start+'&span='+span;
 					$('#share').attr('href',shareURL);
 
 				}
 				else
 				{
-					$('#status').html('No light curve data in the time window: '+StixDateTime.unixTime2ISOstring(start)+
+					$('#status').html('No light curve data in the time window: '+StixDateTime.unixTime2ISOstring(start)+' - '+
 						' to '+StixDateTime.unixTime2ISOstring(start+span));
 				}
 

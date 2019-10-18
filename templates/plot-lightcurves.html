@@ -21,12 +21,22 @@ Quick-look light-curves
 
 
 {% block  main_container%} 
+<div style="width:800px;"> 
+<div class="d-flex justify-content-center">
+	<span class="badge badge-pill badge-light font-weight-bold mr-2 ">x-axis:</span>
+	<a href="#" id="x-utc" class="badge badge-primary mr-2">UTC</a>
+	<a href="#" id="x-t0" class="badge badge-secondary mr-2">T-T0</a>
+	<a href="#" id="x-scet" class="badge badge-success mr-3">SCET</a>
 
-<div id="" class="d-flex flex-wrap">
+	<span class="badge badge-pill badge-light font-weight-bold mr-2 ">y-axis:</span>
+	<a href="#" id="set-logy" class="badge badge-info mr-2">LogY</a>
+</div>
+</div> 
+
+<div id="" class="d-flex flex-column">
 	<div id="lightcurves"></div>
 	<div id="triggers"></div>
 	<div id="rcr"></div>
-
 </div>
 
 

@@ -23,46 +23,39 @@ Calibration data
 {% block  main_container%} 
 
 <a class="btn btn-primary" data-toggle="collapse" href="#calibration-run-list" role="button" aria-expanded="false" aria-controls="calibration-run-list">
-	  Calibration run list
-  </a>
-  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#plots" aria-expanded="false" aria-controls="plots">
-	  Plots
-  </button>
+	Calibration run list
+</a>
 
 
 <div class="collapse" id="calibration-run-list">
-  <div class="card card-body" style="height:400px; overflow:scroll">
-	  		<table class="table table-sm table-striped table-bordered table-hover" id="calibration-runs-table">
-				<thead>
-					<tr>
-						<th class="sortable-column sort-desc">ID</th>
-						<th>Packet header time</th>
-						<th>Start time</th>
-						<th>Duration (s)</th>
-						<th>TM packets</th>
-						<th>Plot</th>
-					</tr>
-				</thead>
-				<tbody >
-				</tbody>
-			</table>
+	<div class="card card-body" style="height:400px; overflow:scroll">
+		<table class="table table-sm table-striped table-bordered table-hover" id="calibration-runs-table">
+			<thead>
+				<tr>
+					<th class="sortable-column sort-desc">ID</th>
+					<th>Packet header time</th>
+					<th>Start time</th>
+					<th>Duration (s)</th>
+					<th>TM packets</th>
+					<th>Plot</th>
+				</tr>
+			</thead>
+			<tbody >
+			</tbody>
+		</table>
 
-  </div>
+	</div>
 </div>
-<div class="collapse show" id="plots">
-  <div class="card card-body">
-	<div class="row d-flex justify-content-center">
-		<table class="table table-sm table-striped table-bordered table-hover" id="calibration-run-info"></table>
-			<div class="col-md-6">
-				<div id="counts2d"></div>
-			</div>
-			<div class="col-md-6">
-				<div id="spectrum"></div>
-			</div>
-		</div>
+<div class="row d-flex justify-content-center">
+	<table class="table table-sm table-striped table-bordered table-hover" id="calibration-run-info"></table>
+	<div class="col-md-6">
+		<div id="counts2d"></div>
+	</div>
+	<div class="col-md-6">
+		<div id="spectrum"></div>
+	</div>
+</div>
 
-  </div>
-</div>
 
 
 
@@ -96,12 +89,12 @@ window.calibrationId={{calibration_id}};
 <script>
 	$(function () {
 		$('.form_datetime').datetimepicker( {format: "yyyy-mm-ddThh:ii:ss"});
-	//	$(".nav-tabs a").click(function(){
-	//		$(this).tab('show'); });
+		//	$(".nav-tabs a").click(function(){
+		//		$(this).tab('show'); });
 
 
-		});
-		
+	});
+
 </script>
 {% endblock %}
 
