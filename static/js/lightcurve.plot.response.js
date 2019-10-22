@@ -1,5 +1,5 @@
 /*!
- * stix.calibration.response..0.1
+ * lightcurve.plot.response..0.1
  * Author: Hualin Xiao 
  */
 MAX_TIME_SPAN=24*7*3600;
@@ -8,11 +8,19 @@ $(function() {
 	$('#right-buttons').show();
 	var pktAna=new StixPacketAnalyzer();
 	window.lightcurveData={};
-	if(window.startUnix>=0 && window.timeSpanSeconds>=0)
+	if(window.startUnix>0 && window.timeSpanSeconds>0)
 	{
-
+		//Request from URL
 		requestLightCurvePackets(window.startUnix,window.timeSpanSeconds);
 	}
+	else if(window.startUnix==0 && window.timeSpanSeconds==0)
+	{
+		//No request from URL, load the last 4 hours' by default
+		loadLastLigthCurves(3600*4);
+		
+	}
+
+
 	window.currentXaxisType=0;
 	window.currentLogy=false;
 
@@ -73,8 +81,6 @@ $(function() {
 					if(unixTime<start)continue;
 					if(unixTime>start+span)break;
 				}
-
-
 				//window.lightcurveData.unixTimestamps.push(startUnixTime + j* (integrations+1)*0.1);
 				lightcurve.scTimestamps.push(startSCET+ j* (integrations+1)*0.1);
 				lightcurve.trigRates.push(trig[j]);
@@ -208,7 +214,7 @@ $(function() {
 
 		var lcLayout = { 
 			showlegend: true, 	
-		//	legend: { 	x: 0, y: 1.0 }, 
+			//	legend: { 	x: 0, y: 1.0 }, 
 			xaxis: xAxisConfig,
 			yaxis: yAxisConfig};
 		var trigLayout = {
@@ -295,17 +301,21 @@ $(function() {
 	});
 
 
-		$( ".last-data" ).click(function( event ) {
+	$( ".last-data" ).click(function( event ) {
 		event.preventDefault();
 		var spanHours=$(this).val();
+		loadLastLigthCurves(spanHours*3600);
+
+	});
+
+	function loadLastLigthCurves(spanSeconds)
+	{
 		var url='/request/last-packet/timestamp/54118';
 		$.getJSON(url, function(data) {
 			var lastTime=data['unix_time'];
 			if(lastTime>0)
 			{
-				console.log(lastTime);
-				console.log(spanHours);
-				requestLightCurvePackets(lastTime-spanHours*3600,spanHours*3600);
+				requestLightCurvePackets(lastTime-spanSeconds,spanSeconds);
 			}
 			else
 			{
@@ -313,7 +323,7 @@ $(function() {
 			}
 		});
 
-	});
+	}
 
 
 
@@ -337,9 +347,6 @@ $(function() {
 			window.startUnix=start;
 			window.timeSpanSeconds=span;
 		}
-
-
-
 
 		$.ajax({
 			url: '/request/qllc/tw',

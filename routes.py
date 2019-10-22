@@ -374,13 +374,14 @@ def request_calibration_runs():
 @app.route('/request/qllc/tw', methods=['POST','GET'])
 def request_quicklook_lightcurves():
     result = {'status': 'Invalid request', 'data': []}
+    data=[]
     try:
         start_unix = float(request.values['start_unix'])
         span_seconds = float(request.values['span_seconds'])
         if start_unix > 0 and span_seconds > 0:
             data = STIX_MDB.get_lightcurve_packets(start_unix, span_seconds)
-        if start_unix == 0 and span_seconds == 0:
-            data = STIX_MDB.get_last_lightcurve_packets()
+        #if start_unix == 0 and span_seconds == 0:
+        #    data = STIX_MDB.get_last_lightcurve_packets()
         result['status'] = 'OK'
         result['data'] = data
 
