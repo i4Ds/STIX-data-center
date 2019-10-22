@@ -403,7 +403,7 @@ class MongoDB(object):
                             }
                         }
             cursor = self.collection_packets.find(query_string,{'header':1}).sort(
-                    '_id', -1).limit(1)
+                    'header.unix_time', -1).limit(1)
             packet=list(cursor)
             if packet:
                 return packet[0]['header']['unix_time']

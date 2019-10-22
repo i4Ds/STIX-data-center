@@ -101,14 +101,17 @@ class JSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
 
 
-@app.route("/test")
-def test():
-    return render_template('test.html')
+#@app.route("/test")
+#def test():
+#    return render_template('test.html')
 
 
-@app.route("/")
-def main():
-    return render_template('index.html')
+#@app.route("/")
+#def main():
+#    return render_template('index.html')
+    
+
+
 
 
 @app.route("/view/list/files")
@@ -119,10 +122,10 @@ def view_filelist():
 
 
 
-@app.route('/view/calibration/configuration/<int:calibration_id>')
-def view_calibration_configuration(calibration_id):
-    data = STIX_MDB.get_calibration_run_info(calibration_id)
-    return render_template('calibration-info-in-modal.html', data=data)
+#@app.route('/view/calibration/configuration/<int:calibration_id>')
+#def view_calibration_configuration(calibration_id):
+#    data = STIX_MDB.get_calibration_run_info(calibration_id)
+#    return render_template('calibration-info-in-modal.html', data=data)
 
 
 @app.route('/view/packet/calibration/<int:calibration_id>')
@@ -136,6 +139,7 @@ def view_packets_of_file(file_id):
     return view_packet_of_file(file_id)
 
 
+@app.route("/", defaults={'calibration_id': -1})
 @app.route("/plot/calibration/", defaults={'calibration_id': -1})
 @app.route("/plot/calibration/<int:calibration_id>")
 def view_calibration(calibration_id):
@@ -314,22 +318,20 @@ def request_packets_by_type_tw(packet_type):
         return json_util.dumps(result)
 
 
-"""
-@app.route("/request/last-packets/type-tw")
-def request_last_telemetry_packets(packet_type):
-    result = {'status': 'Invalid request', 'packets': []}
-    SPIDs = get_group_spids(packet_type)
-    if SPIDs:
-        try:
-            start_unix = float(request.values['start_unix'])
-            span_seconds = float(request.values['span_seconds'])
-            if start_unix > 0 and span_seconds > 0:
-                status, packets = STIX_MDB.select_last_packets(SPIDs, start_unix, span_seconds)
-                result = {'status': status, 'packets': packets}
-        except Exception as e:
-            result = {'status': str(e), 'packets': []}
-    return json_util.dumps(result)
-"""
+#@app.route("/request/last-packets/type-tw")
+#def request_last_telemetry_packets(packet_type):
+#    result = {'status': 'Invalid request', 'packets': []}
+#    SPIDs = get_group_spids(packet_type)
+#    if SPIDs:
+#        try:
+#            start_unix = float(request.values['start_unix'])
+#            span_seconds = float(request.values['span_seconds'])
+#            if start_unix > 0 and span_seconds > 0:
+#                status, packets = STIX_MDB.select_last_packets(SPIDs, start_unix, span_seconds)
+#                result = {'status': status, 'packets': packets}
+#        except Exception as e:
+#            result = {'status': str(e), 'packets': []}
+#    return json_util.dumps(result)
 
 
 @app.route("/request/pdf/quicklook/<int:run_id>")
