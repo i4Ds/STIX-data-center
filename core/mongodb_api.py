@@ -16,6 +16,7 @@ NUM_MAX_RETURN_PACKETS = 1000
 NUM_MAX_RETURN_HEADERS = 20000
 MAX_TABLE_NUM_ROWS = 500
 MAX_REQUEST_LC_TIME_SPAN_DAYS = 3
+MAX_TIME_SPAN_SECONDS=7*24*3600
 
 
 def to_list(spids):
@@ -241,18 +242,28 @@ class MongoDB(object):
         else:
             return 'OK', []
 
-    def select_last_packets_by_SPIDs(self, spids, num=200, order=1):
-        if num > NUM_MAX_RETURN_PACKETS:
-            num = NUM_MAX_RETURN_PACKETS
-
+    def select_last_packets(self,spids, start_unix_time, span_seconds):
+        if span_seconds> MAX_TIME_SPAN_SECONDS:
+            span_seconds=MAX_TIME_SPAN_SECONDS 
         spids = to_list(spids)
         if spids == []:
             return 'INVALID_SPID', []
-
+        end_unix_time=start_unix_time+span_seconds
         if self.collection_packets:
-            query_string = {'header.SPID': {'$in': spids}}
+            query_string = {
+                '$and': [{
+                    'header.SPID': {
+                        '$in': spids
+                    }
+                }, {
+                    'header.unix_time': {
+                        '$gte': start_unix_time,
+                        '$lt': end_unix_time
+                    }
+                }]
+            }
             cursor = self.collection_packets.find(query_string).sort(
-                '_id', order).limit(num)
+                '_id', 1).limit(NUM_MAX_RETURN_PACKETS)
             status = 'OK'
             if cursor.count() == NUM_MAX_RETURN_PACKETS:
                 status = 'TOO_MANY'
@@ -381,9 +392,25 @@ class MongoDB(object):
             cursor=self.collection_packets.find(query_string).sort('_id', 1)
             return cursor
         return []
+    def get_last_packet_unix_time(self,spids):
+        spids = to_list(spids)
+        if spids == []:
+            return -1
+        if self.collection_packets:
+            query_string = {
+                        'header.SPID': {
+                            '$in': spids
+                            }
+                        }
+            cursor = self.collection_packets.find(query_string,{'header':1}).sort(
+                    '_id', -1).limit(1)
+            packet=list(cursor)
+            if packet:
+                return packet[0]['header']['unix_time']
+        return -1
 
 
-"""
+
 if __name__ == '__main__':
     from flask import Flask
     import pprint
@@ -394,5 +421,4 @@ if __name__ == '__main__':
     app.config['mongo_pwd'] = ''
 
     mdb = MongoDB(app)
-    pprint.pprint(mdb.get_lightcurve_packets(1569837400, 3600))
-    """
+    pprint.pprint(mdb.get_last_packet_unix_time(54102))

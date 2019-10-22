@@ -23,7 +23,6 @@ app.config['mongo_pwd'] = ''
 
 STIX_MDB = mongodb_api.MongoDB(app)
 
-
 def convert_to_unix_time(timestamp):
     dt = None
     if isinstance(timestamp, float):
@@ -315,17 +314,22 @@ def request_packets_by_type_tw(packet_type):
         return json_util.dumps(result)
 
 
-@app.route("/request/last-packets/type/<packet_type>")
+"""
+@app.route("/request/last-packets/type-tw")
 def request_last_telemetry_packets(packet_type):
-    result = {'status': 'unknown', 'packets': []}
+    result = {'status': 'Invalid request', 'packets': []}
     SPIDs = get_group_spids(packet_type)
-    try:
-        status = "Invalid request"
-        status, packets = STIX_MDB.select_last_packets_by_SPIDs(SPIDs)
-        result = {'status': status, 'packets': packets}
-    except Exception as e:
-        result = {'status': str(e), 'packets': []}
+    if SPIDs:
+        try:
+            start_unix = float(request.values['start_unix'])
+            span_seconds = float(request.values['span_seconds'])
+            if start_unix > 0 and span_seconds > 0:
+                status, packets = STIX_MDB.select_last_packets(SPIDs, start_unix, span_seconds)
+                result = {'status': status, 'packets': packets}
+        except Exception as e:
+            result = {'status': str(e), 'packets': []}
     return json_util.dumps(result)
+"""
 
 
 @app.route("/request/pdf/quicklook/<int:run_id>")
@@ -381,5 +385,12 @@ def request_quicklook_lightcurves():
     except (TypeError, ValueError, IndexError):
         result = {'status': 'Invalid request', 'data': []}
 
+    return json_util.dumps(result)
+
+
+@app.route("/request/last-packet/timestamp/<int:SPID>")
+def request_last_telemetry_packet_timestamp(SPID):
+    unix_time= STIX_MDB.get_last_packet_unix_time(SPID)
+    result={'unix_time':unix_time}
     return json_util.dumps(result)
 

@@ -249,19 +249,35 @@ $(function() {
 		{
 			var start=StixDateTime.utc2unix(utc);
 			var span=Number(spanMin)*60;
-
 			requestCalibrationRunList(start,span);
 
 		}
+	});
 
+	$( ".last-data" ).click(function( event ) {
+		event.preventDefault();
+		var spanHours=$(this).val();
+		var url='/request/last-packet/timestamp/54124';
+		$.getJSON(url, function(data) {
+			var lastTime=data['unix_time'];
+			if(lastTime>0)
+			{
+				requestCalibrationRunList(lastTime-spanHours*3600,spanHours*3600, 'Request the data of the last '+spanHours+ ' hours.');
+			}
+			else{
+				$('#status').html('No data in the requested time window');
+			}
+		});
 
 	});
+
 
 
 
 	function showCalibrationRunList(data){
 		var $table=$('#calibration-runs-table');
 		var ydata=[];
+		$('#btn-calibration-run').show();
 		for(var i=0;i<data.length;i++)
 		{
 
@@ -285,19 +301,24 @@ $(function() {
 		var id=$(this).data('id');
 		loadCalibrationRun(id);
 		$('#plots').collapse('show');
-
-
 	});
 
 
-	function requestCalibrationRunList(start, span)
+	function requestCalibrationRunList(start, span, msg='')
 	{
 		if(span>MAX_TIME_SPAN)
 		{
 			span=MAX_TIME_SPAN;
 		}
-		$('#status').html('Requesting data from '+StixDateTime.unixTime2ISOstring(start)+
-			' to '+StixDateTime.unixTime2ISOstring(start+span));
+		if(msg=='')
+		{
+			$('#status').html('Requesting data from '+StixDateTime.unixTime2ISOstring(start)+
+				' to '+StixDateTime.unixTime2ISOstring(start+span));
+		}
+		else
+		{
+			$('#status').html(msg);
+		}
 		var dataForm={
 			start_unix:start, //unix_time
 			span_seconds:span//seconds

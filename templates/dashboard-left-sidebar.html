@@ -1,44 +1,16 @@
-<nav class="col-md-2 col-sm-2  col-2 d-none d-md-block mt-3 bg-light sidebar">
+<nav class="col-md-2 col-sm-2  col-2 d-none d-md-block mt-6 p-0 bg-light sidebar">
+
 	<div class="sidebar-sticky">
-
-
 		<ul class="nav flex-column mb-5">
 			<li class="nav-item">
 				<a class="nav-link active" href="#">
 					<span data-feather="home"></span>
-					Data query<span class="sr-only">(current)</span>
+					Home<span class="sr-only">(current)</span>
 				</a>
 			</li>
-			<li class="nav-item mb-2">
-				<form id="reqform" class="form-horizontal">
-					<div class="form-group">
-						<div class="col-sm-10">
-							<input type="text" class="form-control small form_datetime " id="utc-input" placeholder="Start UTC" name="start" id="start-input" >
-						</div> 
-					</div> 
-					<div class="form-group">
-						<div class="col-sm-10">
-							<input type="text" class="form-control small   " placeholder="Time span (min)" min="0" max="5000"  name="span" id="span-input" >
-						</div> 
-					</div> 
-					<div class="form-group">
-						<div class="col-sm-10 col-sm-offset-1">
-							<button type="submit" class="btn btn-secondary">Request</button>
-						</div> 
-					</div> 
-				</form>
-			</li>
-		</ul>
-		<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-			<span>Web Apps</span>
-			<a class="d-flex align-items-center text-muted" href="#">
-			</a>
-		</h6>
-
-		<ul class="nav flex-column mb-2">
 			<li class="nav-item">
-				<a class="nav-link" href="/plot/housekeeping">
-					<span data-feather="bar-chart-2"></span>
+				<a class="nav-link " href="/plot/housekeeping">
+					<span data-feather="home"></span>
 					Housekeeping
 				</a>
 			</li>
@@ -83,7 +55,7 @@
 		</ul>
 
 		<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-			<span>Other Web Apps</span>
+			<span>Archive</span>
 			<a class="d-flex align-items-center text-muted" href="#">
 			</a>
 		</h6>
@@ -96,7 +68,7 @@
 				</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/view/listfile">
+				<a class="nav-link" href="/view/list/files">
 					<span data-feather="file-text"></span>
 					Telemetry files
 				</a>

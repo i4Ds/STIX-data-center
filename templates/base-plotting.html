@@ -19,33 +19,52 @@
 
 	</head>
 	<body>
-		{% set navi_bottom_margin='mb-1' %}
-		{% include 'navi.html' %}
-	
+		{%include 'navi.html' %}
 		<div class="container-fluid">
+			{% include 'dashboard-left-sidebar.html' %}
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+			<form id="reqform" class="">
+				<div class="btn-toolbar">
+					<div class="btn-group  btn-group-sm mr-1">
+						{% block toolbar_button_groups %}
+						{% endblock %}
+					</div> 
+					<div class="input-group input-group-sm mr-auto">
+						<input type="text"  id="utc-input" class=" form-control form_datetime" placeholder="Start UTC" name="start" id="start-input">
+						<input type="text" class="form-control" placeholder="Time span (min)" min="0" max="5000" name="span" id="span-input">
+						<div class="input-group-append">
+							<button class="btn btn-outline-success" type="submit">Query</button>
+						</div>
+					</div>
+					<div class="btn-group btn-group-sm ">
+						<button type="button" class="btn btn-outline-success" id="previous" value="">Previous </button>
+						<button type="button" class="btn btn-outline-success" id="next" value="">Next</button>
+						<button type="button" class="btn btn-outline-success ml-2" >
+							<a class="button" href="#" id="share">
+								<i class="fa fa-chain" style="font-size:14;color:green"></i>Share
+							</a>
+						</button>
+					</div>
+				</div>
+			</form>		
 			<div class="row">
-
-				{% include "dashboard-left-sidebar.html" %}
-
-				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-				<div class="shadow-sm p-3 mb-2 bg-light rounded">
-						<span class="font-weight-light" id="status"> 
+				<div class="shadow-sm p-3 mb-2 bg-light col-md-12 rounded">
+					<span class="font-weight-light" id="status"> 
 						{% block main_title_bar %}
 						{%endblock%}
-						</span>
-						<div class="float-right" id="right-buttons" style="display:none"> 
-							<a class="mr-1" id="previous" href="#">Previous</a>
-							<a class="mr-2" id="next" href="#">Next</a>
-							<a href="#" id="share">
-								<i class="fa fa-chain" style="font-size:14;color:green">Share</i>
-							</a>
-							
-						</div>
+					</span>
 				</div>
-				{% block main_container%} {% endblock %}
-
-				</main>
 			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					{% block main_container%} {% endblock %}
+				</div>
+			</div>
+
+			</main>
+
+
 		</div>
 		{% include "footer.html" %}
 
@@ -56,6 +75,11 @@
 		<script src="{{ url_for('static', filename='js/stix.packet.analyzer.js')}}"></script>
 		<script src="{{ url_for('static', filename='js/stix.plot.js')}}"></script>
 		{% block after_js%}  	{% endblock %}
+		<script>
+			$(".btn-group > .btn").click(function(){
+				$(this).addClass("active").siblings().removeClass("active");
+			});
+		</script>
 
 
 	</body>

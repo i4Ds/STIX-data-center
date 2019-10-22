@@ -1,37 +1,49 @@
 
 
 {% extends "base-plotting.html" %}
-{% block title %}STIX lightcurve viewer{% endblock %}
+{% block title %}STIX light curve viewer{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/bootstrap-datetimepicker.min.css')}}">
 <link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/jquery.dataTables.min.css')}}">
 <script src="{{ url_for('static', filename='vendor/js/bootstrap-datetimepicker.js')}}"></script>
 {% endblock %}
 {% block top_navi_title%} 
-Quick-look light-curves
+Quicklook light curves
 {% endblock %}
 {% block main_title_bar%} 
 {% if message is defined %}
 {{message}}
 {% else %}
-Quick-look light-curves
+Quicklook light curves
 {%endif%}
+{% endblock %}
 
+{% block  toolbar_button_groups%} 
+<button type="button" class="btn btn-outline-success active last-data" value="12">Last 12 hrs</button>
+<button type="button" class="btn btn-outline-success last-data " value="24">Last day</button>
+<button type="button" class="btn btn-outline-success last-data" value="72">Last 3 days</button>
 {% endblock %}
 
 
 {% block  main_container%} 
-<div style="width:800px;"> 
-<div class="d-flex justify-content-center">
-	<span class="badge badge-pill badge-light font-weight-bold mr-2 ">x-axis:</span>
-	<a href="#" id="x-utc" class="badge badge-primary mr-2">UTC</a>
-	<a href="#" id="x-t0" class="badge badge-secondary mr-2">T-T0</a>
-	<a href="#" id="x-scet" class="badge badge-success mr-3">SCET</a>
 
-	<span class="badge badge-pill badge-light font-weight-bold mr-2 ">y-axis:</span>
-	<a href="#" id="set-logy" class="badge badge-info mr-2">LogY</a>
+<div class="d-flex">
+	<div class="mr-auto p-2">
+		<div class="btn-toolbar">
+			<div id="btn-group21" class="btn-group btn-group-sm mr-2 " >
+				<button type="button" class="btn btn-dark" id="" value="">x-axis</button>
+				<button type="button" class="btn btn-outline-secondary " id="x-utc" value="">UTC</button>
+				<button type="button" class="btn btn-outline-secondary " id="x-t0" value="">T-T0</button>
+				<button type="button" class="btn btn-outline-secondary " id="x-scet" value="">SCET</button>
+			</div> 
+			<div id="btn-group22" class="btn-group btn-group-sm " >
+				<button type="button" class="btn btn-dark" id="" value="">Y-axis</button>
+				<button type="button" class="btn btn-outline-secondary " id="set-logy" value="">Log</button>
+			</div>
+		</div>
+	</div>
 </div>
-</div> 
+
 
 <div id="" class="d-flex flex-column">
 	<div id="lightcurves"></div>

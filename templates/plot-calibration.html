@@ -18,18 +18,22 @@ Calibration data
 {%endif%}
 
 {% endblock %}
+{% block  toolbar_button_groups%} 
+	<button type="button" class="btn btn-outline-success active last-data" value="24">Last day</button>
+	<button type="button" class="btn btn-outline-success last-data " value="48">Last 2 day</button>
+	<button type="button" class="btn btn-outline-success last-data " value="72">Last 3 days</button>
+{% endblock %}
 
 
 {% block  main_container%} 
 
-<a class="btn btn-primary" data-toggle="collapse" href="#calibration-run-list" role="button" aria-expanded="false" aria-controls="calibration-run-list">
-	Calibration run list
+<a class="btn btn-success btn-sm" id="btn-calibration-run" data-toggle="collapse" href="#calibration-run-list" role="button" aria-expanded="false" aria-controls="calibration-run-list" style="display:none">
+	Toggle
 </a>
-
 
 <div class="collapse" id="calibration-run-list">
 	<div class="card card-body" style="height:400px; overflow:scroll">
-		<table class="table table-sm table-striped table-bordered table-hover" id="calibration-runs-table">
+		<table class="table table-sm table-striped table-bordered table-hover mt-3" id="calibration-runs-table">
 			<thead>
 				<tr>
 					<th class="sortable-column sort-desc">ID</th>

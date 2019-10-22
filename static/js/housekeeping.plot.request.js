@@ -100,10 +100,27 @@ $(function() {
 
 	});
 
+		$( ".last-data" ).click(function( event ) {
+		event.preventDefault();
+		var spanHours=$(this).val();
+		var url='/request/last-packet/timestamp/54102';
+		$.getJSON(url, function(data) {
+			var lastTime=data['unix_time'];
+			if(lastTime>0)
+			{
+				ajaxHousekeepingRequest(lastTime-spanHours*3600,spanHours*3600);
+			}
+			else
+			{
+				$('#status').html('No data in the requested time window');
+			}
+		});
+
+	});
+
+
 	$('#previous').click(function(e) {
 		e.preventDefault();
-
-		
 		ajaxHousekeepingRequest(window.startUnix-window.timeSpanSeconds, window.timeSpanSeconds);
 	});
 

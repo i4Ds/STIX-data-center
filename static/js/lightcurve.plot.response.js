@@ -133,7 +133,7 @@ $(function() {
 		var length=data.scTimestamps.length;
 		var endUnix=StixDateTime.SCET2Unixtime(data.scTimestamps[length-1]);
 
-	
+
 
 		var startUTC=StixDateTime.unixTime2ISOstring(startUnixTime);
 		var endUTC=StixDateTime.unixTime2ISOstring(endUnix);
@@ -163,140 +163,70 @@ $(function() {
 
 
 
-
-
+		//var lcTraces=[];
+		var allTraces=[];
 
 		var lcTraces=[];
+		var trigTrace=[];
+		var rcrTrace=[];
+
 		var names=['LC 0 - 10 keV', 'LC 10 - 15 keV' , 'LC 15 - 25 keV','LC 25 - 50 keV' , 'LC 50 - 150 keV'];
 		for (var ii=0;ii<5;ii++)
 		{
 			lcTraces.push({
 				x: timeArray,
 				y: yData[ii],
-				showline:true,
 				line:{shape:'hvh'},
 				name:  names[ii],
 				type: 'Scatter+Lines'
 			});
 		}
-		var xAxisConfig={
-			title: xlabel,
-			mirror: 'ticks',
-			showline:true,
-			titlefont: {
-				family: 'Arial, monospace',
-				size: 14,
-				color: '#7f7f7f'
-			}
-		};
-		var yAxisConfig={
-			title: ylabel,
-			mirror: 'ticks',
-			showline:true,
-			titlefont: {
-				family: 'Arial, monospace',
-				size: 14,
-				color: '#7f7f7f'
-			}
-		};
+		trigTrace=[{x: timeArray,	y: data.trigRates,line:{shape:'hvh'},
+			name: "Triggers in "+data.integrationTime+ ' s',
+			type: 'Scatter+Lines'	}];
+		rcrTrace=[{x: timeArray,y: data.rcrArray,line:{shape:'hvh'},
+			name:'RCR',
+			type: 'Scatter+Lines' }];
+		var plotTitle='QL LCs ('+ timeRangeString+')';
 
-		if(logy){
-			yAxisConfig['type']='log';
+		var xAxisConfig={title: xlabel,
+			mirror: 'ticks',
+			showline:true,
+		};
+		var yAxisConfig={title: ylabel,
+			mirror: 'ticks',
+			showline:true,
+		};
+		var yAxisConfigRCR={title: 'RCR',
+			mirror: 'ticks',
+			showline:true,
+		};
+		if(logy){ 
+			yAxisConfig['type']='log'; 
+			yAxisConfigRCR['type']='log';
 		}
 
-		var plotTitle='QL LC('+ timeRangeString+')';
-		var lcLayout = {
-			title: {
-				text:plotTitle,
-				showlegend: true,
-				legend: {
-					x: 1,
-					y: 0.5
-				},
-				font: {
-					family: 'Courier New, monospace',
-					size:18 
-				},
-				xref: 'paper',
-				x: 0.05,
-			},
-			autosize: false,
-			width: 900,
-			height: 500,
+		var lcLayout = { 
+			showlegend: true, 	
+		//	legend: { 	x: 0, y: 1.0 }, 
 			xaxis: xAxisConfig,
-			yaxis: yAxisConfig
-
-		};
-		Plotly.newPlot('lightcurves', lcTraces, lcLayout, config=StixCommon.plotlyConfigAllowSharing);
-
-		var trigTrace=[{
-			x: timeArray,
-			y: data.trigRates,
-			line:{shape:'hvh'},
-			type: 'Scatter+Lines'
-		}];
-
+			yaxis: yAxisConfig};
 		var trigLayout = {
-			title: {
-				text:'Triggers ('+timeRangeString+')',
-				font: {
-					family: 'Courier New, monospace',
-					size:18 
-				},
-				xref: 'paper',
-				x: 0.05,
-			},
-			autosize: false,
-			width: 900,
-			height: 400,
+			showlegend: true, 	
 			xaxis: xAxisConfig,
 			yaxis: yAxisConfig
-
 		};
-
-		Plotly.newPlot('triggers', trigTrace, trigLayout, config=StixCommon.plotlyConfigAllowSharing);
-		var rcrTrace=[{
-			x: timeArray,
-			y: data.rcrArray,
-			line:{shape:'hvh'},
-			type: 'Scatter+Lines'
-		}];
-
-
-		var yAxisConfig={
-			title: 'RCR',
-			showline:true,
-			mirror: 'ticks',
-			titlefont: {
-				family: 'Arial, monospace',
-				size: 14,
-				color: '#7f7f7f'
-			}
-		};
-
-		if(logy){
-			yAxisConfig['type']='log';
-		}
-
 		var rcrLayout = {
-			title: {
-				text:'RCR',
-				font: {
-					family: 'Courier New, monospace',
-					size:18 
-				},
-				xref: 'paper',
-				x: 0.05,
-			},
-			autosize: false,
-			width: 900,
-			height: 400,
+			showlegend: true, 	
 			xaxis: xAxisConfig,
-			yaxis: yAxisConfig
-
+			yaxis: yAxisConfigRCR
 		};
 
-		Plotly.newPlot('rcr', rcrTrace, rcrLayout, config=StixCommon.plotlyConfigAllowSharing);
+		Plotly.newPlot('lightcurves', lcTraces, lcLayout, config=StixCommon.plotlyConfigAllowSharing);
+		Plotly.newPlot('triggers', trigTrace, trigLayout, config=StixCommon.plotlyConfigAllowSharing);
+		Plotly.newPlot('rcr', rcrTrace, rcrLayout,    config=StixCommon.plotlyConfigAllowSharing);
+
+		//Plotly.newPlot('lightcurves', allTraces, layout, config=StixCommon.plotlyConfigAllowSharing);
 
 		window.currentXaxisType=xaxisType;
 		window.currentLogy=logy;
@@ -365,6 +295,25 @@ $(function() {
 	});
 
 
+		$( ".last-data" ).click(function( event ) {
+		event.preventDefault();
+		var spanHours=$(this).val();
+		var url='/request/last-packet/timestamp/54118';
+		$.getJSON(url, function(data) {
+			var lastTime=data['unix_time'];
+			if(lastTime>0)
+			{
+				console.log(lastTime);
+				console.log(spanHours);
+				requestLightCurvePackets(lastTime-spanHours*3600,spanHours*3600);
+			}
+			else
+			{
+				$('#status').html('No data in the requested time window');
+			}
+		});
+
+	});
 
 
 
@@ -402,7 +351,6 @@ $(function() {
 				{
 					$('#status').html(data['status']);
 				}
-
 				if(data['data'].length>0)
 				{
 					window.lightcurveData=getLightCurveData(data,start,span);
@@ -413,7 +361,7 @@ $(function() {
 				}
 				else
 				{
-					$('#status').html('No light curve data in the time window: '+StixDateTime.unixTime2ISOstring(start)+' - '+
+					$('#status').html('No light curve data in the time window: '+StixDateTime.unixTime2ISOstring(start)+
 						' to '+StixDateTime.unixTime2ISOstring(start+span));
 				}
 
