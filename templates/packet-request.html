@@ -6,25 +6,26 @@
 {% endblock %}
 {% block  before_packet_view%} 
 
-<div class="d-flex flex-sm-row">
-	<div class="d-flex p-1 mr-auto">
-		<button class="btn btn-outline-secondary btn-sm mr-2" data-toggle="collapse" href="#collapseForm" role="button" aria-expanded="false" aria-controls="collapseForm">
-			Query Form
+<div class="btn-toolbar mt-2">
+	<div class="btn-group btn-group-sm mr-auto"> 
+		<button class="btn btn-outline-success mr-2" data-toggle="collapse" href="#collapseForm" role="button" aria-expanded="false" aria-controls="collapseForm">
+			Query form
 		</button>
-		<button class="btn btn-outline-secondary btn-sm" data-toggle="collapse" href="#collapseFilter" role="button" aria-expanded="false" aria-controls="collapseFilter">
+		<button class="btn btn-outline-success " data-toggle="collapse" href="#collapseFilter" role="button" aria-expanded="false" aria-controls="collapseFilter">
 			Filter
 		</button>
 	</div>
-	<div class="d-flex p-1">
-		<p class="font-weight-light" id="msg"></p>
+	<div class="btn-group btn-group-sm"> 
+		<button class="btn " id="msg"> 	</button>
+		<button type="button" id="shareLink" class="btn btn-outline-success ml-2" >
+			<a class="" href="#" id="packetShare">
+				<i class="fa fa-chain" style="color:green"></i>Share
+			</a>
+		</button>
 	</div>
-	<div class="d-flex p-1">
-		<div id="shareLink" class="float-right ml-2 font-weight-light" style="display:none;"><a href="#" id="packetShare">
-				<i class="fa fa-chain" style="color:green"></i>Share</a></div>
-	</div>
+
 
 </div>
-
 <div class="collapse" id="collapseForm">
 	<div class="card card-body">
 		<form  id="reqform" action="#" >
