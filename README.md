@@ -2,7 +2,7 @@
 
 based on MongoDB, Python-Flask, bootstrap4  and JQuery.
 
-The server used to test the web browsers is at:  http://108.61.164.149/
+Test server:  http://108.61.164.149/
 
 ## Enviroment setup
 
