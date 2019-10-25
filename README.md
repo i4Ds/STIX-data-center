@@ -27,7 +27,7 @@ Raw data packets are stored in the MongoDB.
 
 
  
-## Start the web server for testing purporses
+## Start the web server for testing
 
 ```
  python wsgi.py
