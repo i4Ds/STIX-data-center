@@ -8,14 +8,20 @@ Test server:  http://108.61.164.149/
 
 
 ```
-
 sudo apt-get install python3
 pip3 install flask werkzeug 
 ```
 To install mongodb, please follow the manual at 
 
- https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
+https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
  
+## Docker
+ 
+If docker-compose is installed ([docker](https://docs.docker.com/install/)) run the following command from the root of the repo (where the `docker-compose.yml`) is located
+```bash
+docker-compose up
+```
+this will start the application stack, access the web app at  `127.0.0.01:5000` and mongodb at `127.0.0.1:27017`
  
 ##  Import data for testing
 
@@ -26,7 +32,6 @@ Raw data packets are stored in the MongoDB.
 ```
 
 
- 
 ## Start the web server for testing
 
 ```
