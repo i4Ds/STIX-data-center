@@ -110,16 +110,6 @@ function displayParametersInPacketView(selector, parent_id, parentNode, childNod
 				paramRaw=node[1];
 				paramEng=node[2];
 				paramChildren=node[3];
-
-
-			}
-			else{
-
-				paramName=node.name;
-				paramDescr=node.desc;
-				paramChildren=node.children;
-				paramRaw=node.raw;
-				paramEng=node.eng;
 			}
 
 			paramDescr=StixIDB.getParameterDescription(paramName);
