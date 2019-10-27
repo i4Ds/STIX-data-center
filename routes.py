@@ -16,19 +16,10 @@ from core import mongodb_api
 from core import desc
 
 app = Flask(__name__)
+app.config['mongo_server'] = 'localhost'
 app.config['mongo_port'] = 27017
-
-if os.environ.get('DOCKER', 'False') == 'True':
-    # Docker
-    app.config['mongo_server'] = 'mongo'
-    app.config['mongo_user'] = 'test'
-    app.config['mongo_pwd'] = 'test'
-else:
-    # Local
-    app.config['mongo_server'] = '120.0.0.1'
-    app.config['mongo_user'] = ''
-    app.config['mongo_pwd'] = ''
-
+app.config['mongo_user'] = ''
+app.config['mongo_pwd'] = ''
 
 STIX_MDB = mongodb_api.MongoDB(app)
 

@@ -1,11 +1,9 @@
 
-
 $("#packetTreeView").treetable({
 	expandable:     true,
 	onNodeExpand:   nodeExpand,
 	onNodeCollapse: nodeCollapse
 });
-
 
 // expand node with ID "1" by default
 $("#packetTreeView").treetable("reveal", '1');
@@ -25,36 +23,36 @@ function nodeCollapse () {
 	// alert("Collapsed: " + this.id);
 }
 
-function displayHeaderInPacketView(selector, parent_id, parentNode, header)
+function displayHeaderInPacketView(selector, parentId, parentNode, header)
 {
 
 	var i=0;
-	var nodeToAdd, row,new_id;
+	var nodeToAdd, row,newId;
 	for (var key in header )
 	{
 		if (key=='_id')continue;
-		new_id=parent_id+'.'+i;
+		newId=parentId+'.'+i;
 		i++;
-		nodeToAdd = $(selector).treetable("node",new_id);
+		nodeToAdd = $(selector).treetable("node",newId);
 
 		// check if node already exists. If not add row to parent node
 		if(!nodeToAdd)
 		{
 
 			row ='<tr data-tt-id="' + 
-				new_id + 
+				newId + 
 				'" data-tt-parent-id="' +
-				parent_id + '" ';
-			header_value=header[key];
-			if (key=="UTC"&&( typeof header_value === 'object'))
+				parentId + '" ';
+			headerValue=header[key];
+			if (key=="UTC"&&( typeof headerValue === 'object'))
 			{
-				var utc=new Date(header_value["$date"]);
-				header_value=utc.toISOString();
+				var utc=new Date(headerValue["$date"]);
+				headerValue=utc.toISOString();
 			}
 
 			row += ' >';
 			row += "<td>" + key + "</td>";
-			row += "<td>"+header_value+"</td>";
+			row += "<td>"+headerValue+"</td>";
 			row += "<td></td>";
 			row += "<td></td>";
 			row +="</tr>";
@@ -64,16 +62,16 @@ function displayHeaderInPacketView(selector, parent_id, parentNode, header)
 	}
 }
 
-var maxArrayElementDisplay=20;
+var maxArrayElementDisplay=40;
 var currentHeaderID=-1;
 
 
 
-function displayParametersInPacketView(selector, parent_id, parentNode, childNodes, packet_id, level)
+function displayParametersInPacketView(selector, parentId, parentNode, childNodes, packetId, level)
 {
 
 	var i=0;
-	var nodeToAdd, row,new_id;
+	var nodeToAdd, row,newId;
 	var length=0;
 	if( !Array.isArray(childNodes)||childNodes.length==0)
 	{
@@ -81,24 +79,21 @@ function displayParametersInPacketView(selector, parent_id, parentNode, childNod
 	}
 	length=childNodes.length;
 	childlength=length;
-
 	if(level>0 &&length>maxArrayElementDisplay)
 	{
 		length=maxArrayElementDisplay;
 	}
-
 	var last_name='';
 	var num_repeat=0;
 	var same=false;
 	for (var i = 0; i < length; i++) 
 	{
 		var node = childNodes[i];
-		new_id=parent_id+'.'+i;
-		nodeToAdd = $(selector).treetable("node",new_id);
+		newId=parentId+'.'+i;
+		nodeToAdd = $(selector).treetable("node",newId);
 		same=false;
 		if(!nodeToAdd) {
 			var raw="";
-
 			var paramName='';
 			var paramDescr='';
 			var paramChildren=[];
@@ -118,19 +113,19 @@ function displayParametersInPacketView(selector, parent_id, parentNode, childNod
 
 
 			row ='<tr  data-name="'+paramName+'"  data-tt-id="' + 
-				new_id + 
+				newId + 
 				'" data-tt-parent-id="' +
-				parent_id + '" ';
+				parentId + '" ';
 			if (Array.isArray(paramChildren) && paramChildren.length>0)
 			{
 				row += ' data-tt-branch="true" ';
 			}
 			row += ' >';
 
-			if(paramRaw)
-			{
-				raw=paramRaw.toString();
-			}
+			//if(paramRaw)
+			//{
+			//	raw=paramRaw.toString();
+			//}
 			var engValue="";
 			if(paramEng != undefined)
 			{
@@ -139,13 +134,14 @@ function displayParametersInPacketView(selector, parent_id, parentNode, childNod
 
 			if(level>0 &&childlength>maxArrayElementDisplay && i==(maxArrayElementDisplay-1))
 			{
-				paramDescr='<a href="/request/packet/id/'+packet_id+'"> more ...</a>'; 
-				raw="";
-				raw="";
+				paramDescr='<a href="/request/packet/id/'+packetId+'"> more ...</a>'; 
+				paramRaw='';
+				//raw="";
+				//	raw="";
 			}
 			row += "<td>" + paramName+ "</td>";
 			row += "<td>" + paramDescr+ "</td>";
-			row += "<td>" + raw + "</td>";
+			row += "<td>" + paramRaw + "</td>";
 			row += "<td>" + engValue+ "</td>";
 			// End row
 			row +="</tr>";
@@ -153,7 +149,7 @@ function displayParametersInPacketView(selector, parent_id, parentNode, childNod
 
 			if (Array.isArray(paramChildren) && paramChildren.length>0)
 			{
-				displayParametersInPacketView(selector, new_id, nodeToAdd, paramChildren, packet_id , level+1);
+				displayParametersInPacketView(selector, newId, nodeToAdd, paramChildren, packetId , level+1);
 
 			} 
 		}
@@ -166,14 +162,14 @@ function displayPacket(data)
 	packet=data[0];
 	
 	var selector="#packetTreeView";
-	var header_root_id=1;
-	var parameter_root_id=2;
+	var headerRootId=1;
+	var paramRootId=2;
 
 	var header=packet.header;
 	var parameters=packet.parameters;
 
-	var headerNode= $(selector).treetable("node",header_root_id);
-	var paramNode= $(selector).treetable("node",parameter_root_id);
+	var headerNode= $(selector).treetable("node",headerRootId);
+	var paramNode= $(selector).treetable("node",paramRootId);
 
 	if(headerNode){
 		$(selector).treetable("unloadBranch",headerNode);
@@ -182,9 +178,9 @@ function displayPacket(data)
 	{
 		$(selector).treetable("unloadBranch",paramNode);
 	}
-	displayHeaderInPacketView(selector, header_root_id, headerNode, header) ;
-	packet_id=packet._id;
-	displayParametersInPacketView(selector, parameter_root_id, paramNode, parameters, packet_id,0);
+	displayHeaderInPacketView(selector, headerRootId, headerNode, header) ;
+	packetId=packet._id;
+	displayParametersInPacketView(selector, paramRootId, paramNode, parameters, packetId,0);
 }
 
 function displayStixHeaders(data)

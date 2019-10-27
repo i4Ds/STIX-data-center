@@ -2,37 +2,32 @@
 
 based on MongoDB, Python-Flask, bootstrap4  and JQuery.
 
-Test server:  http://108.61.164.149/
+The server used to test the web browsers is at:  http://108.61.164.149/
 
 ## Enviroment setup
 
 
 ```
+
 sudo apt-get install python3
 pip3 install flask werkzeug 
 ```
 To install mongodb, please follow the manual at 
 
-https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
+ https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
  
-## Docker
  
-If docker-compose is installed ([docker](https://docs.docker.com/install/)) run the following command from the root of the repo (where the `docker-compose.yml`) is located
-```bash
-docker-compose up
-```
-this will start the application stack, access the web app at  `127.0.0.01:5000` and mongodb at `127.0.0.1:27017`
- 
-##  Import data for testing
+##  Test data import
 
 Raw data packets are stored in the MongoDB. 
 
 ```
-./apps/parser.py   -i test.dat  --wdb
+./application/parser.py   -i test.dat  --wdb
 ```
 
 
-## Start the web server for testing
+ 
+## Start the web server for testing purporses
 
 ```
  python wsgi.py

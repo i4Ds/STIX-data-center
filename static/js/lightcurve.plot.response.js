@@ -49,11 +49,11 @@ $(function() {
 			var packet=packets[i];
 			var parameters=packet['parameters'];
 			pktAna.load(packet);
-			var startCoarseTime=parameters[1][1][0];
-			var startFineTime=parameters[2][1][0];
-			integrations=parameters[3][1][0];
-			detectorMask=parameters[4][1][0];
-			pixelMask=parameters[5][1][0];
+			var startCoarseTime=parameters[1][1];
+			var startFineTime=parameters[2][1];
+			integrations=parameters[3][1];
+			detectorMask=parameters[4][1];
+			pixelMask=parameters[5][1];
 
 			var startSCET=startCoarseTime+startFineTime/65536.;
 			var	dataStartUnixTime=StixDateTime.SCET2Unixtime(startSCET);
