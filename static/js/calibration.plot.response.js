@@ -66,17 +66,17 @@ $(function() {
 		var $tableRunInfo=$('#calibration-run-info');
 		$tableRunInfo.show();
 		$tableRunInfo.empty();
-		var liveTime=data.auxiliary.NIX00124/1000;
+		var liveTime=data.auxiliary[4][1]/1000;
 		$tableRunInfo.append( '<tr> <td> Run #'+data._id+' </td><td >'+
 			' <p class="font-weight-bolder"> Start time </p></td> <td>'+ 
 			StixDateTime.unixTime2ISOstring(data.start_unix_time) +'</td>'+
 			'<td> <p class="font-weight-bolder"> Duration (s)</p>  </td> <td>'+ 
 			data.duration +'</td><td><p class="font-weight-bolder">Quiet time</p></td>'+
-			' <td>'+data.auxiliary.NIX00123+'</td> <td>'+
+			' <td>'+data.auxiliary[3][1]+'</td> <td>'+
 			'<p class="font-weight-bolder">Live time (s)<p></td>'+
 			' <td>'+liveTime+'</td><td><p class="font-weight-bolder">Detector mask </p></td>'+
-			' <td>'+StixCommon.toHex(data.auxiliary.NIX00407)+'</td> <td><p class="font-weight-bolder">Pixel mask </p>'+
-			'</td> <td>'+StixCommon.toHex(data.auxiliary.NIXD0407)+'</td><td> <a href="/view/packet/calibration/'+data._id+'">  Packets'+
+			' <td>'+StixCommon.toHex(data.auxiliary[10][1])+'</td> <td><p class="font-weight-bolder">Pixel mask </p>'+
+			'</td> <td>'+StixCommon.toHex(data.auxiliary[12][1])+'</td><td> <a href="/view/packet/calibration/'+data._id+'">  Packets'+
 			'</a> </td> </tr>');
 		$('#share').attr('href','/plot/calibration/'+data._id);
 		$('#status').html('Showing calibration run # '+data._id);
