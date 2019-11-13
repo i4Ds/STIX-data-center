@@ -6,17 +6,17 @@
 # @date         : May. 12, 2019
 #import json
 import datetime
-import pymongo
 from dateutil import parser as dtparser
 from datetime import datetime
 from datetime import timedelta
+import pymongo
 
 DEFAULT_MAX_PACKETS_RETURN = 20000
 NUM_MAX_RETURN_PACKETS = 1000
 NUM_MAX_RETURN_HEADERS = 20000
 MAX_TABLE_NUM_ROWS = 500
 MAX_REQUEST_LC_TIME_SPAN_DAYS = 3
-MAX_TIME_SPAN_SECONDS=7*24*3600
+MAX_TIME_SPAN_SECONDS = 7 * 24 * 3600
 
 
 def to_list(spids):
@@ -243,25 +243,26 @@ class MongoDB(object):
         else:
             return 'OK', []
 
-    def select_last_packets(self,spids, start_unix_time, span_seconds):
-        if span_seconds> MAX_TIME_SPAN_SECONDS:
-            span_seconds=MAX_TIME_SPAN_SECONDS 
+    def select_last_packets(self, spids, start_unix_time, span_seconds):
+        if span_seconds > MAX_TIME_SPAN_SECONDS:
+            span_seconds = MAX_TIME_SPAN_SECONDS
         spids = to_list(spids)
         if spids == []:
             return 'INVALID_SPID', []
-        end_unix_time=start_unix_time+span_seconds
+        end_unix_time = start_unix_time + span_seconds
         if self.collection_packets:
             query_string = {
                 '$and': [{
                     'header.SPID': {
                         '$in': spids
                     }
-                }, {
-                    'header.unix_time': {
-                        '$gte': start_unix_time,
-                        '$lt': end_unix_time
-                    }
-                }]
+                },
+                         {
+                             'header.unix_time': {
+                                 '$gte': start_unix_time,
+                                 '$lt': end_unix_time
+                             }
+                         }]
             }
             cursor = self.collection_packets.find(query_string).sort(
                 '_id', 1).limit(NUM_MAX_RETURN_PACKETS)
@@ -274,10 +275,7 @@ class MongoDB(object):
 
     def select_last_packet_headers_by_service_type(self, service_type,
                                                    num=100):
-        result = {
-            'status': 'OK',
-            'packets': []
-        }
+        result = {'status': 'OK', 'packets': []}
         if num > 1000:
             result['status'] = 'TOO_MANY'
             return result
@@ -345,17 +343,17 @@ class MongoDB(object):
                 return run['quicklook_pdf']
         return None
 
-    def get_quicklook_packets(self, packet_type,  start_unix_time, span):
-        span=float(span)
-        start_unix_time=float(start_unix_time)
+    def get_quicklook_packets(self, packet_type, start_unix_time, span):
+        span = float(span)
+        start_unix_time = float(start_unix_time)
         if span > 3600 * 24 * MAX_REQUEST_LC_TIME_SPAN_DAYS:  #max 3 days
             return []
         stop_unix_time = start_unix_time + span
-        collection=None
-        if packet_type=='lc':
-            collection=self.collection_qllc
-        elif packet_type=='bkg': 
-            collection=self.collection_qlbkg
+        collection = None
+        if packet_type == 'lc':
+            collection = self.collection_qllc
+        elif packet_type == 'bkg':
+            collection = self.collection_qlbkg
         else:
             return []
 
@@ -372,17 +370,11 @@ class MongoDB(object):
                 }
             }]
         }
-        ret = collection.find(query_string, {
-            'packet_id': 1
-        }).sort('_id', 1)
+        ret = collection.find(query_string, {'packet_id': 1}).sort('_id', 1)
         packet_ids = [x['packet_id'] for x in ret]
         if packet_ids:
-            query_string={
-                '_id': {
-                    '$in': packet_ids
-                }
-            }
-            cursor=self.collection_packets.find(query_string).sort('_id', 1)
+            query_string = {'_id': {'$in': packet_ids}}
+            cursor = self.collection_packets.find(query_string).sort('_id', 1)
             return cursor
         return []
 
@@ -394,33 +386,24 @@ class MongoDB(object):
         }).sort('_id', -1).limit(1)
         packet_ids = [x['packet_id'] for x in ret]
         if packet_ids:
-            query_string={
-                '_id': {
-                    '$in': packet_ids
-                }
-            }
-            cursor=self.collection_packets.find(query_string).sort('_id', 1)
+            query_string = {'_id': {'$in': packet_ids}}
+            cursor = self.collection_packets.find(query_string).sort('_id', 1)
             return cursor
         return []
 
-
-    def get_last_packet_unix_time(self,spids):
+    def get_last_packet_unix_time(self, spids):
         spids = to_list(spids)
         if spids == []:
             return -1
         if self.collection_packets:
-            query_string = {
-                        'header.SPID': {
-                            '$in': spids
-                            }
-                        }
-            cursor = self.collection_packets.find(query_string,{'header':1}).sort(
-                    'header.unix_time', -1).limit(1)
-            packet=list(cursor)
+            query_string = {'header.SPID': {'$in': spids}}
+            cursor = self.collection_packets.find(query_string, {
+                'header': 1
+            }).sort('header.unix_time', -1).limit(1)
+            packet = list(cursor)
             if packet:
                 return packet[0]['header']['unix_time']
         return -1
-
 
 
 if __name__ == '__main__':
