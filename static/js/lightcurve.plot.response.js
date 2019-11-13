@@ -349,7 +349,7 @@ $(function() {
 		}
 
 		$.ajax({
-			url: '/request/qllc/tw',
+			url: '/request/ql/lc/tw',
 			type:"POST",
 			dataType:"json",
 			data:dataForm ,

@@ -2,6 +2,7 @@
 <html lang="en">
 	<head>
 		<title>{% block title %}{% endblock %}  </title>
+		<meta http-equiv="Cache-control" content="no-cache">
 		<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/bootstrap.min.css')}}">
 		<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/font-awesome.min.css')}}">
 		<script src="{{ url_for('static', filename='vendor/js/jquery-3.4.1.min.js')}}"></script>
@@ -25,6 +26,7 @@
 		{% include "packet-treeview-widget.html" %}
 			{% block after_packet_view%}
 			{% endblock %}
+		</div>
 
 		</div>
 		

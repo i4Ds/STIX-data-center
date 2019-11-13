@@ -56,6 +56,7 @@ class MongoDB(object):
             self.collection_runs = self.db['processing_runs']
             self.collection_calibration = self.db['calibration_runs']
             self.collection_qllc = self.db['ql_lightcurves']
+            self.collection_qlbkg = self.db['ql_background']
         except Exception as e:
             print(str(e))
 
@@ -344,13 +345,21 @@ class MongoDB(object):
                 return run['quicklook_pdf']
         return None
 
-    def get_lightcurve_packets(self, start_unix_time, span):
+    def get_quicklook_packets(self, packet_type,  start_unix_time, span):
         span=float(span)
         start_unix_time=float(start_unix_time)
         if span > 3600 * 24 * MAX_REQUEST_LC_TIME_SPAN_DAYS:  #max 3 days
             return []
         stop_unix_time = start_unix_time + span
-        if not self.collection_qllc:
+        collection=None
+        if packet_type=='lc':
+            collection=self.collection_qllc
+        elif packet_type=='bkg': 
+            collection=self.collection_qlbkg
+        else:
+            return []
+
+        if not collection:
             return []
         query_string = {
             "$and": [{
@@ -363,7 +372,7 @@ class MongoDB(object):
                 }
             }]
         }
-        ret = self.collection_qllc.find(query_string, {
+        ret = collection.find(query_string, {
             'packet_id': 1
         }).sort('_id', 1)
         packet_ids = [x['packet_id'] for x in ret]
@@ -376,6 +385,7 @@ class MongoDB(object):
             cursor=self.collection_packets.find(query_string).sort('_id', 1)
             return cursor
         return []
+
     def get_last_lightcurve_packets(self):
         if not self.collection_qllc:
             return []
@@ -392,6 +402,8 @@ class MongoDB(object):
             cursor=self.collection_packets.find(query_string).sort('_id', 1)
             return cursor
         return []
+
+
     def get_last_packet_unix_time(self,spids):
         spids = to_list(spids)
         if spids == []:

@@ -101,17 +101,6 @@ class JSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
 
 
-#@app.route("/test")
-#def test():
-#    return render_template('test.html')
-
-
-#@app.route("/")
-#def main():
-#    return render_template('index.html')
-    
-
-
 
 
 @app.route("/view/list/files")
@@ -122,10 +111,6 @@ def view_filelist():
 
 
 
-#@app.route('/view/calibration/configuration/<int:calibration_id>')
-#def view_calibration_configuration(calibration_id):
-#    data = STIX_MDB.get_calibration_run_info(calibration_id)
-#    return render_template('calibration-info-in-modal.html', data=data)
 
 
 @app.route('/view/packet/calibration/<int:calibration_id>')
@@ -162,6 +147,20 @@ def view_lightcurves():
         pass
     return render_template(
         'plot-lightcurves.html',
+        start_unix=start_unix,
+        span_seconds=span_seconds)
+
+@app.route("/plot/background", methods=['GET'])
+def view_background():
+    start_unix=0
+    span_seconds=0
+    try:
+        start_unix = float(request.values['start'])
+        span_seconds = float(request.values['span'])
+    except:
+        pass
+    return render_template(
+        'plot-background.html',
         start_unix=start_unix,
         span_seconds=span_seconds)
 
@@ -318,20 +317,6 @@ def request_packets_by_type_tw(packet_type):
         return json_util.dumps(result)
 
 
-#@app.route("/request/last-packets/type-tw")
-#def request_last_telemetry_packets(packet_type):
-#    result = {'status': 'Invalid request', 'packets': []}
-#    SPIDs = get_group_spids(packet_type)
-#    if SPIDs:
-#        try:
-#            start_unix = float(request.values['start_unix'])
-#            span_seconds = float(request.values['span_seconds'])
-#            if start_unix > 0 and span_seconds > 0:
-#                status, packets = STIX_MDB.select_last_packets(SPIDs, start_unix, span_seconds)
-#                result = {'status': status, 'packets': packets}
-#        except Exception as e:
-#            result = {'status': str(e), 'packets': []}
-#    return json_util.dumps(result)
 
 
 @app.route("/request/pdf/quicklook/<int:run_id>")
@@ -371,17 +356,16 @@ def request_calibration_runs():
     return json_util.dumps(result)
 
 
-@app.route('/request/qllc/tw', methods=['POST','GET'])
-def request_quicklook_lightcurves():
+@app.route('/request/ql/<packet_type>/tw', methods=['POST','GET'])
+def request_quicklook(packet_type):
     result = {'status': 'Invalid request', 'data': []}
     data=[]
     try:
         start_unix = float(request.values['start_unix'])
         span_seconds = float(request.values['span_seconds'])
         if start_unix > 0 and span_seconds > 0:
-            data = STIX_MDB.get_lightcurve_packets(start_unix, span_seconds)
-        #if start_unix == 0 and span_seconds == 0:
-        #    data = STIX_MDB.get_last_lightcurve_packets()
+            data = STIX_MDB.get_quicklook_packets(packet_type, start_unix, span_seconds)
+
         result['status'] = 'OK'
         result['data'] = data
 
@@ -389,6 +373,7 @@ def request_quicklook_lightcurves():
         result = {'status': 'Invalid request', 'data': []}
 
     return json_util.dumps(result)
+
 
 
 @app.route("/request/last-packet/timestamp/<int:SPID>")
