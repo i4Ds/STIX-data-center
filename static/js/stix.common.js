@@ -2,6 +2,10 @@ var StixCommon={
 	toHex: function(value){
 		return '0x'+(Number(value).toString(16)).toUpperCase();
 	},
+	white: 'rgb(255, 255, 255)',
+
+
+
 	viridis:
 	[[0.0, 'rgb(255, 255, 255)'], 
 		[0.003937007874015748, 'rgb(68, 2, 85)'],
@@ -129,7 +133,8 @@ var StixCommon={
 		[0.484251968503937, 'rgb(34, 139, 141)'],
 		[0.4881889763779528, 'rgb(33, 140, 141)'],
 		[0.4921259842519685, 'rgb(33, 141, 140)'],
-		[0.49606299212598426, 'rgb(33, 142, 140)'], [0.5, 'rgb(32, 144, 140)'],
+		[0.49606299212598426, 'rgb(33, 142, 140)'], 
+		[0.5, 'rgb(32, 144, 140)'],
 		[0.5039370078740157, 'rgb(32, 145, 140)'],
 		[0.5078740157480315, 'rgb(31, 146, 140)'],
 		[0.5118110236220472, 'rgb(31, 147, 139)'],
@@ -261,9 +266,50 @@ var StixCommon={
 	plotlyConfig:{showLink: false, displaylogo: false, sendDataToCloud:false, sendData: false, modeBarButtonsToRemove: ['sendDataToCloud'],  linkText: false},
 	isObjectEmpty:function(obj) {
 		return Object.keys(obj).length === 0;
+	},
+
+	getColor:function(value)
+	{
+		var col=this.white;
+		for (var j=0;j<this.viridis.length;j++)
+		{
+			var color=this.viridis[j];
+			if (value<=color[0])
+			{
+				col=color[1];
+				break;
+			}
+		}
+		return col;
+
+	},
+
+	getColors:function(data){
+		if(!Array.isArray(data))
+		{
+			return [];
+		}
+		var maxValue=Math.max(data);
+		var colors=[];
+
+		for (var i=0;i<data.length;i++)
+		{
+			var x=data[i];
+			var col=this.white;
+			if(maxValue>0)
+			{
+				var value=x/maxValue;
+				if (value>0)
+				{
+				col=getColor(value);
+				}
+
+
+			}
+			colors.push(col);
+		}
+		return colors;
+
 	}
-
-
-
 };
 

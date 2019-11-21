@@ -102,11 +102,13 @@ def view_calibration_packets(calibration_id):
         'packet-request.html', calibration_id=calibration_id)
 
 
+
+
 @app.route("/view/packet/file/<file_id>")
 def view_packets_of_file(file_id):
     return view_packet_of_file(file_id)
 
-
+"""
 @app.route("/", defaults={'calibration_id': -1})
 @app.route("/plot/calibration/", defaults={'calibration_id': -1})
 @app.route("/plot/calibration/<int:calibration_id>")
@@ -118,6 +120,19 @@ def view_calibration(calibration_id):
         'plot-calibration.html',
         calibration_id=calibration_id,
         message=message)
+        """
+
+@app.route("/", defaults={'calibration_id': -1})
+@app.route("/plot/calibration/", defaults={'calibration_id': -1})
+@app.route("/plot/calibration/<int:calibration_id>")
+def view_calibration_svg(calibration_id):
+    message = 'Requesting data of calibration run # {}'.format(calibration_id)
+    if calibration_id == -1:
+        message = 'Requesting data of last calibration run info'
+    return render_template('plot-calibration-svg.html',
+        calibration_id=calibration_id,message=message)
+
+
 
 
 @app.route("/plot/lightcurves", methods=['GET'])

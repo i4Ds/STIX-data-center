@@ -1,0 +1,44 @@
+<h4> Calibration run # {{ data._id }} </h4> 
+<table class="table table-sm table-bordered">
+      <tr>
+		  <td>Reception time</td> <td>{{data.header_unix_time|strftime}}</td>
+	  </tr>
+	  <tr>
+		  <td>Run start </td> <td>{{data.start_unix_time|strftime}}</td>
+	  </tr>
+	  <tr>
+		  <td>Duration (s)</td> <td>{{data.duration}}</td>
+	  </tr>
+	  <tr>
+		  <td>Quiet time</td> <td>{{data.aux.NIX00123}}</td>
+	  </tr>
+	  <tr>
+		  <td>Live time</td> <td>{{data.aux.NIX00124}}</td>
+	  </tr>
+	  <tr>
+		  <td>Average temperature</td> <td>{{data.aux.NIX00125}}</td>
+	  </tr>
+	  <tr>
+		  <td>Compr S</td> <td>{{data.aux.NIXD0126}}</td>
+	  </tr>
+	  <tr>
+		  <td>Compr K</td> <td>{{data.aux.NIXD0127}}</td>
+	  </tr>
+	  <tr>
+		  <td>Compr M</td> <td>{{data.aux.NIXD0128}}</td>
+	  </tr>
+	  <tr>
+		  <td>Detector mask</td> <td>{{data.aux.NIX00407|to_hex}}</td>
+	  </tr>
+	  <tr>
+		  <td>Pixel mask</td> <td>{{data.aux.NIXD0407|to_hex}}</td>
+	  </tr>
+	  <tr>
+		  <td>SbSpect mask</td> <td>{{data.aux.NIX00160|to_hex}}</td>
+      </tr>
+	  <tr>
+		  <td>Packets</td> <td>
+		  <p class="font-weight-light"><a href="/view/packet/calibration/{{data._id}}">Link<a> </p>
+		  </td>
+      </tr>
+  </table>
