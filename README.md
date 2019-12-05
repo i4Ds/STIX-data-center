@@ -73,7 +73,7 @@ https://flask.palletsprojects.com/en/1.1.x/deploying/
 ### Installation
 ```
 sudo apt-get install nginx
-pip3 install gunicore
+pip3 install gunicorn
 ```
 
 ### Configure ngnix
