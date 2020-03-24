@@ -201,7 +201,7 @@ $(function() {
 			pix=pixelsIds[i];
 			if(det==detector && pixel==pix)
 			{
-				var title='Energy spectrum (Detector # '+det+' Pixel # '+pix+')';
+				var title='Energy spectrum (Detector  '+(det+1)+' Pixel  '+pix+')';
 				var xlabel='Energy channel';
 				var ylabel='Counts';
 				var ydata=spectra[i];
@@ -278,6 +278,7 @@ $(function() {
 		var $table=$('#calibration-runs-table');
 		var ydata=[];
 		$('#btn-calibration-run').show();
+		int lastCalibrationID=-1;
 		for(var i=0;i<data.length;i++)
 		{
 
@@ -289,11 +290,16 @@ $(function() {
 				row.duration, 
 				'<a href="/view/packet/calibration/'+row._id+'">Show</a></td>',
 				'<button class="plot-calibration" type="button" data-id="'+row._id+'" class="btn btn-link">Plot</button>'
+				lastCalibrationID=row._id;
 			];
 			ydata.push(tableRows);
 		}
 		calTable.clear().rows.add(ydata).draw();
 		$('#calibration-run-list').collapse('show');
+		if(lastCalibrationID>=0){
+			loadCalibrationRun(lastCalibrationID);
+		}
+
 	}
 
 

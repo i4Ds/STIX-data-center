@@ -1,3 +1,4 @@
-service mongod restart
+#service mongod restart
+pkill gunicorn
 gunicorn --bind 127.0.0.1:8001 wsgi:app --daemon
 

@@ -7,7 +7,7 @@ var analyzer=new StixPacketAnalyzer();
 
 
 
-function plotAllParameters(data, msgContainer)
+function plotAllParameters(data,analyzer,  msgContainer)
 {
 	var paramNames=Object.keys(data);
 	var timeObj=StixDateTime.formatUnixTimeAxis(data['unix_time']);
@@ -28,27 +28,41 @@ function plotAllParameters(data, msgContainer)
 		{
 			//div exists
 			ydata=data[pName];
-			var plotTitle=StixIDB.getParameterDescription(pName)+' - '+ pName;
+			var paramDescription=StixIDB.getParameterDescription(pName);
+			var plotTitle=paramDescription+' - '+ pName;
 			var textCalibration=StixIDB.getTextCalibration(pName);
+			var paramType=analyzer.getParameterType(pName);
+			var paramUnit='';
+			var ylabel='Raw value';
+			if (paramType==1){
+				paramUnit=StixIDB.getParameterUnit(pName);
+				ylabel='Eng. value';
+				if(paramUnit!=undefined){
+					if(paramUnit.length>0)
+					{
+						ylabel+='('+paramUnit+')';
+					}
+				}
+			}
 
 
-			var ylabel='Value';
-			var xlabel='Time [s] (T0: ' +T0_UTC+')';
+			var xlabel='UTC';
 
 			var timeSeries=data[pName];
 			trace = {
-				x: timestamp,
+				x: utcs,
 				y: timeSeries,
-				text: utcs,
 				line:{shape:'hvh'},
 				type: 'Scatter+Lines'
 
 			};
 
-			var calibrationYValue=Object.keys(textCalibration);
-			var calibrationYText=Object.values(textCalibration);
+			var calibratedYValue=Object.keys(textCalibration);
+			var calibratedYText=Object.values(textCalibration);
 			var xAxisConfig={
-				title: xlabel,
+				showline:true,
+				mirror:'ticks',
+				zeroline:false,
 				titlefont: {
 					family: 'Arial, monospace',
 					size: 14,
@@ -57,18 +71,23 @@ function plotAllParameters(data, msgContainer)
 			};
 			var yAxisConfig={
 				title: ylabel,
+				showline:true,
+				mirror:'ticks',
+				zeroline:false,
 				titlefont: {
 					family: 'Arial, monospace',
 					size: 14,
 					color: '#7f7f7f'
-				}
+				},
 			};
 
-			if(calibrationYText.length>0)
+			if(calibratedYText.length>0)
 			{
 				yAxisConfig['tickmode']="array";
-				yAxisConfig['tickvals']=calibrationYValue.map(Number);
-				yAxisConfig['ticktext']=calibrationYText;
+				yAxisConfig['tickvals']=calibratedYValue.map(Number);
+				yAxisConfig['ticktext']=calibratedYText;
+				yAxisConfig['title']='';
+
 			}
 
 
@@ -77,18 +96,22 @@ function plotAllParameters(data, msgContainer)
 					text:plotTitle,
 					font: {
 						family: 'Courier New, monospace',
-						size:18 
+						size:16 
 					},
 					xref: 'paper',
-					x: 0.05,
+					x: 0.2,
+					y: 0.8,
+					 xanchor:'left',
+					 yanchor:'bottom',
 				},
 				autosize: false,
 				width: 600,
-				height: 300,
+				height: 350,
 				xaxis: xAxisConfig,
 				yaxis: yAxisConfig
 
 			};
+			var traces=[trace];
 			Plotly.newPlot(pName, [trace], layout, config=StixCommon.plotlyConfig);
 		}
 	}
@@ -118,7 +141,7 @@ function analyzeHousekeeping(data)
 	analyzer.mergePackets(packets,[54101,54102]);
 	var results=analyzer.getAllParameters();
 	$('#status').html('Preparing data...');
-	plotAllParameters(results, '#status');
+	plotAllParameters(results, analyzer,  '#status');
 	
 	//finished
 	try{
@@ -146,7 +169,7 @@ function analyzeHousekeeping(data)
 		$('#share').attr('href',shareURL);
 
 	}catch(e)
-	{
+	{ 
 	}
 
 }

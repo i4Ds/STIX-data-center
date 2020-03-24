@@ -3,44 +3,40 @@
 	<head>
 		<title>{% block title %}{% endblock %}  </title>
 		<meta http-equiv="Cache-control" content="no-cache">
-		<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/bootstrap.min.css')}}">
-		<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/font-awesome.min.css')}}">
-		<script src="{{ url_for('static', filename='vendor/js/jquery-3.4.1.min.js')}}"></script>
-		<script src="{{ url_for('static', filename='vendor/js/bootstrap.min.js')}}"></script>
-		<link rel="stylesheet" href="{{ url_for('static', filename='css/loader.css')}}">
-		<link rel="stylesheet" href="{{ url_for('static', filename='css/TMTC.css')}}">
-		<link rel="stylesheet" href="{{ url_for('static', filename='css/toolbar.css')}}">
-		<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/jquery.treetable.css')}}">
-		<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/jquery.treetable.theme.default.css')}}">
+		   {% assets "basepacket_css" %}
+            <link rel="stylesheet" href="{{ ASSET_URL }}" />
+        {% endassets %}
+
+		{% assets "basepacket_js_header" %}
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
 
 
 		{% block head %} {% endblock %}
 	</head>
-	<body>
+		<body style="overflow-y:auto; overflow-x:hidden;">
+			<div class="wrapper">
+				{% include "sidebar.html" %}
 
-		{% include "navi.html" %}
-		<div class="container-fluid">
-			{% block before_packet_view%}
+				<div id="content">
+
+
+					{% block before_packet_view%}
+					{% endblock %}
+					{% include "packet-treeview-widget.html" %}
+					{% block after_packet_view%}
+					{% endblock %}
+				</div>
+				{% include "footer.html" %}
+			</div>
+
+
+			{% block before_jscript %}  
 			{% endblock %}
-
-		{% include "packet-treeview-widget.html" %}
-			{% block after_packet_view%}
+			{% assets "basepacket_js_bottom" %}
+				<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+			{% endassets %}
+			{% block after_jscript %}  
 			{% endblock %}
-		</div>
-
-		</div>
-		
-		{% include "footer.html" %}
-
-	
-		{% block before_jscript %}  
-		{% endblock %}
-		<script src="{{ url_for('static', filename='js/stix.datetime.js')}}"></script>
-		<script src="{{ url_for('static', filename='js/stix.idb.js')}}"></script>
-		<script src="{{ url_for('static', filename='vendor/js/jquery.treetable.js')}}"></script>
-		<script src="{{ url_for('static', filename='js/packet.treeview.loader.js')}}"></script>
-		<script src="{{ url_for('static', filename='js/packet.treeview.response.js')}}"></script>
-		{% block after_jscript %}  
-		{% endblock %}
-	</body>
+		</body>
 </html>

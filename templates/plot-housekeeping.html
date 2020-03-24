@@ -1,8 +1,9 @@
 {% extends "base-plotting.html" %}
+
+{% set currentPage="Housekeeping" %}
+
 {% block title %}STIX housekeeping data monitor{% endblock %}
 {% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/bootstrap-datetimepicker.min.css')}}">
-<script src="{{ url_for('static', filename='vendor/js/bootstrap-datetimepicker.js')}}"></script>
 {% endblock %}
 {% block top_navi_title%} 
 Housekeeping data
@@ -18,11 +19,8 @@ Housekeeping data
 
 {% endblock %}
 
-{% block  toolbar_button_groups%} 
-<button type="button" class="btn btn-outline-success active last-data" value="12">Last 12 hrs</button>
-<button type="button" class="btn btn-outline-success last-data" value="24">Last day</button>
-<button type="button" class="btn btn-outline-success last-data" value="48">Last 2 days</button>
-{% endblock %}
+{% set button_groups=({"Last 12 hrs": 12,"Last day": 24,"Last 2 days":48}) %}
+
 
 
 {% block  main_container%} 
@@ -50,8 +48,9 @@ window.fileId={{file_id}};
 
 
 {% block after_js %}
-<script src="{{ url_for('static', filename='js/housekeeping.plot.js')}}"></script>
-<script src="{{ url_for('static', filename='js/housekeeping.plot.request.js')}}"></script>
+{% assets "hk_js" %}
+	<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
 <script>
 	$(function () {
 		$('.form_datetime').datetimepicker( {format: "yyyy-mm-ddThh:ii:ss"});

@@ -5,81 +5,98 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta http-equiv="Cache-control" content="no-cache">
 		<title>{% block title %}{% endblock %}  </title>
-		<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/font-awesome.min.css')}}">
-		<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/bootstrap.min.css')}}">
-		<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/dashboard.css')}}">
-		<link rel="stylesheet" href="{{ url_for('static', filename='css/stix.plot.css')}}">
-		<script src="{{ url_for('static', filename='vendor/js/jquery-3.4.1.min.js')}}"></script>
-		<script src="{{ url_for('static', filename='vendor/js/bootstrap.min.js')}}"></script>
-		<script src="{{ url_for('static', filename='vendor/js/popper.min.js')}}"></script>
-		<script src="{{ url_for('static', filename='vendor/js/plotly-latest.min.js')}}"></script>
-		<script src="{{ url_for('static', filename='vendor/js/is.js')}}"></script>
+        {% assets "baseplot_css" %}
+            <link rel="stylesheet" href="{{ ASSET_URL }}" />
+        {% endassets %}
+
+		{% assets "baseplot_js" %}
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+
 		{% block head %} {% endblock %}
 
 	</head>
-	<body>
-		{%include 'navi.html' %}
-		<div class="container-fluid">
-			{% include 'dashboard-left-sidebar.html' %}
-			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-			<form id="reqform" class="">
-				<div class="btn-toolbar">
-					<div class="btn-group  btn-group-sm mr-1">
-						{% block toolbar_button_groups %}
-						{% endblock %}
-					</div> 
-					<div class="input-group input-group-sm mr-auto">
-						<input type="text"  id="utc-input" class=" form-control form_datetime" placeholder="Start UTC" name="start" id="start-input">
-						<input type="text" class="form-control" placeholder="Time span (min)" min="0" max="5000" name="span" id="span-input">
-						<div class="input-group-append">
-							<button class="btn btn-outline-success" type="submit">Query</button>
-						</div>
-					</div>
-					<div class="btn-group btn-group-sm ">
-						<button type="button" class="btn btn-outline-success" id="previous" value="">Previous </button>
-						<button type="button" class="btn btn-outline-success" id="next" value="">Next</button>
-						<button type="button" class="btn btn-outline-success ml-2" >
-							<a class="button" href="#" id="share">
-								<i class="fa fa-chain" style="font-size:14;color:green"></i>Share
-							</a>
+	<body >
+		<div class="wrapper">
+			{% include "sidebar.html" %}
+			<div id="content">
+				<div class="container-fluid">
+						<nav class="navbar navbar-expand-lg navbar-light bg-light">
+						<button type="button" id="sidebarCollapse" class="btn btn-secondary mr-1">
+							<i class="fas fa-list-ul"></i>
+							<span></span>
 						</button>
-					</div>
-				</div>
-			</form>		
-			<div class="row">
-				<div class="shadow-sm p-3 mb-2 bg-light col-md-12 rounded">
-					<span class="font-weight-light" id="status"> 
-						{% block main_title_bar %}
-						{%endblock%}
-					</span>
-				</div>
-			</div>
+						<button class=" btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" 
+							data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+							<i class="fas fa-align-justify"></i>
+						</button>
+						<div class="collapse navbar-collapse" id="navbarSupportedContent">
+							<form id="reqform" class="form-inline">
+								<div class="btn-toolbar">
+									<div class="btn-group  btn-group-sm mr-1">
+										{% for key, value in button_groups.items() %}	
+										<button type="button" class="btn btn-outline-success last-data " value="{{value}}">{{key}}</button>
+										{% endfor	%}
+									</div> 
+									<div class="input-group input-group-sm mr-auto">
+										<input type="text"  id="utc-input" class=" form-control form_datetime" placeholder="Start UTC" name="start" id="start-input">
+										<input type="text" class="form-control" placeholder="Time span (min)" min="0" max="5000" name="span" id="span-input">
+										<div class="input-group-append">
+											<button class="btn btn-outline-success" type="submit">Query</button>
+										</div>
+									</div>
 
-			<div class="row">
-				<div class="col-md-12">
+								</div>
+							</form>		
+										<ul class="breadCrumb nav navbar-nav ml-auto">
+											<li  class="nav-link">{{currentPage}}</li>
+										</ul>	
+						</div>
+						</nav>
+
+
+
+
+
+					<div class="d-flex mb-3 bg-light rounded shadown-sm mt-2 sticky-top">
+
+						<div class="mr-auto p-2"> 
+							<span class="font-weight-light" id="status"> 
+								{% block main_title_bar %}
+								{%endblock%}
+							</span>
+						</div>
+						<div class="p-1 mr-1"> 
+							<div class="btn-group btn-group-sm ">
+								<button type="button" class="btn btn-outline-success mr-1" id="previous" value="">Previous </button>
+								<button type="button" class="btn btn-outline-success" id="next" value="">Next</button>
+							</div>
+						</div>
+						<div class="p-2"> 
+							<a class="button float-right"  href="#" id="share">
+								<i class="fa fa-share-alt" aria-hidden="true"></i> Share
+							</a>
+						</div>
+					</div><!--end of  info bar-->
+
 					{% block main_container%} {% endblock %}
-				</div>
-			</div>
 
-			</main>
+				</div> <!-- end of fluid-->
 
+			</div> <!-- end of content-->
 
-		</div>
-		{% include "footer.html" %}
-
+		</div> <!-- end of all -->
 		{% block before_js%}  	{% endblock %}
-		<script src="{{ url_for('static', filename='js/stix.idb.js')}}"></script>
-		<script src="{{ url_for('static', filename='js/stix.common.js')}}"></script>
-		<script src="{{ url_for('static', filename='js/stix.datetime.js')}}"></script>
-		<script src="{{ url_for('static', filename='js/stix.packet.analyzer.js')}}"></script>
-		<script src="{{ url_for('static', filename='js/stix.plot.js')}}"></script>
+		{% assets "stix_js" %}
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+
 		{% block after_js%}  	{% endblock %}
 		<script>
 			$(".btn-group > .btn").click(function(){
 				$(this).addClass("active").siblings().removeClass("active");
 			});
 		</script>
-
 
 	</body>
 </html>

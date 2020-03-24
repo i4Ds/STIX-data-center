@@ -1,0 +1,11 @@
+[Unit]
+Description=STIX Flask web server
+[Install]
+WantedBy=multi-user.target
+[Service]
+User=xiaohl
+PermissionsStartOnly=true
+ExecStart=/usr/local/bin/gunicorn --bind 127.0.0.1:8001 wsgi:app --daemon
+TimeoutSec=60
+Restart=on-failure
+RuntimeDirectoryMode=777

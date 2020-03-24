@@ -2,10 +2,8 @@
 
 {% extends "base-plotting.html" %}
 {% block title %}STIX light curve viewer{% endblock %}
+{% set currentPage="Background spectra" %}
 {% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/bootstrap-datetimepicker.min.css')}}">
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/jquery.dataTables.min.css')}}">
-<script src="{{ url_for('static', filename='vendor/js/bootstrap-datetimepicker.js')}}"></script>
 {% endblock %}
 {% block top_navi_title%} 
 Quicklook background monitor
@@ -18,11 +16,8 @@ Quicklook background monitor
 {%endif%}
 {% endblock %}
 
-{% block  toolbar_button_groups%} 
-<button type="button" class="btn btn-outline-success active last-data" value="12">Last 12 hrs</button>
-<button type="button" class="btn btn-outline-success last-data " value="24">Last day</button>
-<button type="button" class="btn btn-outline-success last-data" value="72">Last 3 days</button>
-{% endblock %}
+{% set button_groups=({"Last 12 hrs": 12,"Last day": 24,"Last 3 days":72}) %}
+
 
 
 {% block  main_container%} 
@@ -44,7 +39,6 @@ Quicklook background monitor
 	</div>
 </div>
 
-
 <div id="" class="d-flex flex-column">
 	<div id="lightcurves"></div>
 	<div id="triggers"></div>
@@ -64,15 +58,24 @@ Quicklook background monitor
 {% set span_seconds=0 %}
 {% endif %}
 
+{% if run is not defined%}
+{% set run=-1 %}
+{% endif %}
+
 <script>
 	window.startUnix={{start_unix}};
 window.timeSpanSeconds={{span_seconds}};
+window.run={{run}};
 </script>
 
 {% endblock %}
 
 {% block after_js %}
-<script src="{{ url_for('static', filename='js/qlbkg.plot.response.js')}}"></script>
+
+
+{% assets "qlbkg_js" %}
+	<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
 <script>
 	$(function () {
 		$('.form_datetime').datetimepicker( {format: "yyyy-mm-ddThh:ii:ss"});

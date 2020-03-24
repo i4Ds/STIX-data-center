@@ -1,72 +1,96 @@
 {% extends "base-fluid.html" %}
+
+{% set currentPage="Telemetry files" %}
+{% set bodyStyle="overflow-y:scroll; overflow-x:hidden;" %}
+
 {% block title %}STIX raw telemetry files{% endblock %}
 {% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/dashboard.css')}}">
 <style type="text/css">
-.dataTables_filter {
-	text-align: right !important;
+td th {
+	text-align: center;
 }
 </style>
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/jquery.dataTables.min.css')}}">
 {% endblock %}
 {% block  container %} 
 
-{% include 'dashboard-left-sidebar.html' %}
-<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-<div class=" row bg-white rounded box-shadow mt-5 ">
-	<div class="col">
-		<div class="shadow-sm p-3 mb-2  rounded">
-		<p class="h4 font-weight-light">STIX raw telemetry files </p>
-		</div> 
-		<table class="table table-sm table-striped table-bordered table-hover" id="raw-table">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<button type="button" id="sidebarCollapse" class="btn btn-secondary mr-1">
+		<i class="fas fa-list-ul"></i>
+		<span></span>
+	</button>
+	<button class=" btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" 
+																				 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<i class="fas fa-align-justify"></i>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<form id="reqform" class="form-inline">
+			<div class="btn-toolbar">
+				<div class="input-group input-group-sm mr-auto">
+				<div class="input-group-prepend">
+						<span class="input-group-text" >Time range</span>
+			  </div>					
+  <input type="text"  id="utc-input" class=" form-control form_datetime" placeholder="Start UTC" name="dates" id="start-input">
+				</div>
+
+			</div>
+		</form>		
+		<ul class="breadCrumb nav navbar-nav ml-auto">
+			<li  class="nav-link">{{currentPage}}</li>
+			<!--
+			<li class="nav-link" > <a href="/upload/raw"> Upload </a> </li>
+			-->
+		</ul>	
+	</div>
+</nav>
+
+<div class="container-fluid bg-light "> 
+	<div class="bg-white shadow p-3 ">
+<h4 id="table-caption"> </h4>
+<div class="row clearfix"> 
+	<div class="col-md-12 mr-3  ml-1 column">
+		<table  class="table table-stripped table-bordered hover compact" id="raw-table" >
 			<thead>
-				<tr class="active">
-					<th class="sortable-column sort-desc">ID</th>
-					<th>Filename</th>
-					<th>Processing time</th>
-					<th>Data start UTC</th>
-					<th>Data end UTC</th>
-					<th width="20%">Description</th>
-					<th>Packets</th>
-					<th>HK plotting</th>
-					<th>Quicklook PDF</th>
+				<tr class="">
+					<th  class="sortable-column sort-desc">ID</th>
+					<th >Filename</th>
+					<th >Arrival time</th>
+					<th >Start UTC</th>
+					<th >Span (min)</th>
+					<th>
+						<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Packet browser" >Packets</span>
+					</th>
+					<th> 	
+						<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Plot housekeeping parameters" >HK</span>
+					</th>
+					<th>
+						<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Plot Quicklook Light Curves" >QLLC</span>
+					</th>
+					<th>
+						<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Plot Quicklook Background Monitor Light Curves" >BKGLC</span>
+					</th>
+					<th>
+						<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Plot Quicklook Background Spectra" >Spectra</span>
+					</th>
+					<th>
+						<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Plot calibration spectra" >CAL</span>
+					</th>
+					<th >Remarks</th>
 				</tr>
 			</thead>
 			<tbody >
-				{% for row in runs %}
-				<tr>
-					<td>{{ row._id }}</td>
-					<td>{{ row.filename }}</td>
-					<td>{{ row.run_start_unix_time|strftime}}</td>
-					<td>{{ row.data_start_unix_time|strftime}}</td>
-					<td>{{ row.data_stop_unix_time|strftime}}</td>
-					<td> <span class="d-inline-block text-truncate" style="max-width:200px;"> {{ row.comment}}</span></td>
-					<td><a href="/view/packet/file/{{row._id}}">Ready</a></td>
-					<td id="hk"> <a href="/plot/housekeeping/file/{{row._id}}">Ready</a></td>
-					{% if row.quicklook_pdf is defined %}
-					<td > <a href="/request/pdf/quicklook/{{row._id}}"><i class="fa fa-file-pdf-o" style="font-size:20px;color:red"></i></a></td>
-					{% else %}
-					<td > </td>
-					{%endif %}
-				</tr>
-				{% endfor %}
-
 			</tbody>
 		</table>
 	</div>
 </div>
-</main>
+	</div>
+</div>
 
 {% endblock %}
-
 {% block jscript %}
 
-<script src="{{ url_for('static', filename='vendor/js/jquery.dataTables.min.js')}}"></script>
-<script src="{{ url_for('static', filename='vendor/js/dataTables.bootstrap4.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/rawfile.list.response.js')}}"></script>
+{% assets "listfile_js" %}
+	<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
 
 
 {% endblock %}
-
-
-

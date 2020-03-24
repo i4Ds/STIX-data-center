@@ -301,7 +301,7 @@ var StixCommon={
 				var value=x/maxValue;
 				if (value>0)
 				{
-				col=getColor(value);
+					col=getColor(value);
 				}
 
 
@@ -310,6 +310,38 @@ var StixCommon={
 		}
 		return colors;
 
+	},
+
+	download:function(filename, text) {
+		var element = document.createElement('a');
+		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+		element.setAttribute('download', filename);
+
+		element.style.display = 'none';
+		document.body.appendChild(element);
+
+		element.click();
+
+		document.body.removeChild(element);
+	},
+
+	downloadArrayAsCSV:function(filename, dataArray){
+		var csv ;
+		header= 'detector, pixel, sbspec ID, ADC start, ADC step, spectral data,\n';
+		csv=dataArray.map(row => row.map(item => (typeof item === 'string' && item.indexOf(',') >= 0) ? `"${item}"`: String(item)).join(',')).join('\n');
+		var data = encodeURI('data:text/csv;charset=utf-8,' +header+ csv);
+		console.log(data);
+
+		const link = document.createElement('a');
+		link.setAttribute('href', data);
+		link.setAttribute('download', filename);
+
+		document.body.appendChild(link);
+
+		link.click();
+
+		document.body.removeChild(link);
 	}
+
 };
 

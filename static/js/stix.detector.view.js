@@ -1,36 +1,36 @@
 var StixDetectorView={
 	detectorP0:[[	135	,	222.5	],
-[	135	,	337.5	],
-[	135	,	472.5	],
-[	135	,	587.5	],
-[	260	,	107.5	],
-[	260	,	222.5	],
-[	260	,	337.5	],
-[	260	,	472.5	],
-[	260	,	587.5	],
-[	260	,	702.5	],
-[	385	,	37.5	],
-[	385	,	152.5	],
-[	385	,	267.5	],
-[	385	,	542.5	],
-[	385	,	657.5	],
-[	385	,	772.5	],
-[	510	,	37.5	],
-[	510	,	152.5	],
-[	510	,	267.5	],
-[	510	,	542.5	],
-[	510	,	657.5	],
-[	510	,	772.5	],
-[	635	,	107.5	],
-[	635	,	222.5	],
-[	635	,	337.5	],
-[	635	,	472.5	],
-[	635	,	587.5	],
-[	635	,	702.5	],
-[	760	,	222.5	],
-[	760	,	337.5	],
-[	760	,	472.5	],
-[	760	,	587.5	]],
+		[	135	,	337.5	],
+		[	135	,	472.5	],
+		[	135	,	587.5	],
+		[	260	,	107.5	],
+		[	260	,	222.5	],
+		[	260	,	337.5	],
+		[	260	,	472.5	],
+		[	260	,	587.5	],
+		[	260	,	702.5	],
+		[	385	,	37.5	],
+		[	385	,	152.5	],
+		[	385	,	267.5	],
+		[	385	,	542.5	],
+		[	385	,	657.5	],
+		[	385	,	772.5	],
+		[	510	,	37.5	],
+		[	510	,	152.5	],
+		[	510	,	267.5	],
+		[	510	,	542.5	],
+		[	510	,	657.5	],
+		[	510	,	772.5	],
+		[	635	,	107.5	],
+		[	635	,	222.5	],
+		[	635	,	337.5	],
+		[	635	,	472.5	],
+		[	635	,	587.5	],
+		[	635	,	702.5	],
+		[	760	,	222.5	],
+		[	760	,	337.5	],
+		[	760	,	472.5	],
+		[	760	,	587.5	]],
 	plotOneDector: function(detectorID=0, colors=[], data=[]){
 		var startX=this.detectorP0[detectorID][0];
 		var startY=this.detectorP0[detectorID][1];
@@ -57,7 +57,7 @@ var StixDetectorView={
 		y=startY+110;
 		paths+= '<text x="'+x+'" y="'+y+'" > #'+(detectorID+1)+' </text>';
 
-		paths+='<rect x="'+startX+'" y="'+startY+'" width="100" height="100"  style="'+guardRingStyle+'" />';
+		paths+='<rect class="guardring" x="'+startX+'" y="'+startY+'" width="100" height="100"  style="'+guardRingStyle+'" />';
 		for(var i=0;i<12;i++)
 		{
 			var path='';
@@ -82,7 +82,7 @@ var StixDetectorView={
 			var pixelData='';
 			if (data.length>0)
 			{
-				pixelData="Counts: "+data[detectorID*12+i];
+				pixelData=data[detectorID*12+i];
 			}
 			var pixelStyle="fill:"+color+";stroke-width:1;stroke:rgb(0,0,0)" ;
 			paths+=  ' <path class="pixel" onClick="loadPixelData('	+detectorID+','+i
@@ -111,10 +111,40 @@ var StixDetectorView={
 		}
 		return path;
 	},
+	createSbSpectraIndicator: function(X0,Y0,W, counts){
+		var path=''
+		var x,y;
+		var k=0;
+		var num=StixCommon.viridis.length;
+		var maxCount=0;
+		if(counts.length==8)
+		{
+			maxCount=Math.max(...counts); 
+		}
+
+		for(var i=0;i<8;i++)
+		{
+			var count=0;
+			if(counts.length==8 && maxCount>0)
+			{
+				count=counts[i];
+				k=parseInt(counts[i]/maxCount*num)-1;
+				if(k<0)k=0;
+			}
+			y=Y0;
+			x=X0+ i* W *1.05;
+			
+			path+='<rect class="pixel" onClick="plotCounts('+i
+				+')" id="sbspec-'+i+'" x="'+x+'" y="'+y+'" width="'+W+'" height="'+W+'"  style="fill:'+StixCommon.viridis[k][1]+'; stroke-width:1;stroke:rgb(0,0,255)" ><title> Subspectrum '+i+': '+count+' counts</title></rect>';
+		}
+		path+= '<text x="'+(X0+3*W)+'" y="'+(Y0+1.5*W)+'" > Sbspec</text>';
+		return path;
+
+	},
 
 
 
-	plotDector : function (selector,counts=[]){
+	plotDector : function (selector,counts=[], sbspecCounts=[]){
 		//counts is a 32*12 array containing data or empty
 		$(selector).html('');
 		var frameStyle="fill:rgb(255,255,255); stroke-width:3;stroke:rgb(0,0,255)";
@@ -136,9 +166,17 @@ var StixDetectorView={
 
 
 		var maxValue=Math.max(...counts);
-		 maxValue=Math.ceil(maxValue/100.)*100;
+		maxValue=Math.ceil(maxValue/100.)*100;
 
 		html+=this.createColorBar(10,1000,1000,30,maxValue);
+		if(Array.isArray(sbspecCounts))
+		{
+			if(sbspecCounts.length>0){
+				html+=this.createSbSpectraIndicator(0,0,30,sbspecCounts);
+			}
+		}
+
+
 		for (var i=0;i<32;i++)
 		{
 			var colors=[];

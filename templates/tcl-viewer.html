@@ -1,0 +1,86 @@
+{% extends "base-fluid.html" %}
+
+{% set currentPage="Telemetry files" %}
+{% set bodyStyle="overflow-y:scroll; overflow-x:hidden;" %}
+
+{% block title %}STIX raw telemetry files{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/jquery.dataTables.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/daterangepicker.css')}}">
+<script src="{{ url_for('static', filename='vendor/js/moment.min.js')}}"></script>
+<script src="{{ url_for('static', filename='vendor/js/daterangepicker.min.js')}}"></script>
+<style type="text/css">
+td th {
+	text-align: center;
+}
+</style>
+{% endblock %}
+{% block  container %} 
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<button type="button" id="sidebarCollapse" class="btn btn-secondary mr-1">
+		<i class="fas fa-list-ul"></i>
+		<span></span>
+	</button>
+	<button class=" btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" 
+																				 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<i class="fas fa-align-justify"></i>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<form id="reqform" class="form-inline">
+			<div class="btn-toolbar">
+				<div class="input-group input-group-sm mr-auto">
+				<div class="input-group-prepend">
+						<span class="input-group-text" >Time range</span>
+			  </div>					
+  <input type="text"  id="utc-input" class=" form-control form_datetime" placeholder="Start UTC" name="dates" id="start-input">
+				</div>
+
+			</div>
+		</form>		
+		<ul class="breadCrumb nav navbar-nav ml-auto">
+			<li  class="nav-link">{{currentPage}}</li>
+		</ul>	
+	</div>
+</nav>
+
+<div class="container-fluid bg-light "> 
+	<div class="bg-white shadow p-3">
+<h4> Raw data files</h4>
+<div class=" row"> 
+	<div class="col mr-3  ml-1">
+		<table  class="stripe row-border order-column hover compact " id="raw-table" >
+			<thead>
+				<tr class="active">
+					<th width="5%" class="sortable-column sort-desc">ID</th>
+					<th>Filename</th>
+					<th>Arrival time</th>
+					<th>Start UTC</th>
+					<th width="10%">Span (min)</th>
+					<th width="5%">Raw</th>
+					<th>Packets</th>
+					<th>HK</th>
+					<th>QLLC</th>
+					<th>QLBKG</th>
+					<th>CAL</th>
+					<th >Remarks</th>
+				</tr>
+			</thead>
+			<tbody >
+			</tbody>
+		</table>
+	</div>
+</div>
+	</div>
+</div>
+
+{% endblock %}
+{% block jscript %}
+
+<script src="{{ url_for('static', filename='js/stix.datetime.js')}}"></script>
+<script src="{{ url_for('static', filename='vendor/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{ url_for('static', filename='vendor/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/rawfile.list.response.js')}}"></script>
+
+
+{% endblock %}

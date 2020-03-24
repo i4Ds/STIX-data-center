@@ -8,7 +8,11 @@ $(function() {
 	$('#right-buttons').show();
 	var pktAna=new StixPacketAnalyzer();
 	window.lightcurveData={};
-	if(window.startUnix>0 && window.timeSpanSeconds>0)
+	if(window.run>=0)
+	{
+		requestLightCurvePacketsOfRun(window.run);
+	}
+	else if(window.startUnix>0 && window.timeSpanSeconds>0)
 	{
 		//Request from URL
 		requestLightCurvePackets(window.startUnix,window.timeSpanSeconds);
@@ -163,9 +167,9 @@ $(function() {
 				break;
 		}
 
-		var timeRangeString=startUTC+' - ' + endUTC;
+		var timeRangeString=startUTC+' to ' + endUTC;
 		$('#status').html('Showing data from '+timeRangeString);
-		var ylabel='Counts in '+ data.integrationTime +' s';
+		var ylabel='Number of counts in '+ data.integrationTime +' s';
 
 
 
@@ -176,7 +180,7 @@ $(function() {
 		var trigTrace=[];
 		var rcrTrace=[];
 
-		var names=['LC 0 - 10 keV', 'LC 10 - 15 keV' , 'LC 15 - 25 keV','LC 25 - 50 keV' , 'LC 50 - 150 keV'];
+		var names=['4 - 10 keV', '10 - 15 keV' , '15 - 25 keV','25 - 50 keV' , '50 - 150 keV'];
 		for (var ii=0;ii<5;ii++)
 		{
 			lcTraces.push({
@@ -191,7 +195,7 @@ $(function() {
 			name: "Triggers in "+data.integrationTime+ ' s',
 			type: 'Scatter+Lines'	}];
 		rcrTrace=[{x: timeArray,y: data.rcrArray,line:{shape:'hvh'},
-			name:'RCR',
+			name:'Rate control regimes',
 			type: 'Scatter+Lines' }];
 		var plotTitle='QL LCs ('+ timeRangeString+')';
 
@@ -213,16 +217,19 @@ $(function() {
 		}
 
 		var lcLayout = { 
+			title:'STIX quick-look light curves',
 			showlegend: true, 	
 			//	legend: { 	x: 0, y: 1.0 }, 
 			xaxis: xAxisConfig,
 			yaxis: yAxisConfig};
 		var trigLayout = {
+			title:'Trigger rate',
 			showlegend: true, 	
 			xaxis: xAxisConfig,
 			yaxis: yAxisConfig
 		};
 		var rcrLayout = {
+			title:'Rate control regimes',
 			showlegend: true, 	
 			xaxis: xAxisConfig,
 			yaxis: yAxisConfigRCR
@@ -326,7 +333,35 @@ $(function() {
 	}
 
 
+	function requestLightCurvePacketsOfRun(run)
+	{
+		$('#status').html('Requesting lightcurves of run '+run);
 
+
+		$.ajax({
+			url: '/request/ql/lc/run/'+run,
+			dataType:"json",
+			success: function (data) {
+				if(data['status']!='OK')
+				{
+					$('#status').html(data['status']);
+				}
+				if(data['data'].length>0)
+				{
+					window.lightcurveData=getLightCurveData(data,0,0);
+					plotLightCurves(window.lightcurveData, 0,false);
+					var shareURL='/plot/lightcurves?run='+run;
+					$('#share').attr('href',shareURL);
+				}
+				else
+				{
+					$('#status').html('No light curve data found for run: '+run);
+				}
+
+			}
+
+		});
+	}
 
 
 	function requestLightCurvePackets(start, span)

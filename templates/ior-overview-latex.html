@@ -1,0 +1,59 @@
+{% extends "base-fluid.html" %}
+
+{% block title %}Operation request viewer{% endblock %}
+{% block head %}
+<style type="text/css">
+#occurrences{
+	border-style:solid;
+	border-color: grey;
+}
+</style>
+{% assets "iorviewer_css" %}
+<link rel="stylesheet" href="{{ ASSET_URL }}" />
+{% endassets %}
+
+{% endblock %}
+
+{% block  container %} 
+<div class="container-fluid bg-light "> 
+	<p>
+	<div class="alert alert-success">
+		<h4> Operation request overview</h4>
+		<div id="msg"></div><br>
+		<div id="top-info"></div><br>
+		<br>
+	</div>
+	</p>
+
+	<div class="bg-white shadow p-3">
+		<div class="row"> 
+			<div class="col">
+				<div id="file-info"> </div> <a href="#" id="downloadlatex">Download</a>
+				<a class="ml-2" href="/view/ior/latex/{{file_id-1}}" id="">Previous</a>
+				<a class="ml-2" href="/view/ior/latex/{{file_id+1}}" id="">Next</a>
+				<textarea id="occurrences"  rows="50" cols="250" > 	</textarea>
+				<div id="summary"></div>
+				{% if file_id is defined%}
+				<div class="mt-20 p-10 ml-30">
+				<a href="/view/ior/{{file_id}}">Here for more details</a>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block jscript %}  
+{% if file_id is not defined%}
+{% set file_id=-1 %}
+{% endif %}
+<script>
+	window.fileID={{file_id}};
+</script>
+{% assets "ior_overview_latex_js" %}
+<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
+
+
+{% endblock %}

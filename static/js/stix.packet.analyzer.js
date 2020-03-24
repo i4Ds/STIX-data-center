@@ -73,7 +73,6 @@ class StixPacketAnalyzer
 		}catch(e){
 			return -1;
 		}
-
 	}
 
 	constructor()
@@ -81,6 +80,7 @@ class StixPacketAnalyzer
 		this._parameters=[];
 		this._parameter_vector={};
 		this._header={};
+		this._value_type={};
 	}
 
 	convertRaw2Int(raw)
@@ -96,6 +96,7 @@ class StixPacketAnalyzer
 		this._parameters=[];
 		this._parameter_vector={};
 		this._header={};
+		this._value_type={};
 	}
 	mergePackets(packets, SPIDs, default_value_type='eng')
 	{
@@ -147,6 +148,7 @@ class StixPacketAnalyzer
 			name=this.getName(param);
 			if (name.includes('NIXG'))continue;
 			value=this.getRawInt(param);
+			this._value_type[name]=0;
 
 			engValue=this.getEng(param);
 			if(default_value_type=='eng'){
@@ -155,6 +157,8 @@ class StixPacketAnalyzer
 					if (!isNaN(engValue))
 					{
 						value=engValue;
+						this._value_type[name]=1;
+
 					}
 				}
 			}
@@ -179,6 +183,10 @@ class StixPacketAnalyzer
 	getAllParameters()
 	{
 		return this._parameter_vector;
+	}
+
+	getParameterType(pName){
+		return this._value_type[pName];
 	}
 
 

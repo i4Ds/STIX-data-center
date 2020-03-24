@@ -1,8 +1,8 @@
-# STIX web data browsers 
+# STIX  data web browsers 
 
 based on MongoDB, Python-Flask, bootstrap4  and JQuery.
 
-The server used to test the web browsers is at:  http://108.61.164.149/
+
 
 ## Enviroment setup
 
@@ -10,7 +10,7 @@ The server used to test the web browsers is at:  http://108.61.164.149/
 ```
 
 sudo apt-get install python3
-pip3 install flask werkzeug 
+pip3 install flask werkzeug flask-assets  jsmin cssmin
 ```
 To install mongodb, please follow the manual at 
 
@@ -34,7 +34,7 @@ Raw data packets are stored in the MongoDB.
 ```
 
 
-## MongoDB performance opitmization
+## MongoDB performance optimization
 
 
 Some third-party GUIs are recommended in order to to interact with MongoDB,  for example, Robo3T which is available at:
@@ -42,7 +42,11 @@ https://robomongo.org/
 
 Indexes support the efficient execution of queries in MongoDB. Without indexes, MongoDB must perform a collection scan, i.e. scan every document in a collection, to select those documents that match the query statement.
 
- Make sure that the following indexes are created for the collection packets:
+Open mongodb shell then run
+```
+ db.getCollection('packets').CreateIndex({<index>: 1})
+```
+Replacing <index> with the following items
 ```
 header.UTC
 header.SPID
@@ -51,13 +55,8 @@ header.service_subtype
 header.unix_time
 header.TMTC
 run_id
-
 ```
 
-If not , open mongodb shell then run
-```
- db.getCollection('<collection_name>').CreateIndex({<index>: 1})
-```
  
 
 For more optimizations, see https://docs.mongodb.com/manual/core/query-optimization/
@@ -67,7 +66,7 @@ For more optimizations, see https://docs.mongodb.com/manual/core/query-optimizat
 ## Deployment
 
 
-ngnix and gunicore are recommanded for the final server as described at 
+ngnix and gunicore are recommended for the final server as described at 
 https://flask.palletsprojects.com/en/1.1.x/deploying/
 
 ### Installation

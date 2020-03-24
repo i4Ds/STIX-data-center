@@ -1,6 +1,9 @@
 //Something exported from STIX IDB
 //hualin.xiao@fhnw.ch
 //2019-10-09
+function isSet(number, bitPosition) {
+  return (number & (1 << bitPosition)) === 0 ? false : true;
+}
 var StixIDB={
 	//var PacketLoader= (function() {
 	paramDescr: {
@@ -567,38 +570,38 @@ var StixIDB={
 		NIXD0381:"Register 10 (VREF2P)",
 		NIXD0382:"Register 11 (TUNE)",
 		NIXD0407:"Pixel mask - detail",
-		NIXD0410:"TH - Ch 0",
-		NIXD0411:"TH - Ch 1",
+		NIXD0410:"Pixel 7",
+		NIXD0411:"Pixel 3",
 		NIXD0412:"TH - Ch 2",
-		NIXD0413:"TH - Ch 3",
+		NIXD0413:"Pixel 11",
 		NIXD0414:"TH - Ch 4",
-		NIXD0415:"TH - Ch 5",
+		NIXD0415:"Pixel 6",
 		NIXD0416:"TH - Ch 6",
 		NIXD0417:"TH - Ch 7",
-		NIXD0418:"TH - Ch 8",
+		NIXD0418:"Pixel 2",
 		NIXD0419:"TH - Ch 9",
 		NIXD0420:"TH - Ch 10",
-		NIXD0421:"TH - Ch 11",
+		NIXD0421:"Pixel 10",
 		NIXD0422:"TH - Ch 12",
 		NIXD0423:"TH - Ch 13",
 		NIXD0424:"TH - Ch 14",
-		NIXD0425:"TH - Ch 15",
+		NIXD0425:"Pixel 1",
 		NIXD0426:"TH - Ch 16",
 		NIXD0427:"TH - Ch 17",
-		NIXD0428:"TH - Ch 18",
+		NIXD0428:"Pixel 5",
 		NIXD0429:"TH - Ch 19",
 		NIXD0430:"TH - Ch 20",
-		NIXD0431:"TH - Ch 21",
+		NIXD0431:"Pixel 9",
 		NIXD0432:"TH - Ch 22",
 		NIXD0433:"TH - Ch 23",
 		NIXD0434:"TH - Ch 24",
 		NIXD0435:"TH - Ch 25",
-		NIXD0436:"TH - Ch 26",
+		NIXD0436:"Pixel 0",
 		NIXD0437:"TH - Ch 27",
 		NIXD0438:"TH - Ch 28",
-		NIXD0439:"TH - Ch 29",
-		NIXD0440:"TH - Ch 30",
-		NIXD0441:"TH - Ch 31",
+		NIXD0439:"Pixel 4",
+		NIXD0440:"Pixel 8",
+		NIXD0441:"Guardring",
 		NIXD0442:"E1 (low bound for spec)",
 		NIXD0443:"E2 (high bound for spec)",
 		NIXG0001:"IDPU + reboot mask",
@@ -743,38 +746,38 @@ var StixIDB={
 		PIX00108:"Self-test ID",
 		PIX00120:"Parameter (236,6)",
 		PIX00121:"ASW image size [page]",
-		PIX00122:"TH - Ch 0",
-		PIX00123:"TH - Ch 1",
+		PIX00122:"Pixel 7",
+		PIX00123:"Pixel 3",
 		PIX00124:"TH - Ch 2",
-		PIX00125:"TH - Ch 3",
+		PIX00125:"Pixel 11",
 		PIX00126:"TH - Ch 4",
-		PIX00127:"TH - Ch 5",
+		PIX00127:"Pixel 6",
 		PIX00128:"TH - Ch 6",
 		PIX00129:"TH - Ch 7",
-		PIX00130:"TH - Ch 8",
+		PIX00130:"Pixel 2",
 		PIX00131:"TH - Ch 9",
 		PIX00132:"TH - Ch 10",
-		PIX00133:"TH - Ch 11",
+		PIX00133:"Pixel 10",
 		PIX00134:"TH - Ch 12",
 		PIX00135:"TH - Ch 13",
 		PIX00136:"TH - Ch 14",
-		PIX00137:"TH - Ch 15",
+		PIX00137:"Pixel 1",
 		PIX00138:"TH - Ch 16",
 		PIX00139:"TH - Ch 17",
-		PIX00140:"TH - Ch 18",
+		PIX00140:"Pixel 5",
 		PIX00141:"TH - Ch 19",
 		PIX00142:"TH - Ch 20",
-		PIX00143:"TH - Ch 21",
+		PIX00143:"Pixel 9",
 		PIX00144:"TH - Ch 22",
 		PIX00145:"TH - Ch 23",
 		PIX00146:"TH - Ch 24",
 		PIX00147:"TH - Ch 25",
-		PIX00148:"TH - Ch 26",
+		PIX00148:"Pixel 0",
 		PIX00149:"TH - Ch 27",
 		PIX00150:"TH - Ch 28",
-		PIX00151:"TH - Ch 29",
-		PIX00152:"TH - Ch 30",
-		PIX00153:"TH - Ch 31",
+		PIX00151:"Pixel 4",
+		PIX00152:"Pixel 8",
+		PIX00153:"Guardring",
 		PIX00154:"Temperature limit",
 		PIX00155:"Number of corrections",
 		PIX00156:"TLUT element",
@@ -1341,8 +1344,402 @@ var StixIDB={
 		PIX00919:"SP - Wait Cycles",
 		PIX00920:"Bad block handling"
 	},
+	tmDesc:{54001:"STIX TC ACC SUCCESS",
+		54002:"STIX TC ACC FLR - Illegal APID",
+		54013:"STIX TC EXEC SUCCESS",
+		54003:"STIX TC ACC FLR - Incomplete or invalid length",
+		54004:"STIX TC ACC FLR - Incorrect checksum (CRC)",
+		54005:"STIX TC ACC FLR - Illegal packet type",
+		54006:"STIX TC ACC FLR - Illegal packet subtype",
+		54007:"STIX TC ACC FLR - Illegal or inconsistent application data fie",
+		54008:"STIX TC ACC FLR - Illegal segmented sequence flag",
+		54065:"STIX TC ACC FLR - Illegal segment sequence flag",
+		54009:"STIX TC ACC FLR - Illegal packet length wrt type/subtype",
+		54010:"STIX TC ACC FLR - Illegal source/packet data header const",
+		54012:"STIX TC ACC FLR - Illegal ACK value in TC DFH",
+		54015:"TBC STIX TC EXEC FLR - Invalid operation mode transition req",
+		54016:"STIX TC EXEC FLR - Accessing invalid MID",
+		54017:"STIX TC EXEC FLR - Writing to protected memory, EEPROM",
+		54019:"STIX TC EXEC FLR - Invalid start addr or length TC(6-2,5or9)",
+		54020:"STIX TC EXEC FLR - FLASH memory write failed",
+		54021:"STIX TC EXEC FLR - Memory load operation failed - inv pack len",
+		54022:"TBC STIX TC EXEC FLR - TC SW reset failed - ASW still running",
+		54024:"TBC STIX TC EXEC FLR - List of user data selections is full",
+		54026:"STIX TC EXEC FLR - Disable ASW Auto-start cannot be performed",
+		54028:"STIX TC EXEC FLR - Invalid HK data report period in TC(3,129)",
+		54029:"STIX TC EXEC FLR - Memory load not enabled",
+		54032:"STIX TC EXEC FLR - Wrong dynamic length of received TC",
+		54033:"STIX TC EXEC FLR - Packet rejected due to full TC buffer",
+		54077:"STIX TC EXEC FLR - TC(237,1) failed to set parameter",
+		54078:"STIX TC EXEC FLR - TC(237,2) invalid parameter sub-id",
+		54079:"STIX TC EXEC FLR - TC(237,2) failed to get parameter",
+		54080:"STIX TC EXEC FLR - TC Service 3 - invalid SID",
+		54081:"STIX TC EXEC FLR - TC(236,7) - Enable FDIR failed",
+		54082:"STIX TC EXEC FLR - TC(236,8) - Disable FDIR failed",
+		54083:"STIX TC EXEC FLR - TC(236,10) - FDIR conf failed - wrong ID",
+		54084:"STIX TC EXEC FLR - TC(236,10) FDIR conf param is OOB",
+		54085:"STIX TC EXEC FLR - Memory operation failed",
+		54086:"STIX TC EXEC FLR - Time sync, TC(9,129), already in progress",
+		54087:"STIX TC EXEC FLR - No Timecode within 2s after TC(9,129)",
+		54091:"STIX TC EXEC FLR - TC(236,18) failed - wrong FDIR mask /par type",
+		54056:"STIX TC EXEC FLR - Telecommanded self-tests failed",
+		54035:"STIX TC EXEC FLR - System ID OOB when powering ON/OFF",
+		54036:"STIX TC EXEC FLR - Subsystem ID OOB when powering ON/OFF",
+		54037:"STIX TC EXEC FLR - Wrong systemID / subsytemID pair when conf",
+		54038:"STIX TC EXEC FLR - Wrong configuration parameter",
+		54040:"STIX TC EXEC FLR - Requested operation failed",
+		54092:"STIX TC EXEC FLR - Memory reading failed (TC(6,5) or TC(6,9))",
+		54093:"STIX TC EXEC FLR - HW selftest cannot be exec, already running",
+		54094:"STIX TC EXEC FLR - Memory selftest cannot be exec - address",
+		54347:"STIX TC EXEC FLR - Unable to read memory",
+		54348:"STIX TC EXEC FLR - Unable to write memory",
+		54349:"STIX TC EXEC FLR - Unable to read FLASH page in block",
+		54350:"STIX TC EXEC FLR - Unable to erase block",
+		54351:"STIX TC EXEC FLR - Unable to write page",
+		54088:"STIX TC EXEC FLR - TC to load ASW img fr FLASH to RAM failed",
+		54089:"STIX TC EXEC FLR -TC to save ASW img fr RAM to FLASH failed",
+		54095:"STIX TC EXEC FLR - TC to exec ASW image from RAM failed",
+		54096:"STIX TC EXEC FLR - TC236 - 3, 14 or 17 not executed",
+		54034:"STIX TC EXEC FLR - Wrong current operation mode",
+		54041:"STIX TC EXEC FLR - Formatting of calibration accus failed",
+		54043:"STIX TC EXEC FLR - Detector/pixel/ AD channel OOB",
+		54044:"STIX TC EXEC FLR - Subspectrum def exc max num of calib acc",
+		54045:"STIX TC EXEC FLR - ASIC Reset failed",
+		54046:"STIX TC EXEC FLR - Read ASIC temperature procedure failed",
+		54047:"STIX TC EXEC FLR - Setting ASIC latency failed",
+		54048:"STIX TC EXEC FLR - On demand ASIC ADC readout failed",
+		54049:"STIX TC EXEC FLR - ASIC baseline determination failed",
+		54050:"STIX TC EXEC FLR - ASIC dark channel determination failed",
+		54051:"STIX TC EXEC FLR - Threshold scan failed",
+		54052:"STIX TC EXEC FLR - ASIC ADC reading failed",
+		54053:"STIX TC EXEC FLR - Start of test pulse generation failed",
+		54054:"STIX TC EXEC FLR - Reading ASIC registers failed",
+		54055:"STIX TC EXEC FLR - Writing ASIC registers failed",
+		54058:"STIX TC EXEC FLR - Det Q: LV is not powered on",
+		54059:"STIX TC EXEC FLR - Attenuator: LV is not powered on",
+		54060:"STIX TC EXEC FLR - HV: LV is not powered on",
+		54061:"STIX TC EXEC FLR - No config: Attenuator execution in progress",
+		54062:"STIX TC EXEC FLR - Requested quarters (Det or Grp) not powered",
+		54063:"STIX TC EXEC FLR - Requested quarters (Det or Grp) not enabled",
+		54064:"STIX TC EXEC FLR - Already running different test procedure",
+		54066:"STIX TC EXEC FLR - En/dis file transfer to SSMM - TC21",
+		54067:"STIX TC EXEC FLR - Reset output data buffers - TC(21,128)",
+		54068:"STIX TC EXEC FLR - Send context to on-board context mgmt",
+		54069:"STIX TC EXEC FLR - Process context from on-board context mgmt",
+		54070:"STIX TC EXEC FLR - Process TC(237,11) data compression scheme",
+		54071:"STIX TC EXEC FLR - Invalid time or energy interval selected",
+		54072:"STIX TC EXEC FLR - LUT type OOB for TC(237,8)",
+		54073:"STIX TC EXEC FLR - LUT type OOB for TC(237,7)",
+		54074:"STIX TC EXEC FLR - Applying ELUT to FPGA failed",
+		54075:"STIX TC EXEC FLR - Wrong conf for auto transition to NOMINAL",
+		54090:"STIX TC EXEC FLR - Attenuator data acquisition loop timeout",
+		54097:"STIX TC EXEC FLR - Attenuator control loop timeout",
+		54098:"STIX TC EXEC FLR - List of user selection request is full",
+		54099:"STIX TC EXEC FLR - Filesystem check failed",
+		54100:"STIX TC EXEC FLR - Storing LUT in filesystem failed",
+		54104:"STIX TC EXEC FLR - Saving LUT Ids in ParamMgmt as current failed",
+		54105:"STIX TC EXEC FLR - Problem applying TLUT",
+		54106:"STIX TC EXEC FLR - Incorrect detector ID or register mask",
+		54107:"STIX TC EXEC FLR - Failed to set parameter",
+		54108:"STIX TC EXEC FLR - Invalid parameter sub-id",
+		54109:"STIX TC EXEC FLR - Failed to get parameter",
+		54345:"STIX TC EXEC FLR - RCR parameter update failed for TC(237,10)",
+		54346:"STIX TC EXEC FLR - QL parameter update failed for TC(237,9)",
+		54343:"STIX TC EXEC FLR - LUT upload failed for TC(237,7)",
+		54354:"STIX TC EXEC FLR - Start time gte end time",
+		54355:"STIX TC EXEC FLR - Too many selftests pending",
+		54356:"STIX TC EXEC FLR - Invalid number for avg",
+		54101:"STIX HK report - SID 1",
+		54102:"STIX HK report - SID 2",
+		54330:"STIX Connection Test Report",
+		54256:"STIX Info - Start-up SW boot success",
+		54275:"STIX Info - SDRAM zeroing for EDAC config finished",
+		54273:"STIX Info - SDRAM init pattern memory test started",
+		54274:"STIX Info - SDRAM init pattern memory test succes",
+		54259:"STIX Info - Application SW starting progress report",
+		54258:"STIX Info - Mode transition success",
+		54257:"STIX Info - Application SW boot success",
+		54276:"STIX Info - EDAC alg for mod of scrubb rate",
+		54277:"STIX Info - HV depolarisation status changed",
+		54281:"STIX Info - Filesystem initialisation finished",
+		54261:"STIX Info - TC instrument HW self-test success - SuSW",
+		54260:"STIX Info - TC instrument HW self-test started - SuSW",
+		54264:"STIX Info - CPU overload condition recovered",
+		54265:"STIX Info - Attenuator operation restored",
+		54266:"STIX Info - HV PSU failure recovered",
+		54267:"STIX Info - SEU in detector recovered",
+		54268:"STIX Info - SpaceWire Time code reception restored",
+		54262:"STIX Info - TC instrument HW self-test started - ASW",
+		54263:"STIX Info - TC instrument HW self-test success - ASW",
+		54255:"STIX Info - ASIC verif proc correction of regs successful",
+		54253:"STIX Warning - SpW communication restored",
+		54314:"STIX Info - Preparing for shutdown",
+		54361:"STIX Info - EDAC zeroing of Rotating Buffer started",
+		54362:"STIX Info - EDAC zeroing of Rotating Buffer finished",
+		54313:"STIX Info - FDIR protection enabled",
+		54312:"STIX Warning - ASW image operation failed",
+		54252:"STIX Warning - Auto selftest exec on state-machine failed",
+		54272:"STIX Warning - Too many IRQs",
+		54278:"STIX Warning - CPU overload condition detected",
+		54279:"STIX Warning - Attenuator operation interrupted - used too freq",
+		54280:"STIX Warning - SEU in detector",
+		54282:"STIX Warning - SpaceWire Time code reception lost",
+		54344:"STIX Warning - Autonomous LUT apply failed",
+		54285:"STIX Warning - ASIC verif proc found mismatching registers",
+		54311:"STIX Warning - EDAC: detected recoverable SEU",
+		54251:"STIX Warning - Packet rejected - corruption indicated by SpW",
+		54250:"STIX Warning - Packet rejected - not enough bytes received",
+		54249:"STIX Warning - Packet rejected - too many bytes received",
+		54248:"STIX Warning - Packet rejected - incorrect CCSDS",
+		54242:"STIX Warning - AhbRx callback - SpW closed and reinitialised",
+		54246:"STIX Warning - Spacewire link error",
+		54241:"STIX Warning - Wrong corr - ATT pos sens vs motor mov",
+		54240:"STIX Warning - QL detector failure identification",
+		54270:"STIX Warning - LUT not found",
+		54271:"STIX Warning - Incosistent pg addr before and after FLASH fs opr",
+		54293:"STIX Warning - Filesystem CRC error",
+		54352:"STIX Warning - No data found for BSD box",
+		54353:"STIX Warning - BSD user request failed",
+		54357:"STIX Warning - Test procedure Interupted",
+		54358:"STIX Warning - Async memory operation interrupted",
+		54359:"STIX Warning - Attenuator already in operation",
+		54360:"STIX Warning - Cannot move attenuator because LV is off",
+		54286:"STIX Error - Start-up SW boot",
+		54287:"STIX Error - Application SW boot",
+		54288:"STIX Error - Mode transition failure",
+		54295:"STIX Error - Watchdog failure detected",
+		54239:"STIX Error - Context file(s) not found",
+		54289:"STIX Error - TC instrument HW self-test (SuSW)",
+		54291:"STIX Error - Too many IRQs",
+		54292:"STIX Error - SDRAM init pattern memory test",
+		54299:"STIX Error - Warm reset initiated",
+		54300:"STIX Error - Repeated problem with booting ASW image",
+		54301:"STIX Error - Attenuator motor failure",
+		54302:"STIX Error - Extremely high X-ray events data rate",
+		54303:"STIX Error - Detectors quadrant overcurrent",
+		54304:"STIX Error - Critical temperature of detectors quadrant detected",
+		54305:"STIX Error - HV PSU failure",
+		54306:"STIX Error - SEU in detector persistent",
+		54307:"STIX Error - HW failure of HK monitored line",
+		54309:"STIX Error - HK acquisition",
+		54290:"STIX Error - TC instrument HS self-test (ASW)",
+		54342:"STIX Error - ASIC verif failed (correc mismatch regs of ASICs)",
+		54316:"STIX Error - SDRAM memory failure during StartASW procedure",
+		54315:"STIX Error - SW failure of HK monitored line",
+		54317:"STIX Error - Both PSUs are powered on",
+		54318:"STIX Error - SDRAM initialisation timeout",
+		54319:"STIX Error - FLASH reset error",
+		54245:"STIX Error - SRAM memory check failed",
+		54244:"STIX Hi Sev Error - STIX requesting exec nominal sequence",
+		54310:"STIX Hi Sev Error - STIX requesting immediate power down",
+		54243:"STIX Hi Sev Error - STIX req power cycle - SDRAM init timeout",
+		54126:"STIX Archive Memory Mgmt - User data selections report",
+		54127:"STIX Filesystem check report",
+		54128:"STIX SuSW Parameter report",
+		54129:"STIX ASW Parameter report",
+		54130:"STIX Threshold scan report",
+		54131:"STIX ASIC temperature report",
+		54132:"STIX On-demand ASIC ADC readout report",
+		54133:"STIX ASIC baseline report",
+		54134:"STIX Channel dark current report",
+		54135:"STIX ASIC ADC read report",
+		54137:"STIX ASIC register read report",
+		54138:"STIX Stored attenuator data report",
+		54140:"STIX Subsysystem configuration report",
+		54141:"STIX FDIR parameter reported",
+		54329:"STIX Memory Check Report",
+		54320:"STIX Memory Dump Report - MAIN:EEPROM",
+		54321:"STIX Memory Dump Report - MAIN:SRAM",
+		54322:"STIX Memory Dump Report - MAIN:SDRAM",
+		54323:"STIX Memory Dump Report - MAIN:FLASH_A",
+		54324:"STIX Memory Dump Report - MAIN:FLASH_B",
+		54325:"STIX Memory Dump Report - MAIN:ASW_IMAGE_A1",
+		54326:"STIX Memory Dump Report - MAIN:ASW_IMAGE_A2",
+		54327:"STIX Memory Dump Report - MAIN:ASW_IMAGE_B1",
+		54328:"STIX Memory Dump Report - MAIN:ASW_IMAGE_B2",
+		54333:"STIX Memory Dump Report - RED:EEPROM",
+		54334:"STIX Memory Dump Report - RED:SRAM",
+		54335:"STIX Memory Dump Report - RED:SDRAM",
+		54336:"STIX Memory Dump Report - RED:FLASH_A",
+		54337:"STIX Memory Dump Report - RED:FLASH_B",
+		54338:"STIX Memory Dump Report - RED:ASW_IMAGE_A1",
+		54339:"STIX Memory Dump Report - RED:ASW_IMAGE_A2",
+		54340:"STIX Memory Dump Report - RED:ASW_IMAGE_B1",
+		54341:"STIX Memory Dump Report - RED:ASW_IMAGE_B2",
+		54332:"STIX Memory Dump Report - FULL MEM ACCESS",
+		54331:"STIX Context Report from User",
+		54110:"STIX Science Data Transfer - X-ray L0 auto",
+		54111:"STIX Science Data Transfer - X-ray L1 auto",
+		54112:"STIX Science Data Transfer - X-ray L2 auto",
+		54113:"STIX Science Data Transfer - X-ray L3 auto",
+		54142:"STIX Science Data Transfer - Spectrogram auto",
+		54114:"STIX Science Data Transfer - X-ray L0 user",
+		54115:"STIX Science Data Transfer - X-ray L1 user",
+		54116:"STIX Science Data Transfer - X-ray L2 user",
+		54117:"STIX Science Data Transfer - X-ray L3 user",
+		54143:"STIX Science Data Transfer - Spectrogram user",
+		54118:"STIX Science Data Transfer - QL summed light curves",
+		54119:"STIX Science Data Transfer - QL background monitor",
+		54120:"STIX Science Data Transfer - QL detector specific spectra",
+		54121:"STIX Science Data Transfer - Variance",
+		54122:"STIX Science Data Transfer - Flare flag and location",
+		54124:"STIX Science Data Transfer - Bckg spectrum for calibration",
+		54125:"STIX Science Data Transfer - Aspect",
+		54144:"STIX Science Data Transfer - TM mgmt status and flare list",
+		54103:"STIX HK report - SID 4"},
 
+	paramUnits:{
+		NIX00078:"V",
+		NIX00079:"V",
+		NIX00080:"V",
+		NIX00081:"V",
+		NIX00090:"V",
+		NIX00091:"V",
+		NIX00092:"V",
+		NIX00093:"V",
+		NIX00094:"A",
+		NIX00101:"degC",
+		NIX00102:"degC",
+		NIX00125:"degC",
+		NIX00355:"degC",
+		NIXD0024:"degC",
+		NIXD0025:"degC",
+		NIXD0026:"degC",
+		NIXD0027:"mA",
+		NIXD0028:"mA",
+		NIXD0029:"mA",
+		NIXD0030:"mA",
+		NIXD0031:"V",
+		NIXD0032:"V",
+		NIXD0035:"V",
+		NIXD0036:"V",
+		NIXD0037:"V",
+		NIXD0038:"V",
+		NIXD0039:"V",
+		NIXD0040:"degC",
+		NIXD0041:"degC",
+		NIXD0042:"degC",
+		NIXD0043:"degC",
+		NIXD0044:"degC",
+		NIXD0045:"degC",
+		NIXD0046:"degC",
+		NIXD0047:"degC",
+		NIXD0048:"V",
+		NIXD0049:"V",
+		NIXD0050:"V",
+		NIXD0051:"degC",
+		NIXD0052:"V",
+		NIXD0053:"V",
+		NIXD0054:"degC",
+		NIXD0055:"degC",
+		NIXD0056:"degC",
+		NIXD0057:"degC",
+		NIXD0058:"mA",
+		NIXD0075:"mA",
+		NIXG0253:"V",
+		NIXG0254:"V",
+		NIXG0255:"V"},
 
+	tcDesc: {ZIX03005:"STIX Enable HK report generation",
+		ZIX03006:"STIX Disable HK report generation",
+		ZIX03129:"STIX Update HK report Generation Period",
+		ZIX06005:"STIX Dump Memory",
+		ZIX06009:"STIX Check Memory",
+		ZIX0602A:"STIX Load Memory",
+		ZIX0602B:"STIX Load Memory",
+		ZIX09129:"STIX Accept Time Synchronisation",
+		ZIX17001:"STIX Perform Connection Test",
+		ZIX20128:"STIX Information Distribution",
+		ZIX21001:"STIX Enable Science Data Transfer",
+		ZIX21002:"STIX Disable Science Data Transfer",
+		ZIX21128:"STIX Reset Science Data Output Buffer",
+		ZIX22001:"STIX Request User to Report Context",
+		ZIX22003:"STIX Accept Context",
+		ZIX36001:"STIX Mode transition",
+		ZIX36002:"STIX Instrument warm reset",
+		ZIX36003:"STIX Load Application SW image to RAM",
+		ZIX36004:"STIX Power ON a STIX subsystem",
+		ZIX36005:"STIX Power OFF a STIX subsystem",
+		ZIX36007:"STIX Enable FDIR function",
+		ZIX36008:"STIX Disable FDIR function",
+		ZIX36009:"STIX Execute STIX instrument self-test",
+		ZIX36010:"STIX Configure FDIR function",
+		ZIX36011:"STIX Disable ASW Auto-start",
+		ZIX36012:"STIX Enable Memory Load",
+		ZIX36013:"STIX Disable Memory Load",
+		ZIX36014:"STIX Execute ASW image from SDRAM",
+		ZIX36015:"STIX Read STIX subsystem configuration",
+		ZIX36017:"STIX Save ASW image from RAM to FLASH",
+		ZIX36018:"Request FDIR parameter",
+		ZIX36020:"STIX Request RAM pattern memory test",
+		ZIX36601:"STIX IDPU config",
+		ZIX36602:"STIX DETECTORS config",
+		ZIX36603:"STIX ASPECT SYSTEM config",
+		ZIX36604:"STIX ATTENUATOR config",
+		ZIX36605:"STIX PSU config",
+		ZIX36606:"STIX SuSW config",
+		ZIX36607:"STIX ASW config",
+		ZIX36608:"STIX SuSW+ASW config",
+		ZIX37001:"STIX Load SuSW parameter",
+		ZIX37002:"STIX Report SuSW parameter",
+		ZIX37003:"STIX Initiate reset and restart calibr",
+		ZIX37004:"STIX En/Dis formatting of calibration",
+		ZIX37005:"STIX Truncate calibration accumulation",
+		ZIX37006:"STIX En/Dis continuous accumulation",
+		ZIX37008:"STIX Apply LUT",
+		ZIX37009:"STIX Update QL parameters",
+		ZIX37010:"STIX Update RCR parameters",
+		ZIX37011:"STIX Update data compression parameters",
+		ZIX37013:"Flare processing parameters",
+		ZIX37014:"Configure TM publishing interval",
+		ZIX37015:"Set new value of PALD counter",
+		ZIX37016:"Configure TM corridor upper limit",
+		ZIX37017:"Override publishing of flare data",
+		ZIX37018:"STIX Load ASW parameter",
+		ZIX37019:"STIX Report ASW parameter",
+		ZIX37701:"STIX Upload LUT - Det/pix upper temp cor",
+		ZIX37702:"STIX Upload LUT - Det/pix lower temp cor",
+		ZIX37703:"STIX Upload LUT - ELUT",
+		ZIX37704:"STIX Upload LUT - Flare location det tab",
+		ZIX37705:"STIX Upload LUT - Division T/nT energies",
+		ZIX37706:"STIX Upload LUT - T enrg bins - img int",
+		ZIX37707:"STIX Upload LUT - nT enrg bins - img int",
+		ZIX37708:"STIX Upload LUT - T FMI",
+		ZIX37709:"STIX Upload LUT - nT FMI",
+		ZIX37710:"STIX Upload LUT - Min T int time - img",
+		ZIX37711:"STIX Upload LUT - Min nT int time - img",
+		ZIX37712:"STIX Upload LUT - Min T cnts img - img",
+		ZIX37713:"STIX Upload LUT - Min nT cnts img - img",
+		ZIX37714:"STIX Upload LUT - Min T cnts imgs - img",
+		ZIX37715:"STIX Upload LUT - Min nT cnt imgs - img",
+		ZIX37716:"STIX Upload LUT - Total Flare Mag Index",
+		ZIX37717:"STIX Upload LUT - T enrg bins - spectro",
+		ZIX37718:"STIX Upload LUT - nT enrg bins - spectro",
+		ZIX37719:"STIX Upload LUT - Min T int time - spc",
+		ZIX37720:"STIX Upload LUT - Min nT int time - spc",
+		ZIX37721:"STIX Upload LUT - Min T cnts img - spc",
+		ZIX37722:"STIX Upload LUT - Min nT cnts img - spc",
+		ZIX37723:"STIX Upload LUT - Min T cnts imgs - spc",
+		ZIX37724:"STIX Upload LUT - Min nT cnt imgs - spc",
+		ZIX38001:"STIX Select data for download",
+		ZIX38002:"STIX Report of the unprocessed data sel",
+		ZIX38004:"STIX Clear the list of user data select",
+		ZIX38005:"STIX Free data in the filesystem",
+		ZIX38006:"STIX Perform filesystem check",
+		ZIX38008:"STIX Request list of X ray data chunks",
+		ZIX38010:"STIX Request Aspect burst data",
+		ZIX39001:"STIX Reset ASIC",
+		ZIX39002:"STIX Read ASIC temperature",
+		ZIX39004:"STIX Set ASIC latency delay",
+		ZIX39005:"STIX Execute on-demand ASIC ADC readout",
+		ZIX39007:"STIX Determine ASIC baseline",
+		ZIX39009:"STIX Determine channel dark current",
+		ZIX39011:"STIX Perform threshold scan",
+		ZIX39013:"STIX Perform ASIC ADC read",
+		ZIX39015:"STIX Generate test pulses",
+		ZIX39017:"STIX Perform ASIC register read",
+		ZIX39019:"STIX Perform ASIC register write",
+		ZIX39020:"STIX Download stored data from ATT"},
 
 	TEXT_CALI: {
 		"NIX00012": {
@@ -1626,489 +2023,999 @@ var StixIDB={
 			"42": "Aspect",
 			"43": "TM mgmt + FLR"
 		},
-		"NIX00129": {
-			"0": "Found",
-			"1": "Missing_Uncorr"
-		},
-		"NIX00130": {
-			"0": "Found",
-			"1": "Missing_Uncorr"
-		},
-		"NIX00182": {
-			"0": "Off",
-			"1": "On"
-		},
-		"NIX00183": {
-			"0": "Off",
-			"1": "On"
-		},
-		"NIX00184": {
-			"0": "Failed",
-			"1": "Successful"
-		},
-		"NIX00208": {
-			"1": "IDPU",
-			"2": "DETECTORS",
-			"3": "ASPECT SYSTEM",
-			"4": "ATTENUATOR",
-			"5": "PSU"
-		},
-		"NIX00235": {
-			"0": "Open",
-			"1": "Closed"
-		},
-		"NIX00236": {
-			"0": "Open",
-			"1": "Closed"
-		},
-		"NIX00237": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIX00238": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIX00293": {
-			"1": "BIA",
-			"128": "NUS",
-			"16": "BFP",
-			"2": "EIA",
-			"32": "EFP",
-			"4": "BSA",
-			"64": "FCA",
-			"8": "ESA"
-		},
-		"NIX00304": {
-			"0": "LIKELY_BOOT",
-			"1": "BOOT",
-			"2": "SAFE",
-			"3": "MAINTENANCE",
-			"4": "CONFIGURATION",
-			"5": "NOMINAL"
-		},
-		"NIX00305": {
-			"0": "LIKELY_BOOT",
-			"1": "BOOT",
-			"2": "SAFE",
-			"3": "MAINTENANCE",
-			"4": "CONFIGURATION",
-			"5": "NOMINAL"
-		},
-		"NIX00306": {
-			"0": "TC_TRANSITION",
-			"1": "AUTO_NOMINAL",
-			"2": "AUTO_FAILURE"
-		},
-		"NIX00308": {
-			"0": "HV1_DET_1_16",
-			"1": "HV2_DET_17_32"
-		},
-		"NIX00336": {
-			"0": "LIKELY_BOOT",
-			"1": "BOOT",
-			"2": "SAFE",
-			"3": "MAINTENANCE",
-			"4": "CONFIGURATION",
-			"5": "NOMINAL"
-		},
-		"NIX00340": {
-			"1": "Open only 1",
-			"12": "Close both",
-			"2": "Open only 2",
-			"3": "Open both",
-			"4": "Close only 1",
-			"6": "Emerg. Shutd.",
-			"8": "Close only 2"
-		},
-		"NIX00341": {
-			"1": "MOTOR 1",
-			"2": "MOTOR 2"
-		},
-		"NIX00342": {
-			"0": "None",
-			"1": "AB",
-			"2": "BC",
-			"3": "Both"
-		},
-		"NIX00348": {
-			"1": "Q1",
-			"2": "Q2",
-			"4": "Q3",
-			"8": "Q4"
-		},
-		"NIX00354": {
-			"1": "Q1",
-			"2": "Q2",
-			"4": "Q3",
-			"8": "Q4"
-		},
-		"NIX00389": {
-			"0": "ManualTransit",
-			"1": "SelectedConfig"
-		},
-		"NIX00390": {
-			"0": "ManualTransit",
-			"1": "SelectedConfig"
-		},
-		"NIX00401": {
-			"1": "P_AllPxAttOut",
-			"128": "B_2LPxFullyCov",
-			"16": "B_AllPx",
-			"2": "P_AllPxAttIn",
-			"3": "P_4LPxAttIn",
-			"32": "B_6LPxEx2LA",
-			"4": "P_2LPxCycAttIn",
-			"5": "P_1LPxCycAttIn",
-			"6": "P_SPxAttIn",
-			"64": "B_4LPxEx4LA",
-			"7": "P_2SPxCycAttIn",
-			"8": "P_1SPxCycAttIn"
-		},
-		"NIXD0004": {
-			"0": "Nominal",
-			"1": "Redundant"
-		},
-		"NIXD0005": {
-			"0": "Nominal",
-			"1": "Redundant"
-		},
-		"NIXD0021": {
-			"0": "ASW",
-			"1": "SuSW"
-		},
-		"NIXD0022": {
-			"0": "1"
-		},
-		"NIXD0023": {
-			"0": "LIKELY_BOOT",
-			"1": "BOOT",
-			"2": "SAFE",
-			"3": "MAINTENANCE",
-			"4": "CONFIGURATION",
-			"5": "NOMINAL"
-		},
-		"NIXD0059": {
-			"0": "NotAvailable",
-			"1": "PrevLocEstimat",
-			"2": "NewLocValue"
-		},
-		"NIXD0060": {
-			"0": "NoSignNThrFlux",
-			"1": "WeakNThrFlux",
-			"2": "SignNThrFlux"
-		},
-		"NIXD0061": {
-			"0": "NoFlareDetect",
-			"1": "Minor_B1",
-			"2": "Small_C1",
-			"3": "Moderate_M1",
-			"4": "Major_X1"
-		},
-		"NIXD0064": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIXD0066": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIXD0067": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIXD0068": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIXD0069": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIXD0074": {
-			"0": "1 off 2 off",
-			"1": "1 on 2 off",
-			"2": "1 off 2 on",
-			"3": "1 on 2 on"
-		},
-		"NIXD0080": {
-			"0": "Off",
-			"1": "On"
-		},
-		"NIXD0081": {
-			"0": "Off",
-			"1": "On"
-		},
-		"NIXD0082": {
-			"0": "Off",
-			"1": "On"
-		},
-		"NIXD0083": {
-			"0": "Off",
-			"1": "On"
-		},
-		"NIXD0084": {
-			"0": "Off",
-			"1": "On"
-		},
-		"NIXD0085": {
-			"0": "Off",
-			"1": "On"
-		},
-		"NIXD0086": {
-			"0": "Off",
-			"1": "On"
-		},
-		"NIXD0087": {
-			"0": "Off",
-			"1": "On"
-		},
-		"NIXD0088": {
-			"0": "Still",
-			"1": "Moving"
-		},
-		"NIXD0089": {
-			"0": "Still",
-			"1": "Moving"
-		},
-		"NIXD0090": {
-			"0": "Disabled",
-			"1": "Enabled"
-		},
-		"NIXD0091": {
-			"0": "Disabled",
-			"1": "Enabled"
-		},
-		"NIXD0092": {
-			"0": "Disabled",
-			"1": "Enabled"
-		},
-		"NIXD0093": {
-			"0": "Failed",
-			"1": "Successful"
-		},
-		"NIXD0094": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIXD0095": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIXD0096": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIXD0097": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIXD0098": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIXD0099": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIXD0100": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIXD0163": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIXD0164": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIXD0166": {
-			"0": "False",
-			"1": "True"
-		},
-		"NIXD0167": {
-			"0": "False",
-			"1": "True"
-		},
-/*		"NIXD0168": {
-			"0": "TASK1_NO_OVERR",
-			"1": "TASK1_HkMon_re",
-			"10": "TASK2_HKReport",
-			"11": "TASK2_StartASW",
-			"12": "TASK2_TcBuffer",
-			"13": "TASK2_EDACCont",
-			"14": "TASK2_HWSelfte",
-			"15": "TASK2_debug_dT",
-			"16": "TASK3_NO_OVERR",
-			"17": "TASK3_TmBuffer",
-			"18": "TASK3_EDACCont",
-			"19": "TASK3_HWSelfte",
-			"2": "TASK1_MemLoad_",
-			"20": "TASK3_debug_dT",
-			"21": "TASK3_FSW_NULL",
-			"22": "TASK3_FSW_NULL",
-			"23": "TASK3_FSW_NULL",
-			"24": "TASK4_NO_OVERR",
-			"25": "TASK4_TcBuffer",
-			"26": "TASK4_TmBuffer",
-			"27": "TASK4_Timing_d",
-			"28": "TASK4_EDACCont",
-			"29": "TASK4_HWSelfte",
-			"3": "TASK1_MemDump_",
-			"30": "TASK4_debug_dT",
-			"31": "TASK4_FSW_NULL",
-			"4": "TASK1_MemCheck",
-			"5": "TASK1_EDACCont",
-			"6": "TASK1_HWSelfte",
-			"7": "TASK1_debug_dT",
-			"8": "TASK2_NO_OVERR",
-			"9": "TASK2_WDG_refr"
-		},
-		*/
-		"NIXD0169": {
-			"0": "Off",
-			"1": "On"
-		},
-		"NIXD0302": {
-			"0": "NONE",
-			"1": "SRAM",
-			"16": "WDOG",
-			"2": "SW",
-			"4": "POWER",
-			"8": "TRAP"
-		},
-		"NIXD0303": {
-			"0": "Nominal",
-			"1": "Redundant"
-		},
-		"NIXD0304": {
-			"0": "NONE",
-			"1": "SRAM",
-			"2": "SDRAM"
-		},
-		"NIXD0358": {
-			"0": "Nominal",
-			"1": "Redundant"
-		},
-		"NIXD0359": {
-			"0": "Error reset",
-			"1": "Error wait",
-			"2": "Ready",
-			"3": "Started",
-			"4": "Connecting",
-			"5": "Running"
-		},
-		"NIXD0367": {
-			"0": "0pA",
-			"1": "10pA",
-			"2": "20pA",
-			"3": "100pA"
-		},
-		"NIXD0368": {
-			"0": "DCSEB_400",
-			"1": "DCSEB_1600",
-			"2": "DCSEB_2100",
-			"3": "DCSEB_2900",
-			"4": "ACDB_400",
-			"5": "ACDB_1600",
-			"6": "ACDB_2100",
-			"7": "ACDB_2900"
-		},
-		"NIXD0376": {
-			"0": "0.98",
-			"1": "1.76",
-			"10": "8.89",
-			"11": "9.72",
-			"12": "10.51",
-			"13": "11.31",
-			"14": "12.14",
-			"15": "12.92",
-			"2": "2.56",
-			"3": "3.34",
-			"4": "4.14",
-			"5": "4.95",
-			"6": "5.73",
-			"7": "6.54",
-			"8": "7.3",
-			"9": "8.11"
-		},
-		"NIXD0377": {
-			"0": "23",
-			"1": "48",
-			"2": "105"
-		},
-		"NIXD0379": {
-			"0": "50",
-			"1": "100",
-			"2": "150",
-			"3": "200"
-		},
-		"NIXD0380": {
-			"0": "Normal_EngRead",
-			"1": "GAIN",
-			"2": "PZ filter",
-			"3": "RC2 filter"
-		},
-		"NIXD0381": {
-			"0": "250",
-			"1": "470",
-			"2": "690",
-			"3": "910",
-			"4": "1130",
-			"5": "1350",
-			"6": "1570",
-			"7": "1790"
-		},
-		"NIXD0382": {
-			"0": "Detpic",
-			"1": "RC2 filter",
-			"2": "Enabled",
-			"3": "Disabled",
-			"4": "7uA/Gain",
-			"5": "1uA/Gain"
-		},
-		"NIXS0001": {
-			"0": "SuSW_limits",
-			"1": "ASW_Ch00",
-			"2": "ASW_Ch10",
-			"3": "ASW_Ch01",
-			"4": "ASW_Ch11"
-		},
-		"NIXS0002": {
-			"0": "NOT_POWERED",
-			"1": "1Q",
-			"2": "2Q",
-			"3": "3Q",
-			"4": "4Q"
-		},
-		"NIXS0003": {
-			"0": "0 motors",
-			"1": "1 motor",
-			"2": "2 motors"
-		}
+			"NIX00129": {
+				"0": "Found",
+				"1": "Missing_Uncorr"
+			},
+			"NIX00130": {
+				"0": "Found",
+				"1": "Missing_Uncorr"
+			},
+			"NIX00182": {
+				"0": "Off",
+				"1": "On"
+			},
+			"NIX00183": {
+				"0": "Off",
+				"1": "On"
+			},
+			"NIX00184": {
+				"0": "Failed",
+				"1": "Successful"
+			},
+			"NIX00208": {
+				"1": "IDPU",
+				"2": "DETECTORS",
+				"3": "ASPECT SYSTEM",
+				"4": "ATTENUATOR",
+				"5": "PSU"
+			},
+			"NIX00235": {
+				"0": "Open",
+				"1": "Closed"
+			},
+			"NIX00236": {
+				"0": "Open",
+				"1": "Closed"
+			},
+			"NIX00237": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIX00238": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIX00293": {
+				"1": "BIA",
+				"128": "NUS",
+				"16": "BFP",
+				"2": "EIA",
+				"32": "EFP",
+				"4": "BSA",
+				"64": "FCA",
+				"8": "ESA"
+			},
+			"NIX00304": {
+				"0": "LIKELY_BOOT",
+				"1": "BOOT",
+				"2": "SAFE",
+				"3": "MAINTENANCE",
+				"4": "CONFIGURATION",
+				"5": "NOMINAL"
+			},
+			"NIX00305": {
+				"0": "LIKELY_BOOT",
+				"1": "BOOT",
+				"2": "SAFE",
+				"3": "MAINTENANCE",
+				"4": "CONFIGURATION",
+				"5": "NOMINAL"
+			},
+			"NIX00306": {
+				"0": "TC_TRANSITION",
+				"1": "AUTO_NOMINAL",
+				"2": "AUTO_FAILURE"
+			},
+			"NIX00308": {
+				"0": "HV1_DET_1_16",
+				"1": "HV2_DET_17_32"
+			},
+			"NIX00336": {
+				"0": "LIKELY_BOOT",
+				"1": "BOOT",
+				"2": "SAFE",
+				"3": "MAINTENANCE",
+				"4": "CONFIGURATION",
+				"5": "NOMINAL"
+			},
+			"NIX00340": {
+				"1": "Open only 1",
+				"12": "Close both",
+				"2": "Open only 2",
+				"3": "Open both",
+				"4": "Close only 1",
+				"6": "Emerg. Shutd.",
+				"8": "Close only 2"
+			},
+			"NIX00341": {
+				"1": "MOTOR 1",
+				"2": "MOTOR 2"
+			},
+			"NIX00342": {
+				"0": "None",
+				"1": "AB",
+				"2": "BC",
+				"3": "Both"
+			},
+			"NIX00348": {
+				"1": "Q1",
+				"2": "Q2",
+				"4": "Q3",
+				"8": "Q4"
+			},
+			"NIX00354": {
+				"1": "Q1",
+				"2": "Q2",
+				"4": "Q3",
+				"8": "Q4"
+			},
+			"NIX00389": {
+				"0": "ManualTransit",
+				"1": "SelectedConfig"
+			},
+			"NIX00390": {
+				"0": "ManualTransit",
+				"1": "SelectedConfig"
+			},
+			"NIX00401": {
+				"1": "P_AllPxAttOut",
+				"128": "B_2LPxFullyCov",
+				"16": "B_AllPx",
+				"2": "P_AllPxAttIn",
+				"3": "P_4LPxAttIn",
+				"32": "B_6LPxEx2LA",
+				"4": "P_2LPxCycAttIn",
+				"5": "P_1LPxCycAttIn",
+				"6": "P_SPxAttIn",
+				"64": "B_4LPxEx4LA",
+				"7": "P_2SPxCycAttIn",
+				"8": "P_1SPxCycAttIn"
+			},
+			"NIXD0004": {
+				"0": "Nominal",
+				"1": "Redundant"
+			},
+			"NIXD0005": {
+				"0": "Nominal",
+				"1": "Redundant"
+			},
+			"NIXD0021": {
+				"0": "ASW",
+				"1": "SuSW"
+			},
+			"NIXD0022": {
+				"0": "1"
+			},
+			"NIXD0023": {
+				"0": "LIKELY_BOOT",
+				"1": "BOOT",
+				"2": "SAFE",
+				"3": "MAINTENANCE",
+				"4": "CONFIGURATION",
+				"5": "NOMINAL"
+			},
+			"NIXD0059": {
+				"0": "NotAvailable",
+				"1": "PrevLocEstimat",
+				"2": "NewLocValue"
+			},
+			"NIXD0060": {
+				"0": "NoSignNThrFlux",
+				"1": "WeakNThrFlux",
+				"2": "SignNThrFlux"
+			},
+			"NIXD0061": {
+				"0": "NoFlareDetect",
+				"1": "Minor_B1",
+				"2": "Small_C1",
+				"3": "Moderate_M1",
+				"4": "Major_X1"
+			},
+			"NIXD0064": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIXD0066": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIXD0067": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIXD0068": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIXD0069": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIXD0074": {
+				"0": "1 off 2 off",
+				"1": "1 on 2 off",
+				"2": "1 off 2 on",
+				"3": "1 on 2 on"
+			},
+			"NIXD0080": {
+				"0": "Off",
+				"1": "On"
+			},
+			"NIXD0081": {
+				"0": "Off",
+				"1": "On"
+			},
+			"NIXD0082": {
+				"0": "Off",
+				"1": "On"
+			},
+			"NIXD0083": {
+				"0": "Off",
+				"1": "On"
+			},
+			"NIXD0084": {
+				"0": "Off",
+				"1": "On"
+			},
+			"NIXD0085": {
+				"0": "Off",
+				"1": "On"
+			},
+			"NIXD0086": {
+				"0": "Off",
+				"1": "On"
+			},
+			"NIXD0087": {
+				"0": "Off",
+				"1": "On"
+			},
+			"NIXD0088": {
+				"0": "Still",
+				"1": "Moving"
+			},
+			"NIXD0089": {
+				"0": "Still",
+				"1": "Moving"
+			},
+			"NIXD0090": {
+				"0": "Disabled",
+				"1": "Enabled"
+			},
+			"NIXD0091": {
+				"0": "Disabled",
+				"1": "Enabled"
+			},
+			"NIXD0092": {
+				"0": "Disabled",
+				"1": "Enabled"
+			},
+			"NIXD0093": {
+				"0": "Failed",
+				"1": "Successful"
+			},
+			"NIXD0094": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIXD0095": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIXD0096": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIXD0097": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIXD0098": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIXD0099": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIXD0100": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIXD0163": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIXD0164": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIXD0166": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIXD0167": {
+				"0": "False",
+				"1": "True"
+			},
+			"NIXD0169": {
+				"0": "Off",
+				"1": "On"
+			},
+			"NIXD0302": {
+				"0": "NONE",
+				"1": "SRAM",
+				"16": "WDOG",
+				"2": "SW",
+				"4": "POWER",
+				"8": "TRAP"
+			},
+			"NIXD0303": {
+				"0": "Nominal",
+				"1": "Redundant"
+			},
+			"NIXD0304": {
+				"0": "NONE",
+				"1": "SRAM",
+				"2": "SDRAM"
+			},
+			"NIXD0358": {
+				"0": "Nominal",
+				"1": "Redundant"
+			},
+			"NIXD0359": {
+				"0": "Error reset",
+				"1": "Error wait",
+				"2": "Ready",
+				"3": "Started",
+				"4": "Connecting",
+				"5": "Running"
+			},
+			"NIXD0367": {
+				"0": "0pA",
+				"1": "10pA",
+				"2": "20pA",
+				"3": "100pA"
+			},
+			"NIXD0368": {
+				"0": "DCSEB_400",
+				"1": "DCSEB_1600",
+				"2": "DCSEB_2100",
+				"3": "DCSEB_2900",
+				"4": "ACDB_400",
+				"5": "ACDB_1600",
+				"6": "ACDB_2100",
+				"7": "ACDB_2900"
+			},
+			"NIXD0376": {
+				"0": "0.98",
+				"1": "1.76",
+				"10": "8.89",
+				"11": "9.72",
+				"12": "10.51",
+				"13": "11.31",
+				"14": "12.14",
+				"15": "12.92",
+				"2": "2.56",
+				"3": "3.34",
+				"4": "4.14",
+				"5": "4.95",
+				"6": "5.73",
+				"7": "6.54",
+				"8": "7.3",
+				"9": "8.11"
+			},
+			"NIXD0377": {
+				"0": "23",
+				"1": "48",
+				"2": "105"
+			},
+			"NIXD0379": {
+				"0": "50",
+				"1": "100",
+				"2": "150",
+				"3": "200"
+			},
+			"NIXD0380": {
+				"0": "Normal_EngRead",
+				"1": "GAIN",
+				"2": "PZ filter",
+				"3": "RC2 filter"
+			},
+			"NIXD0381": {
+				"0": "250",
+				"1": "470",
+				"2": "690",
+				"3": "910",
+				"4": "1130",
+				"5": "1350",
+				"6": "1570",
+				"7": "1790"
+			},
+			"NIXD0382": {
+				"0": "Detpic",
+				"1": "RC2 filter",
+				"2": "Enabled",
+				"3": "Disabled",
+				"4": "7uA/Gain",
+				"5": "1uA/Gain"
+			},
+			"NIXS0001": {
+				"0": "SuSW_limits",
+				"1": "ASW_Ch00",
+				"2": "ASW_Ch10",
+				"3": "ASW_Ch01",
+				"4": "ASW_Ch11"
+			},
+			"NIXS0002": {
+				"0": "NOT_POWERED",
+				"1": "1Q",
+				"2": "2Q",
+				"3": "3Q",
+				"4": "4Q"
+			},
+			"NIXS0003": {
+				"0": "0 motors",
+				"1": "1 motor",
+				"2": "2 motors"
+			}
 	},
 
-	getParameterDescription: function(paramName)
+	SCET_TIMESTAMPS:['NIX00287', 		'NIX00288', 		
+		'NIX00445',	'NIX00446', 		'PIX00021',
+		'NIX00121',
+		'PIX00072',
+		'PIX00022', 	'PIX00086',	'PIX00087'],
+
+	ASWParameter:['PSU_TEMP',
+'IDPU_TEMP_PCB',
+'IDPU_TEMP_FPGA',
+'3V3_CURRENT',
+'2V5_CURRENT',
+'1V5_CURRENT',
+'SPW0L_CURRENT',
+'SPW1L_CURRENT',
+'SPW2L_CURRENT',
+'SPW_VOLTAGE_MAIN',
+'SPW_VOLTAGE_REDUNDANT',
+'ADC_SELFCHECK_1V5',
+'ADC_SELFCHECK_2V5',
+'ADC_SELFCHECK_2V9',
+'ATT_V',
+'ATT0M_C',
+'ATT1M_C',
+'ATT2M_C',
+'ATT_T',
+'PSU_HV_01',
+'PSU_HV_17',
+'DET0Q_C',
+'DET1Q_C',
+'DET2Q_C',
+'DET3Q_C',
+'DET4Q_C',
+'DET_Q1_T',
+'DET_Q2_T',
+'DET_Q3_T',
+'DET_Q4_T',
+'ASP_REF_2V5A_V',
+'ASP_REF_2V5B_V',
+'ASP_TIM01',
+'ASP_TIM02',
+'ASP_TIM03',
+'ASP_TIM04',
+'ASP_TIM05',
+'ASP_TIM06',
+'ASP_TIM07',
+'ASP_TIM08',
+'ASP_VSENSA_V',
+'ASP_VSENSB_V',
+'ASP_PHOTOA0_V',
+'ASP_PHOTOA1_V',
+'ASP_PHOTOB0_V',
+'ASP_PHOTOB1_V',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_PSU_TEMP',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_PCB_TEMP',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_FPGA_TEMP',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_3V3_C',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_2V5_C',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_1V5_C',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_SPW_C',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_SPW0_V',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_SPW1_V',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_1V5_V',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_2V5_V',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_2V9_V',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ATT_V',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ATT_C',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ATT_T',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_HV01',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_HV17',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_DET_C',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_DET_Q1_T',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_DET_Q2_T',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_DET_Q3_T',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_DET_Q4_T',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ASP_REFA_V',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ASP_REFB_V',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ASP_TIM01',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ASP_TIM02',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ASP_TIM03',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ASP_TIM04',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ASP_TIM05',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ASP_TIM06',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ASP_TIM07',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ASP_TIM08',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ASP_VSENSA',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ASP_VSENSB',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ASP_PHOTOA0',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ASP_PHOTOA1',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ASP_PHOTOB0',
+'HKMON_OUT_OF_BOUNDS_TRIGGERED_ASP_PHOTOB1',
+'FDIR_ENABLED_FUNCTIONS',
+'FDIR_ENABLED_CURRENT_CHECK',
+'FDIR_ENABLED_VOLTAGE_CHECK',
+'FDIR_ENABLED_TEMPERATURE_CHECK',
+'CONFIG_TLUT_ENABLED_DET_TEMP_MASK',
+'CONFIG_TLUT_AVG_READOUT_COUNT',
+'FDIR_ATT_LIMIT_T1',
+'FDIR_ATT_LIMIT_T2',
+'FDIR_ATT_LIMIT_N1',
+'FDIR_ATT_LIMIT_N2',
+'CONFIG_FSW_REACTION_TO_SERVICE_20',
+'CONFIG_SCRUB_SDRAM',
+'CONFIG_SCRUB_CACHE',
+'CONFIG_ENABLED_EDAC',
+'CONFIG_SDRAM_PRESCALER',
+'CONFIG_FSW_RECONFIGURATION_INFO_TM51',
+'CONFIG_ROTB_PRESCALER',
+'FDIR_IRQ_COUNTER_MAX_DETECTOR',
+'FDIR_IRQ_COUNTER_MAX_DETECTOR_QL',
+'FDIR_IRQ_COUNTER_MAX_DATAFLASH',
+'FDIR_IRQ_COUNTER_MAX_SPW',
+'SPW_LINK_PROBLEM_TRANSIENT_DURATION_MS',
+'CONFIG_SPW_STATE',
+'CONFIG_SPW_ENABLE_OVC',
+'CONFIG_PSU_1V5_ENABLE_OCP',
+'CONFIG_PSU_2V5_ENABLE_OCP',
+'CONFIG_PSU_3V3_ENABLE_OCP',
+'CONFIG_ATT_ENABLE_OCP',
+'CONFIG_ATT_ENABLE_OVP',
+'CONFIG_DET_ENABLE_OCP',
+'CONFIG_PSU_HV01_ENABLE_OVP',
+'CONFIG_PSU_HV17_ENABLE_OVP',
+'CONFIG_SPW_THRESHOLD_CURRENT',
+'CONFIG_PSU_1V5_THRESHOLD',
+'CONFIG_PSU_2V5_THRESHOLD',
+'CONFIG_PSU_3V3_THRESHOLD',
+'CONFIG_ATT_CURRENT_THRESHOLD',
+'CONFIG_ATT_VOLTAGE_THRESHOLD',
+'CONFIG_DET_CURRENT_THRESHOLD',
+'CONFIG_PSU_HV01_THRESHOLD',
+'CONFIG_PSU_HV17_THRESHOLD',
+'EDAC_SEU_REPORT_PERIOD_S',
+'EDAC_SCRUB_ALGO_CACHE_THRESHOLD_NOM',
+'EDAC_SCRUB_ALGO_CACHE_THRESHOLD_HIGH',
+'EDAC_SCRUB_ALGO_SDRAM_THRESHOLD_NOM',
+'EDAC_SCRUB_ALGO_SDRAM_THRESHOLD_HIGH',
+'CONFIG_CURRENT_TLUT1_ID',
+'CONFIG_CURRENT_TLUT2_ID',
+'CONFIG_CURRENT_ELUT_ID',
+'CONFIG_CURRENT_SKY_LUT_ID',
+'HK_TM_SID2_REPORTING_PERIOD',
+'HK_TM_SID4_REPORTING_PERIOD',
+'SPW_TIME_CODE_RECEPTION_TIMEOUT_MS',
+'HK_TM_SID4_REPORTING_ENABLED',
+'HK_TM_SID2_REPORTING_ENABLED',
+'MEM_LOAD_ENABLED',
+'ASPECT_SUMMED_VALUES',
+'ASPECT_HALVES_POWER',
+'ATT_NOMINAL_PWM_LEVEL',
+'ATT_MAX_PWM_LEVEL',
+'ATT_OPENNED_MOTOR',
+'HV_01_16_State',
+'HV_17_32_State',
+'HV_01_16_Pwm',
+'HV_17_32_Pwm',
+'LV_State',
+'HV_RESET_INTERVAL_1',
+'HV_RESET_DURATION_1',
+'HV_RESET_INTERVAL_2',
+'HV_RESET_DURATION_2',
+'HV_RESET_DELAY_FROM_FLARE',
+'CONFIG_ADC_ENABLE_MASK',
+'CONFIG_ADC_MODE_MASK',
+'ASIC_VERIFICATION_PERIOD',
+'CALISTE_IGNORE_FLAGS',
+'SEU_IGNORE_GROUP_FLAGS',
+'DETECTOR_QUARTERS_POWER',
+'CALIB_FORMATTING_ENABLED',
+'CALIB_CONTINUOUS_ACQUISITION',
+'CALIB_PIXEL_FORMATTING_MASK',
+'CALIB_DETE_FORMATTING_MASK',
+'CALIB_DETECTOR_MASK',
+'CALIB_PIXEL_MASK',
+'CALIB_SUBSPECT_FORMATTING_MASK',
+'CALIB_QUIET_TIME',
+'CALIB_MAX_INTEGRATION',
+'CALIB_SUBSPECTRA1',
+'CALIB_SUBSPECTRA2',
+'CALIB_SUBSPECTRA3',
+'CALIB_SUBSPECTRA4',
+'CALIB_SUBSPECTRA5',
+'CALIB_SUBSPECTRA6',
+'CALIB_SUBSPECTRA7',
+'CALIB_SUBSPECTRA8',
+'CALIB_BIN_REDUCTION_OPTION',
+'CALIB_COMPRESSION_SCHEMA',
+'QL_LIGHTCURVE_NUMBER_OF_INTEGRATIONS',
+'QL_LIGHTCURVE_DETE_MASK',
+'QL_LIGHTCURVE_PIXE_MASK',
+'QL_LIGHTCURVE_ENERGY_BIN_MASK1',
+'QL_LIGHTCURVE_ENERGY_BIN_MASK2',
+'QL_LIGHTCURVE_ENABLE_TM',
+'QL_LIGHTCURVE_COMPRESSION_SCHEMA_COUNTS',
+'QL_LIGHTCURVE_COMPRESSION_SCHEMA_TRIGGERS',
+'QL_SPECTRUM_NUMBER_OF_INTEGRATIONS',
+'QL_SPECTRUM_NUMBER_OF_WAIT_ITERATIONS',
+'QL_SPECTRUM_DETE_MASK',
+'QL_SPECTRUM_PIXE_MASK',
+'QL_SPECTRUM_ENABLE_TM',
+'QL_SPECTRUM_COMPRESSION_SCHEMA_COUNTS',
+'QL_SPECTRUM_COMPRESSION_SCHEMA_TRIGGERS',
+'QL_BGMON_NUMBER_OF_INTEGRATIONS',
+'QL_BGMON_ENERGY_BIN_MASK1',
+'QL_BGMON_ENERGY_BIN_MASK2',
+'QL_BGMON_ENABLE_ALGO',
+'QL_BGMON_DEFAULT_R0',
+'QL_BGMON_DEFAULT_R1',
+'QL_BGMON_DEFAULT_R2',
+'QL_BGMON_DEFAULT_R3',
+'QL_BGMON_DEFAULT_R4',
+'QL_BGMON_DEFAULT_R5',
+'QL_BGMON_DEFAULT_R6',
+'QL_BGMON_DEFAULT_R7',
+'QL_BGMON_ENABLE_TM',
+'QL_BGMON_COMPRESSION_SCHEMA_COUNTS',
+'QL_BGMON_COMPRESSION_SCHEMA_TRIGGERS',
+'QL_FLAREDET_F_E1_R0',
+'QL_FLAREDET_F_E1_R1',
+'QL_FLAREDET_F_E1_R2',
+'QL_FLAREDET_F_E1_R3',
+'QL_FLAREDET_F_E1_R4',
+'QL_FLAREDET_F_E1_R5',
+'QL_FLAREDET_F_E1_R6',
+'QL_FLAREDET_F_E1_R7',
+'QL_FLAREDET_F_E2_R0',
+'QL_FLAREDET_F_E2_R1',
+'QL_FLAREDET_F_E2_R2',
+'QL_FLAREDET_F_E2_R3',
+'QL_FLAREDET_F_E2_R4',
+'QL_FLAREDET_F_E2_R5',
+'QL_FLAREDET_F_E2_R6',
+'QL_FLAREDET_F_E2_R7',
+'QL_FLAREDET_NUMBER_OF_INTEGRATIONS',
+'QL_FLAREDET_DETE_MASK',
+'QL_FLAREDET_PIXE_MASK',
+'QL_FLAREDET_THERMAL_ENERGY_MASK',
+'QL_FLAREDET_NONTHERMAL_ENERGY_MASK',
+'QL_FLAREDET_TIMESCALE1',
+'QL_FLAREDET_TIMESCALE2',
+'QL_FLAREDET_KB',
+'QL_FLAREDET_CFMIN',
+'QL_FLAREDET_KREL',
+'QL_FLAREDET_KRELP',
+'QL_FLAREDET_KRELPP',
+'QL_FLAREDET_CBCINIT_THERMAL',
+'QL_FLAREDET_CBCINIT_NONTHERMAL',
+'QL_FLAREDET_THERMAL_THRESHOLD_B1',
+'QL_FLAREDET_THERMAL_THRESHOLD_C1',
+'QL_FLAREDET_THERMAL_THRESHOLD_M1',
+'QL_FLAREDET_THERMAL_THRESHOLD_X1',
+'QL_FLAREDET_NONTHERMAL_THRESHOLD_WEAK',
+'QL_FLAREDET_NONTHERMAL_THRESHOLD_SIGNIF',
+'QL_FLARE_ENABLE_TM',
+'QL_FLARELOC_NUMBER_OF_INTEGRATIONS',
+'QL_FLARELOC_ENERGY_MASK',
+'QL_FLARELOC_V1',
+'QL_FLARELOC_V2',
+'QL_FLARELOC_K',
+'QL_FLARELOC_KP',
+'QL_FLARELOC_KPP',
+'QL_FLARELOC_KPPP',
+'QL_FLARELOC_K0',
+'QL_FLARELOC_K1',
+'QL_FLARELOC_K2',
+'QL_FLARELOC_DX',
+'QL_FLARELOC_DY',
+'QL_FLARELOC_DET_MASK',
+'QL_VARIANCE_DETE_MASK',
+'QL_VARIANCE_ENE_MASK',
+'QL_VARIANCE_PIXE_MASK',
+'QL_VARIANCE_ENABLE_TM',
+'QL_VARIANCE_COMPRESSION_SCHEMA',
+'QL_DETPERF_NUMBER_OF_INTEGRATIONS',
+'QL_DETPERF_ENERGY_MASK',
+'QL_DETPERF_KBAD',
+'QL_DETPERF_CBAD',
+'QL_DETPERF_NBAD',
+'QL_DETPERF_NREP',
+'QL_DETPERF_ACTIVE_DETE_MASK',
+'RCR_ENABLED',
+'RCR_L0',
+'RCR_L1',
+'RCR_L2',
+'RCR_L3',
+'RCR_B0',
+'RCR_GROUP_MASK',
+'RCR_PIXEL_0',
+'RCR_PIXEL_1',
+'RCR_PIXEL_2N',
+'RCR_PIXEL_2S',
+'RCR_PIXEL_3N1',
+'RCR_PIXEL_3N2',
+'RCR_PIXEL_3S1',
+'RCR_PIXEL_3S2',
+'RCR_PIXEL_4N1',
+'RCR_PIXEL_4N2',
+'RCR_PIXEL_4N3',
+'RCR_PIXEL_4N4',
+'RCR_PIXEL_4S1',
+'RCR_PIXEL_4S2',
+'RCR_PIXEL_4S3',
+'RCR_PIXEL_4S4',
+'RCR_PIXEL_5',
+'RCR_PIXEL_6_1',
+'RCR_PIXEL_6_2',
+'RCR_PIXEL_7_1',
+'RCR_PIXEL_7_2',
+'RCR_PIXEL_7_3',
+'RCR_PIXEL_7_4',
+'RCR_PIXEL_B0',
+'RCR_PIXEL_B1',
+'RCR_PIXEL_B2',
+'RCR_PIXEL_B3',
+'RCR_PIXEL_B4',
+'RCR_PIXEL_B5',
+'RCR_PIXEL_B6',
+'RCR_PIXEL_B7',
+'RCR_REGIME_TO_STATE',
+'NOMINAL_ACCU_MIN_INTEGRATION',
+'NOMINAL_ACCU_MAX_INTEGRATION',
+'NOMINAL_ACCU_MAX_COUNTS',
+'NOMINAL_QL_PERIOD',
+'NOMINAL_SUMEMASK',
+'NOMINAL_SUMDMASK',
+'ENABLED_SSID_TRANSFFER_TO_SSMM_MASK',
+'DEFAULT_DATA_COMPRESSION',
+'INCLUDE_BCKG',
+'INCLUDE_CFL',
+'DETECTOR_MASK_L0',
+'DETECTOR_MASK_L1',
+'DETECTOR_MASK_L2',
+'DETECTOR_MASK_L3',
+'DETECTOR_MASK_L4',
+'PIXEL_MASK_L0',
+'PIXEL_MASK_L1R0',
+'PIXEL_MASK_L1R1',
+'PIXEL_MASK_L1R2',
+'PIXEL_MASK_L1R3',
+'PIXEL_MASK_L1R4',
+'PIXEL_MASK_L1R5',
+'PIXEL_MASK_L1R6',
+'PIXEL_MASK_L1R7',
+'PIXEL_MASK_L2R0P1',
+'PIXEL_MASK_L2R0P2',
+'PIXEL_MASK_L2R0P3',
+'PIXEL_MASK_L2R0P4',
+'PIXEL_MASK_L2R0P5',
+'PIXEL_MASK_L2R1P1',
+'PIXEL_MASK_L2R1P2',
+'PIXEL_MASK_L2R1P3',
+'PIXEL_MASK_L2R1P4',
+'PIXEL_MASK_L2R1P5',
+'PIXEL_MASK_L2R2P1',
+'PIXEL_MASK_L2R2P2',
+'PIXEL_MASK_L2R2P3',
+'PIXEL_MASK_L2R2P4',
+'PIXEL_MASK_L2R2P5',
+'PIXEL_MASK_L2R3P1',
+'PIXEL_MASK_L2R3P2',
+'PIXEL_MASK_L2R3P3',
+'PIXEL_MASK_L2R3P4',
+'PIXEL_MASK_L2R3P5',
+'PIXEL_MASK_L2R4P1',
+'PIXEL_MASK_L2R4P2',
+'PIXEL_MASK_L2R4P3',
+'PIXEL_MASK_L2R4P4',
+'PIXEL_MASK_L2R4P5',
+'PIXEL_MASK_L2R5P1',
+'PIXEL_MASK_L2R5P2',
+'PIXEL_MASK_L2R5P3',
+'PIXEL_MASK_L2R5P4',
+'PIXEL_MASK_L2R5P5',
+'PIXEL_MASK_L2R6P1',
+'PIXEL_MASK_L2R6P2',
+'PIXEL_MASK_L2R6P3',
+'PIXEL_MASK_L2R6P4',
+'PIXEL_MASK_L2R6P5',
+'PIXEL_MASK_L2R7P1',
+'PIXEL_MASK_L2R7P2',
+'PIXEL_MASK_L2R7P3',
+'PIXEL_MASK_L2R7P4',
+'PIXEL_MASK_L2R7P5',
+'PIXEL_MASK_L3R0P1',
+'PIXEL_MASK_L3R0P2',
+'PIXEL_MASK_L3R0P3',
+'PIXEL_MASK_L3R0P4',
+'PIXEL_MASK_L3R0P5',
+'PIXEL_MASK_L3R1P1',
+'PIXEL_MASK_L3R1P2',
+'PIXEL_MASK_L3R1P3',
+'PIXEL_MASK_L3R1P4',
+'PIXEL_MASK_L3R1P5',
+'PIXEL_MASK_L3R2P1',
+'PIXEL_MASK_L3R2P2',
+'PIXEL_MASK_L3R2P3',
+'PIXEL_MASK_L3R2P4',
+'PIXEL_MASK_L3R2P5',
+'PIXEL_MASK_L3R3P1',
+'PIXEL_MASK_L3R3P2',
+'PIXEL_MASK_L3R3P3',
+'PIXEL_MASK_L3R3P4',
+'PIXEL_MASK_L3R3P5',
+'PIXEL_MASK_L3R4P1',
+'PIXEL_MASK_L3R4P2',
+'PIXEL_MASK_L3R4P3',
+'PIXEL_MASK_L3R4P4',
+'PIXEL_MASK_L3R4P5',
+'PIXEL_MASK_L3R5P1',
+'PIXEL_MASK_L3R5P2',
+'PIXEL_MASK_L3R5P3',
+'PIXEL_MASK_L3R5P4',
+'PIXEL_MASK_L3R5P5',
+'PIXEL_MASK_L3R6P1',
+'PIXEL_MASK_L3R6P2',
+'PIXEL_MASK_L3R6P3',
+'PIXEL_MASK_L3R6P4',
+'PIXEL_MASK_L3R6P5',
+'PIXEL_MASK_L3R7P1',
+'PIXEL_MASK_L3R7P2',
+'PIXEL_MASK_L3R7P3',
+'PIXEL_MASK_L3R7P4',
+'PIXEL_MASK_L3R7P5',
+'COMPRESSION_SCHEME_L1L2_COUNTS',
+'COMPRESSION_SCHEME_L3_VISIBILITY',
+'COMPRESSION_SCHEME_L1L2L3L4_TRIGGERS',
+'COMPRESSION_SCHEME_SPECTROGRAM_COUNTS',
+'IMAGING_DETE_MASK',
+'IMAGING_TRIM_N',
+'IMAGING_TRIM_F',
+'IMAGING_BCKG_DETERMIN',
+'SPECTRO_DETE_MASK',
+'SPECTRO_PIXE_MASK',
+'SPECTRO_BCKG_DETERMIN',
+'SSC_for_PID49_CAT12_SYSCTRL',
+'SSC_for_PID90_CAT12_MTL',
+'SSC_for_PID90_CAT12_TCSeq',
+'SSC_for_PID90_CAT12_RecAct',
+'SSC_for_PID90_CAT12_BuMTL',
+'SSC_for_PID90_CAT12_DirCom',
+'SSC_for_PID90_CAT12_SpareGS0',
+'SSC_for_PID90_CAT12_SpareGS1',
+'SSC_for_PID90_CAT12_AOCS',
+'SSC_for_PID90_CAT12_SYSCTRL',
+'SSC_for_PID90_CAT12_OBCP',
+'SSC_for_other',
+'LAST_REJECETED_SSC',
+'LAST_ACCEPTED_SSC',
+'TM_MGMT_PUBLISHING_INTERVAL',
+'TM_MGMT_PALD_COUNTER',
+'TM_MGMT_UBSD_COUNTER',
+'TM_MGMT_T1',
+'TM_MGMT_T2',
+'TM_MGMT_M1',
+'TM_MGMT_M2',
+'FLARE_LIST_LAST_REPORT_SCET',
+'FDIR_ATT_TOTAL_COUNTER',
+'FLARE_SEL_PERIOD',
+'FLARE_SEL_LATENCY',
+'FLARE_SEL_ENABLED',
+'FLARE_SEL_START',
+'FLARE_SEL_STOP',
+'ASIC_REGISTER_1_HW_DEFAULT',
+'ASIC_REGISTER_2_HW_DEFAULT',
+'ASIC_REGISTER_3_HW_DEFAULT',
+'ASIC_REGISTER_4_HW_DEFAULT',
+'ASIC_REGISTER_5_HW_DEFAULT',
+'ASIC_REGISTER_6_HW_DEFAULT',
+'ASIC_REGISTER_7_HW_DEFAULT',
+'ASIC_REGISTER_8_HW_DEFAULT',
+'ASIC_REGISTER_9_HW_DEFAULT',
+'ASIC_REGISTER_10_HW_DEFAULT',
+'ASIC_REGISTER_11_HW_DEFAULT',
+'ASIC_REGISTER_12_HW_DEFAULT',
+'ASIC_REGISTER_13_HW_DEFAULT',
+'FS_REWRITE_FILES_AFTER_N_SEUS',
+'ATT_GLOBAL_DISABLE_FLAG',
+'ASIC_LATENCY_DELAY'],
+
+	getASWParameterName: function(index){
+		if (index>=0&&index<471)return StixIDB.ASWParameter[index]+"(ID:"+index+")";
+	},
+
+getParameterDescription: function(paramName)
+{
+	if (!(paramName in StixIDB.paramDescr))
 	{
-		if (!(paramName in StixIDB.paramDescr))
+		return "";
+	}
+
+	var desc=StixIDB.paramDescr[paramName];
+	return desc;
+},
+
+	getTextCalibration: function(name)
+{
+	if(!(name in StixIDB.TEXT_CALI))
+	{
+		return {};
+	}
+	else{
+
+		return StixIDB.TEXT_CALI[name];
+	}
+},
+	getTMDescription:function(name){
+		if(!(name in StixIDB.tmDesc))return "";
+		return StixIDB.tmDesc[name];
+	},
+	getParameterUnit:function(name){
+		if(!(name in StixIDB.paramUnits))return "";
+		return StixIDB.paramUnits[name];
+
+	},
+	getTCDescription:function(name){
+		if(!(name in StixIDB.tcDesc))
 		{
 			return "";
 		}
-
-		var desc=StixIDB.paramDescr[paramName];
+		var desc=StixIDB.tcDesc[name];
 		return desc;
 	},
-	getTextCalibration: function(name)
-	{
-		if(!(name in StixIDB.TEXT_CALI))
-		{
-			return {};
-		}
-		else{
+	getSubSystemName:function(system, subID){
 
-			return StixIDB.TEXT_CALI[name];
+		if(system==1||system=="IDPU"){
+			return "Watchdog";		
 		}
-	},
+		else if(system==2||system=="DETECTORS"){
+			
+			var quad=[];
+			for(var j=0;j<4;j++)
+			{
+				if (isSet(subID,j)){
+					quad.push(1+j);
+				}
+			
+			}
+			return 'detector quadrant '+quad.join(',');
+		}
+		else if(system==3||system=="ASPECT_SYSTEM"){
+			if (subID==1)return "Aspect system A";
+			else if(subID==2) return "Aspect system B";
+			else if(subID==3) return  "Aspect system A and B"
+		}
+		else if(system==4||system=="ATTENUATOR"){
+
+			var motors=[];
+			if(isSet(subID,0)) motors.push("Motor 1");
+			if(isSet(subID,1)) motors.push("Motor 2");
+			if(isSet(subID,2)) motors.push("Override Motor 1");
+			if(isSet(subID,3)) motors.push("Override Motor 2");
+			return motors.join(',');
+			
+		}
+		else if(system==5 || system=="PSU"){
+			var power=[];
+			if (isSet(subID,0))power.push("HVPS 1");
+			if (isSet(subID,1))power.push("HVPS 2");
+			if (isSet(subID,2))power.push("LVPS ");
+			return power.join(', ');
+		}
+
+		return "";
+
+	}
+
+
 };
 

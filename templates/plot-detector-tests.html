@@ -1,0 +1,108 @@
+
+
+
+{% extends "base-plotting.html" %}
+
+{% set currentPage="Detector tests" %}
+
+{% block title %}STIX detector test report viewer{% endblock %}
+{% block head %}
+{% endblock %}
+{% block top_navi_title%} 
+detector test data
+{% endblock %}
+{% block main_title_bar%} 
+{% if message is defined %}
+{{message}}
+{% else %}
+detector test data
+{%endif%}
+
+{% endblock %}
+
+{% set button_groups=({"Last day": 24,"Last 2 days": 48,"Last 3 days":72}) %}
+
+
+
+{% block  main_container%} 
+
+
+<button type="button" class="btn btn-success btn-sm" id="btn-detector-test-run" data-toggle="collapse" data-target="#detector-test-run-list" style="display:none;" >
+	Show calibration runs 
+</button>
+
+<div class="collapse" id="detector-test-run-list">
+	<div class="card card-body" style="height:400px; overflow:scroll">
+		<table class="table table-sm table-striped table-bordered table-hover mt-3" id="detector-test-table">
+			<thead>
+				<tr>
+					<th class="sortable-column sort-desc">ID</th>
+					<th>Time </th>
+					<th>Description</th>
+					<th>Packet</th>
+					<th>Plot</th>
+				</tr>
+			</thead>
+			<tbody >
+			</tbody>
+		</table>
+
+	</div>
+</div>
+<div class="d-flex flex-column">
+	<div class="row justify-content-md-center">
+		<div class="col-md-6">
+			<div id="counts2d">
+			</div>
+
+		</div>
+		<div class="col-md-6" >
+			<div width="70%" id="histogram" >
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+
+
+	{% endblock %}
+
+
+	{% block before_js%}
+	{% if start_unix is not defined%}
+	{% set start_unix=0 %}
+	{% endif %}
+	{% if span_sec is not defined%}
+	{% set span_sec=0 %}
+	{% endif %}
+	{% if test_id is not defined%}
+	{% set test_id=-1 %}
+	{% endif %}
+
+	<script>
+		window.startUnix={{start_unix}};
+window.timeSpanSeconds={{span_sec}};
+window.testId={{test_id}};
+	</script>
+
+	{% endblock %}
+
+	{% block after_js %}
+
+	{% assets "dettest_js" %}
+		<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+	{% endassets %}
+	<script>
+		$(function () {
+			$('.form_datetime').datetimepicker( {format: "yyyy-mm-ddThh:ii:ss"});
+
+
+		});
+
+	</script>
+	{% endblock %}
+
+
+

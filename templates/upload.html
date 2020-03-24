@@ -1,0 +1,57 @@
+
+{% set currentPage="Raw telemetry upload" %}
+{% set bodyStyle="overflow-y:scroll; overflow-x:hidden;" %}
+
+{% extends "base-fluid.html" %}
+{% block title %}STIX telemetry raw data upload{% endblock %}
+{% block head %}
+{% endblock %}
+{% block  container %} 
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<button type="button" id="sidebarCollapse" class="btn btn-secondary mr-1">
+		<i class="fas fa-list-ul"></i>
+		<span></span>
+	</button>
+	<button class=" btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" 
+																				 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<i class="fas fa-align-justify"></i>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="breadCrumb nav navbar-nav ml-auto">
+			<li  class="nav-link">{{currentPage}}</li>
+		</ul>	
+	</div>
+</nav>
+
+<div class="container ">
+<div class="col-md-8 col-md-offset-2 pt-40">
+    <h3>Select a raw data file to upload</h3>
+<form method="POST" action="#" enctype="multipart/form-data">
+	<!-- COMPONENT START -->
+	<div class="form-group">
+		<div class="input-group input-file" name="Fichier1">
+			<span class="input-group-btn">
+        		<button class="btn btn-default btn-choose" type="button">Choose</button>
+    		</span>
+    		<input type="text" class="form-control" placeholder='Choose a file...' />
+    		<span class="input-group-btn">
+				<button type="submit" class="btn btn-primary pull-right" disabled>Submit</button>
+    		</span>
+		</div>
+	</div>
+	<!-- COMPONENT END -->
+	<p> Only *ascii file will be processed automatically </p>
+</form>
+        
+        
+</div>
+</div>
+{% endblock %}
+
+{% block jscript %}
+{% assets "uploadfile_js" %}
+	<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
+
+{% endblock %}
+

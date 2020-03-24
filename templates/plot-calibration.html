@@ -1,11 +1,10 @@
 
-
 {% extends "base-plotting.html" %}
+{% set currentPage="Calibration" %}
+
+
 {% block title %}STIX calibration data viewer{% endblock %}
 {% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/bootstrap-datetimepicker.min.css')}}">
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/jquery.dataTables.min.css')}}">
-<script src="{{ url_for('static', filename='vendor/js/bootstrap-datetimepicker.js')}}"></script>
 {% endblock %}
 {% block top_navi_title%} 
 Calibration data
@@ -18,22 +17,43 @@ Calibration data
 {%endif%}
 
 {% endblock %}
-{% block  toolbar_button_groups%} 
-	<button type="button" class="btn btn-outline-success active last-data" value="24">Last day</button>
-	<button type="button" class="btn btn-outline-success last-data " value="48">Last 2 days</button>
-	<button type="button" class="btn btn-outline-success last-data " value="72">Last 3 days</button>
-{% endblock %}
+
+{% set button_groups=({"Last day": 24,"Last 2 days": 48,"Last 3 days":72}) %}
 
 
 {% block  main_container%} 
-
-<a class="btn btn-success btn-sm" id="btn-calibration-run" data-toggle="collapse" href="#calibration-run-list" role="button" aria-expanded="false" aria-controls="calibration-run-list" style="display:none">
-	Toggle
+<div class="btn-group btn-group-sm ">
+<button type="button" class="btn btn-sm btn-outline-primary mr-2" id="btn-calibration-run" data-toggle="collapse" data-target="#calibration-run-list" style="display:none;" >
+								<i class="fas fa-list" aria-hidden="true"></i> 
+	Calibration runs
+</button> 			
+<a  class="btn btn-sm btn-outline-primary mr-2"  style="display:none;" id="packet">
+								<i class="fas fa-columns" aria-hidden="true"></i> Current Run Packets
 </a>
+<button type="button" class="btn btn-sm btn-outline-primary mr-2"  id="show-modal">
+								<i class="fas fa-info" aria-hidden="true"></i> 
+								Calibration run info
+</button>
+
+<button type="button" class="btn btn-sm btn-outline-primary mr-2"  style="display:none;" id="download">
+								<i class="fas fa-file-excel" aria-hidden="true"></i> 
+								Download energy Spectra
+</button>
+<!--
+<button type="button" class="btn btn-sm btn-outline-primary"  style="" id="calibration-report">
+								<i class="fas fa-file-pdf" aria-hidden="true"></i> Calibration analysis report 
+</button>
+<button type="button" class="btn btn-sm btn-outline-primary"  style="" id="calibration-report">
+								<i class="fas fa-file-excel" aria-hidden="true"></i>ELUT parameters
+</button>
+-->
+
+
+</div>
 
 <div class="collapse" id="calibration-run-list">
-	<div class="card card-body" style="height:400px; overflow:scroll">
-		<table class="table table-sm table-striped table-bordered table-hover mt-3" id="calibration-runs-table">
+	<div class="card card-body" style="height:250px; overflow:scroll">
+		<table class="display compact mt-3" id="calibration-runs-table">
 			<thead>
 				<tr>
 					<th class="sortable-column sort-desc">ID</th>
@@ -50,16 +70,43 @@ Calibration data
 
 	</div>
 </div>
-<div class="d-flex flex-column">
-	<table class="table table-sm table-striped table-bordered table-hover" id="calibration-run-info"></table>
-	<div class="row justify-content-md-center">
-		<div class="col-md-6" id="counts2d"></div>
-		<div class="col-md-6" id="spectrum"></div>
+<div class="d-flex flex-column mt-10">
+	<div class="row">
+		<div class="col" >
+		</div>
 	</div>
+	<div class="row justify-content-md-center">
+		<div class="col-md-6">
+			<div id="counts2d" style="height:calc(100vh-200px);">
+			</div>
+		</div>
+		<div class="col-md-6" >
+			<div style="width:100%" id="spectrum" > </div>
+		</div>
+	</div>
+
 </div>
 
-
-
+  <!-- calibration info Modal -->
+  <div class="modal fade" id="cal-info-modal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+		  <h4 class="modal-title"><span id="cal-info-title"></span></h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+			<table class="table table-sm table-striped table-bordered table-hover" id="table-calibration-run-info">
+			</table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
 
 
 {% endblock %}
@@ -72,28 +119,33 @@ Calibration data
 {% if span_sec is not defined%}
 {% set span_sec=0 %}
 {% endif %}
+
 {% if calibration_id is not defined%}
 {% set calibration_id=-2 %}
 {% endif %}
 
+{% if file_id is not defined%}
+{% set file_id=-1 %}
+{% endif %}
+
 <script>
-	window.startUnix={{start_unix}};
+window.startUnix={{start_unix}};
 window.timeSpanSeconds={{span_sec}};
 window.calibrationId={{calibration_id}};
+window.fileID={{file_id}};
 </script>
 
 {% endblock %}
 
 {% block after_js %}
-<script src="{{ url_for('static', filename='js/calibration.plot.response.js')}}"></script>
-<script src="{{ url_for('static', filename='vendor/js/jquery.dataTables.min.js')}}"></script>
-<script src="{{ url_for('static', filename='vendor/js/dataTables.bootstrap4.min.js')}}"></script>
+
+{% assets "calibration_js" %}
+	<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
 <script>
 	$(function () {
 		$('.form_datetime').datetimepicker( {format: "yyyy-mm-ddThh:ii:ss"});
-		//	$(".nav-tabs a").click(function(){
-		//		$(this).tab('show'); });
-
+		
 
 	});
 

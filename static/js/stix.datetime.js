@@ -2,14 +2,16 @@
  * stix.datatime..0.1
  * Author: Hualin Xiao 
  */
-var SCET_OFFSET=946684800.;
+//var SCET_OFFSET=946727931;
+//var SCET_OFFSET=946684800;
+var SCET_OFFSET=946727930.8147931;
 
 var StixDateTime={
 
 	unixTime2ISOstring: function(unix)
 	{
 		var ts=new Date(unix*1000.);//.toISOString().slice(0,20);
-		return ts.toISOString();
+		return ts.toISOString().slice(0,19);
 	},
 	utc2unix: function(utc)
 	{
@@ -66,8 +68,6 @@ var StixDateTime={
 	},
 
 
-
-
 	SCET2ISOString: function(coarse_time, fine_time=0)
 	{
 		var unixtimestamp = coarse_time + fine_time / 65536. + SCET_OFFSET;
@@ -111,4 +111,3 @@ var StixDateTime={
 	}
 
 };
-

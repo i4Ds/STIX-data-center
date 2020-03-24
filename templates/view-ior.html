@@ -1,0 +1,151 @@
+{% extends "base-fluid.html" %}
+
+{% set currentPage="Operation request viewer" %}
+{% set bodyStyle="overflow-y:scroll; overflow-x:hidden;" %}
+
+{% block title %}Operation request viewer{% endblock %}
+{% block head %}
+<style type="text/css">
+td th {
+	text-align: center;
+}
+	.top-info{
+		font-weight:bold;
+		font-style: italic;
+		font-size: 0.8em;
+	}
+</style>
+{% assets "iorviewer_css" %}
+<link rel="stylesheet" href="{{ ASSET_URL }}" />
+{% endassets %}
+
+{% endblock %}
+{% block  container %} 
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<button type="button" id="sidebarCollapse" class="btn btn-secondary mr-1">
+		<i class="fas fa-list-ul"></i>
+		<span></span>
+	</button>
+	<button class=" btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" 
+																				 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<i class="fas fa-align-justify"></i>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<div class="btn-group  btn-group-sm mr-1">
+			<div class="input-group input-group-sm ">
+				<div class="input-group-prepend">
+					<span class="input-group-text" id="inputGroup-sizing-sm">Filter</span>
+				</div>
+				<input id="search" placeholder="Search..." type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+			</div>
+		</div>
+		<ul class="breadCrumb nav navbar-nav ml-auto">
+			<li  class="nav-link">{{currentPage}}</li>
+		</ul>	
+	</div>
+</nav>
+
+<div class="container-fluid "> 
+	<div class="d-flex">
+		<div class="ml-1 mr-auto">
+			<div class="container">
+				<div class="info" id="top-info">
+				</div>
+				<div class="info" id="duration-info">
+				</div>
+
+			</div>
+		</div>
+		<div class="">
+			<div class="btn-group btn-group-sm ">
+				<button type="button" class="btn btn-outline-success mr-1" id="previous" value="">Previous </button>
+				<button type="button" class="btn btn-outline-success" id="next" value="">Next</button>
+				{% if file_id is defined%}
+				<a type="button" class="btn btn-outline-success" href="/view/ior/overview/{{file_id}}"> Occurrence list</a>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<table class="table-hover  treetable"  id="occurrences" width="100%">
+				<thead>
+					<tr>
+						<th width="5%" ># </th>
+						<th width="15%"> Action Time</th>
+						<th width="15%"> Duration (s)</th>
+						<th width="10%"> TC/sequence</th>
+						<th > Description </th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-6">
+			<table id="parameters" class= "table-hover treetable " width="100%">
+				<thead>
+					<tr>
+						<th width="30%">Name</th>
+						<th width="30%">Description</th>
+						<th width="15%">value</th>
+						<th width="15%">Eng. value</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-tt-id="2" data-tt-branch='true'>
+						<td>Telecommands<span id="command-number">[0]</span>
+						</td>
+						<td>
+						</td>
+						<td></td>
+						<td></td>
+					</tr>
+
+					<tr data-tt-id="1" data-tt-branch='true'>
+						<td>Parameters<span id="param-number">[0]</span>
+						</td>
+						<td>
+						</td>
+						<td></td>
+						<td></td>
+					</tr>
+
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="container-fluid "> 
+		<div class="row">
+			<div class="col-md-12">
+				<div id="command-sequences"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="statusbar"><span id="msg" class="text-muted small" style="margin-right:5px;"></span></div>
+	<div id="leftloader" class="leftloader" style="display:none;"></div>
+	<div id="rightloader" class="rightloader" style="display:none;"></div>
+
+</div> <!--end of container-->
+
+{% endblock %}
+
+{% if file_id is not defined%}
+{% set file_id=-1 %}
+{% endif %}
+
+{% block jscript %}
+<script>
+	window.fileID={{file_id}};
+</script>
+
+
+{% assets "iorviewer_js" %}
+<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
+
+
+{% endblock %}

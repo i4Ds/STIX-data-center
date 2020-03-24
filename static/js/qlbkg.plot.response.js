@@ -13,6 +13,10 @@ $(function() {
 		//Request from URL
 		requestBackgroundPackets(window.startUnix,window.timeSpanSeconds);
 	}
+	else if(window.run>=0)
+	{
+		requestBackgroundPacketsOfRun(window.run);
+	}
 	else if(window.startUnix==0 && window.timeSpanSeconds==0)
 	{
 		//No request from URL, load the last 4 hours' by default
@@ -159,7 +163,7 @@ $(function() {
 		var lcTraces=[];
 		var trigTrace=[];
 
-		var names=['LC 0 - 10 keV', 'LC 10 - 15 keV' , 'LC 15 - 25 keV','LC 25 - 50 keV' , 'LC 50 - 150 keV'];
+		var names=['4 - 10 keV', '10 - 15 keV' , '15 - 25 keV','25 - 50 keV' , '50 - 150 keV'];
 		for (var ii=0;ii<5;ii++)
 		{
 			lcTraces.push({
@@ -195,6 +199,7 @@ $(function() {
 		var lcLayout = { 
 			showlegend: true, 	
 			//	legend: { 	x: 0, y: 1.0 }, 
+			title:'Background monitor light curves',
 			xaxis: xAxisConfig,
 			yaxis: yAxisConfig};
 		var trigLayout = {
@@ -305,6 +310,35 @@ $(function() {
 	}
 
 
+
+	function requestBackgroundPacketsOfRun(run)
+	{
+		$('#status').html('Requesting background data of run'+run);
+		$.ajax({
+			url: '/request/ql/bkg/run/'+run,
+			dataType:"json",
+			success: function (data) {
+				if(data['status']!='OK')
+				{
+					$('#status').html(data['status']);
+				}
+				if(data['data'].length>0)
+				{
+					window.lightcurveData=getBackgroundData(data,0,0);
+					plotBackground(window.lightcurveData, 0,false);
+					var shareURL='/plot/background?run='+run;
+					$('#share').attr('href',shareURL);
+
+				}
+				else
+				{
+					$('#status').html('No background data found for run: '+run);
+				}
+
+			}
+
+		});
+	}
 
 
 
