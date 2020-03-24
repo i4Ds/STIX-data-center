@@ -79,13 +79,13 @@ For more optimizations, see https://docs.mongodb.com/manual/core/query-optimizat
 ngnix and gunicore are recommended for the final server as described at 
 https://flask.palletsprojects.com/en/1.1.x/deploying/
 
-### Installation
+### nginx installation
 ```
 sudo apt-get install nginx
 pip3 install gunicorn
 ```
 
-### Configure ngnix
+### nginx configuration
 gedit /etc/nginx/nginx.conf
 
 ```
