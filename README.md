@@ -174,7 +174,10 @@ http {
 ```
 gunicorn --bind 127.0.0.1:8001 wsgi:app --daemon
 ```
-One could copy stixweb.service to /etc/systemd/system/ , the server will start automatically after reboot.
+One could copy stixweb.service to /etc/systemd/system/, the server will start automatically after reboot.
+```
+sudo cp stixweb.service /etc/systemd/system/ 
+```
 
 ## Security issues
 
