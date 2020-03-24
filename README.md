@@ -17,7 +17,7 @@ To install mongodb, please follow the manual at
  https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
  
  
-##  Test data import
+##  Import test data
 
 Raw data packets are stored in the MongoDB. 
 
