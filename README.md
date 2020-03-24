@@ -19,10 +19,10 @@ To install mongodb, please follow the manual at
  
 ##  Import test data
 
-Raw data packets are stored in the MongoDB. 
+run STIX packet parser (available in https://github.com/i4Ds/STIX-python-data-parser)
 
 ```
-./application/parser.py   -i test.dat  --wdb
+.stix/app/parser.py   -i test.dat  --wdb
 ```
 
 
@@ -162,14 +162,10 @@ http {
 ```
 gunicorn --bind 127.0.0.1:8001 wsgi:app --daemon
 ```
-
-
+One could copy stixweb.service to /etc/systemd/system/ , the server will start automatically after reboot.
 
 ## Security issues
 
 
 
-## TODOs
- 
- - change the folder structure
- - use flask Blueprint
+
