@@ -12,7 +12,7 @@ based on MongoDB, Python-Flask, bootstrap4  and JQuery.
 sudo apt-get install python3
 pip3 install flask werkzeug flask-assets  jsmin cssmin
 ```
-To install mongodb, please follow the manual at 
+To install mongodb on ubuntu, please follow the manual at 
 
  https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
  
