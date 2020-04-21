@@ -11,9 +11,9 @@ from datetime import datetime
 from datetime import timedelta
 import pymongo
 
-DEFAULT_MAX_PACKETS_RETURN = 20000
-NUM_MAX_RETURN_PACKETS = 1000
-NUM_MAX_RETURN_HEADERS = 20000
+#DEFAULT_MAX_PACKETS_RETURN = 100000
+NUM_MAX_RETURN_PACKETS = 10000
+NUM_MAX_RETURN_HEADERS = 200000
 MAX_TABLE_NUM_ROWS = 500
 MAX_REQUEST_LC_TIME_SPAN_DAYS = 3
 MAX_TIME_SPAN_SECONDS = 7 * 24 * 3600
@@ -87,9 +87,9 @@ class _MongoDB(object):
             return {'header': 1}
         return None
 
-    def get_run_info(self, run_id):
+    def get_raw_file_info(self, run_id):
         if self.collection_raw_files:
-            cursor = self.collection_raw_files.find({'_id': int(run_id)})
+            cursor = self.collection_raw_files.find({'_id': int(run_id)}).limit(NUM_MAX_RETURN_PACKETS)
             for x in cursor:
                 return x
         return None
@@ -104,13 +104,13 @@ class _MongoDB(object):
     def select_packet_by_id(self, _id, header_only=False):
         if self.collection_packets:
             cursor = self.collection_packets.find(
-                {'_id': int(_id)}, self.get_field_selector(header_only))
+                {'_id': int(_id)}, self.get_field_selector(header_only)).limit(NUM_MAX_RETURN_HEADERS)
             return cursor
         return []
     def select_packets_by_ids(self, _ids):
         if self.collection_packets:
             cursor = self.collection_packets.find(
-                    {'_id': {'$in':_ids}})
+                    {'_id': {'$in':_ids}}).limit(NUM_MAX_RETURN_PACKETS)
             return cursor
         return []
 
@@ -199,6 +199,10 @@ class _MongoDB(object):
             if header_only:
                 num_max = NUM_MAX_RETURN_HEADERS
             fields = self.get_field_selector(header_only)
+            if int(run_id)==-1:
+                run_id=self.get_last_file_id()
+                #return the last file packets 
+
             query_string = {'run_id': int(run_id)}
             if SPIDs:
                 query_string = {
@@ -322,6 +326,13 @@ class _MongoDB(object):
             }).sort('_id', -1).limit(num)
             data = cursor
         return status,data
+    def get_last_file_id(self):
+        try:
+            return self.collection_raw_files.find().sort(
+                '_id', -1).limit(1)[0]['_id'] 
+        except:
+            return -1
+
 
     def close(self):
         if self.connect:
@@ -333,16 +344,20 @@ class _MongoDB(object):
                 '_id', -1).limit(20)
             return runs
         return []
-    def get_num_processing_runs(self):
+    def get_num_raw_files(self):
         num=0
         if self.collection_raw_files:
             num= self.collection_raw_files.count()
         return num
-    def get_processing_runs(self, start, num):
+
+    def get_raw_files(self, start, num):
+        start_id=int(start)
+        end_id=int(start)+int(num)
+
         runs=[]
         if self.collection_raw_files:
-            if start > 0:
-                runs= list(self.collection_raw_files.find().skip(start).limit(num))
+            if start >= 0:
+                runs= list(self.collection_raw_files.find({'_id':{'$gte':start_id,'$lt':end_id }}).limit(MAX_TABLE_NUM_ROWS))
             elif start < 0:
                 runs= list( self.collection_raw_files.find().sort('_id',-1).limit(num))
 
@@ -355,7 +370,43 @@ class _MongoDB(object):
         run['num_calibration']=len(calibration_ids)
         #run['calibration_runs']=calibration_ids
 
-    def select_processing_runs_by_tw(self, start_unix, stop_unix):
+    #def get_bsd_ids_of_run(self,run):
+    #    ids=[]
+    #    if self.collection_id:
+
+    def select_raw_files_by_filename(self, filename):
+        runs = []
+        if not filename:
+            #invalid string
+            return []
+        if self.collection_raw_files:
+            query_string = {'filename':{'$regex':'{}'.format(filename),'$options':'i'}}
+            runs = list(self.collection_raw_files.find(query_string).limit(MAX_TABLE_NUM_ROWS))
+            for run in runs:
+                self.attach_calibration_run_info(run)
+        return runs
+
+    def select_iors_by_filename(self, filename):
+        iors= []
+        if not filename:
+            #invalid string
+            return []
+        if self.collection_IORs:
+            query_string = {'filename':{'$regex':'{}'.format(filename),'$options':'i'}}
+            filter_string={
+                    '_id': 1,
+                    'filename': 1,
+                    'genUnix': 1,
+                    'startUnix': 1,
+                    'stopUnix': 1,
+                    'phase': 1,
+                    'description': 1
+                }
+            iors= list(self.collection_IORs.find(query_string, filter_string).limit(MAX_TABLE_NUM_ROWS))
+        return iors
+
+
+    def select_raw_files_by_tw(self, start_unix, stop_unix):
         start_unix_time=float(start_unix)
         stop_unix_time=float(stop_unix)
         runs = []
@@ -479,10 +530,9 @@ class _MongoDB(object):
                     'run_id':int(file_id)
             }
             result= self.collection_calibration.find(
-                    query_string,{'spectra':0}).sort('_id', 1)
+                    query_string,{'spectra':0, 'analysis_report':0}).sort('_id', 1)
             ids=list(result)
         return ids
-
 
     def select_calibration_runs_by_tw(self, start_unix_time, span_seconds):
         runs = []
@@ -515,6 +565,36 @@ class _MongoDB(object):
         return rows
 
 
+    def get_calibration_pdf(self, calibration_id):
+        _id=int(calibration_id)
+        if self.collection_calibration:
+            cursor= self.collection_calibration.find({'_id': _id})
+            if not cursor:
+                return []
+            run=list(cursor)[0]
+            try:
+                return run['analysis_report']['pdf']
+            except Exception as e:
+                pass
+        return []
+
+    def get_calibration_elut(self, calibration_id):
+        _id=int(calibration_id)
+        if self.collection_calibration:
+            cursor= self.collection_calibration.find({'_id': _id})
+            if not cursor:
+                return []
+            run=list(cursor)[0]
+            try:
+                return run['analysis_report']['elut']
+            except Exception as e:
+                pass
+
+        return []
+    
+    
+
+
 
     def get_calibration_run_info(self, calibration_id):
         _id = int(calibration_id)
@@ -522,19 +602,11 @@ class _MongoDB(object):
         rows = []
         if self.collection_calibration:
             if _id == -1:
-                rows = self.collection_calibration.find({},{'spectra':0}).sort('_id',
-                                                               -1).limit(1)
+                rows = self.collection_calibration.find({},{'spectra':0}).sort('_id',-1).limit(1)
             elif _id >= 0:
                 rows = self.collection_calibration.find({'_id': _id},{'spectra':0})
-
         return rows
 
-    def get_run_ql_pdf(self, _id):
-        if self.collection_raw_files:
-            run = self.collection_raw_files.find_one({'_id': _id})
-            if 'quicklook_pdf' in run:
-                return run['quicklook_pdf']
-        return None
 
     def get_quicklook_packets(self, packet_type, start_unix_time, span):
         span = float(span)
@@ -554,7 +626,7 @@ class _MongoDB(object):
                         {'header.SPID': 54120},
                         {'header.unix_time': {'$gte':start_unix_time, '$lt':stop_unix_time}}
                     ]}
-            cursor = self.collection_packets.find(query_string).sort('_id', 1)
+            cursor = self.collection_packets.find(query_string).sort('_id', 1).limit(NUM_MAX_RETURN_PACKETS)
             return cursor
         else:
             return []
@@ -635,12 +707,12 @@ class _MongoDB(object):
                 return packet[0]['header']['unix_time']
         return -1
 
-    def select_operation_request_by_id(self,fid):
+    def select_iors_by_id(self,fid):
         if self.collection_IORs:
             cursor = self.collection_IORs.find({'_id':int(fid)})
             return cursor
         return []
-    def select_operation_request_by_tw(self,start=0, stop=2524521600, generation_time=True):
+    def select_iors_by_tw(self,start=0, stop=2524521600, generation_time=True):
         #gen: generation time
         #
         iors= []
@@ -667,7 +739,7 @@ class _MongoDB(object):
                     'description': 1
                 }).sort('_id', -1).limit(MAX_TABLE_NUM_ROWS)
         return iors 
-    def select_last_operation_request_info(self, num=50):
+    def select_last_iors_info(self, num=50):
         if not self.collection_IORs:
             return []
         if self.collection_IORs:
@@ -702,7 +774,7 @@ if __name__ == '__main__':
     mdb = MongoDB(app)
     #pprint.pprint(mdb.get_last_packet_unix_time(54102))
     #pprint.pprint(mdb.select_detector_tests_by_tw(0,1e9))
-    pprint.pprint(mdb.get_num_processing_runs())
+    pprint.pprint(mdb.get_raw_files())
     #pprint.pprint(list(mdb.get_processing_runs(0, 20)))
-    pprint.pprint(list(mdb.select_processing_runs_by_tw(0, 1e10)))
+    #pprint.pprint(list(mdb.select_processing_runs_by_tw(0, 1e10)))
 

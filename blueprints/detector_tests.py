@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort
+from flask import Blueprint, render_template, abort, request
 from bson import json_util
 from jinja2 import TemplateNotFound
 from core import mongodb_api

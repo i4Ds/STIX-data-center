@@ -1,14 +1,12 @@
 
 {% extends "base-plotting.html" %}
-{% set currentPage="Calibration" %}
+{% set currentPage="" %}
 
 
 {% block title %}STIX calibration data viewer{% endblock %}
 {% block head %}
 {% endblock %}
-{% block top_navi_title%} 
-Calibration data
-{% endblock %}
+
 {% block main_title_bar%} 
 {% if message is defined %}
 {{message}}
@@ -19,6 +17,18 @@ Calibration data
 {% endblock %}
 
 {% set button_groups=({"Last day": 24,"Last 2 days": 48,"Last 3 days":72}) %}
+
+{%block top_nav_bar %} 
+
+	  <form class="form-inline" action="/plot/calibration/run"> 
+		  <div class="form-group ml-2">
+				<input type="number"  id="input-file-id" class="  form-control form-control-sm " size="10" placeholder="Or calibration run ID" name="run" >
+				<button type="submit" class="btn btn-sm ml-1 btn-outline-success">Load</button>
+		  </div>
+		  </form>
+
+
+{%endblock%}
 
 
 {% block  main_container%} 
@@ -32,21 +42,19 @@ Calibration data
 </a>
 <button type="button" class="btn btn-sm btn-outline-primary mr-2"  id="show-modal">
 								<i class="fas fa-info" aria-hidden="true"></i> 
-								Calibration run info
+								Run info
 </button>
 
-<button type="button" class="btn btn-sm btn-outline-primary mr-2"  style="display:none;" id="download">
+<button type="button" class="btn btn-sm btn-outline-primary mr-2"  style="display:none;" id="download-spectra">
 								<i class="fas fa-file-excel" aria-hidden="true"></i> 
-								Download energy Spectra
+								Download spectra
 </button>
-<!--
-<button type="button" class="btn btn-sm btn-outline-primary"  style="" id="calibration-report">
-								<i class="fas fa-file-pdf" aria-hidden="true"></i> Calibration analysis report 
+<button type="button" class="btn btn-sm btn-outline-primary mr-2"  style="display:none" id="open-report">
+								<i class="fas fa-file-pdf" aria-hidden="true"></i> Analysis reports
 </button>
-<button type="button" class="btn btn-sm btn-outline-primary"  style="" id="calibration-report">
-								<i class="fas fa-file-excel" aria-hidden="true"></i>ELUT parameters
+<button type="button" class="btn btn-sm btn-outline-primary"  style="display:none" id="download-elut">
+								<i class="fas fa-file-excel" aria-hidden="true"></i>ELUT 
 </button>
--->
 
 
 </div>
@@ -145,7 +153,8 @@ window.fileID={{file_id}};
 <script>
 	$(function () {
 		$('.form_datetime').datetimepicker( {format: "yyyy-mm-ddThh:ii:ss"});
-		
+	$('#menu-cal').siblings().removeClass("active");
+	    $('#menu-cal').addClass('active');
 
 	});
 

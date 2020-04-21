@@ -60,6 +60,23 @@ $(document).ready(function() {
 			}
 		});
 	
+		
+	$("#btn-search-iors").on('click',function(e){
+		e.preventDefault();
+		var filename= $("#input-filename").val();
+		$.ajax({
+			type: "POST",
+			url:"/request/ior/info",
+			data:{
+				filename: filename,
+			},
+			dataType:'json',
+			success: function(data){
+				addRows(data);
+			}
+		});
+	});
+
 
 
 

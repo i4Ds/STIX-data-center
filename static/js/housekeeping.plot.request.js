@@ -11,11 +11,17 @@ $(function() {
 		ajaxHousekeepingRequest(window.startUnix,window.timeSpanSeconds);
 
 	}
-	else if(fileId>=0)
+	else
 	{
 		var url='/request/packets/file/'+fileId+'/hk';
+		var fileInfo="";
+		if(fileId>=0)fileInfo=" File #"+fileId+' ...';
+		else{
+			fileInfo=" most recent file ...";
+		}
 
-		$('#status').html('Requesting data...');
+
+		$('#status').html('Requesting data of '+ fileInfo);
 		$.ajax({
 			url: url,
 			type:"GET",
@@ -30,7 +36,7 @@ $(function() {
 				}
 				else
 				{
-					$('#status').html('No packet in the file #' +fileId);
+					$('#status').html('Invalid file ID #' +fileId +' or no housekeeping packets in the requested file.' );
 				}
 
 			}
@@ -64,6 +70,7 @@ $(function() {
 			success: function (data) {
 				if(data['packets'].length>0)
 				{
+					//consle.log("Packet length:"+data['packets'].length);
 					$('#status').html('Number of packet:'+data['packets'].length)
 					analyzeHousekeeping(data);
 					$('#right-buttons').show();

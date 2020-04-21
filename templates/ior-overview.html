@@ -48,10 +48,18 @@
 {% endif %}
 <script>
 	window.fileID={{file_id}};
+
+
 </script>
 {% assets "ior_overview_js" %}
 <script type="text/javascript" src="{{ ASSET_URL }}"></script>
 {% endassets %}
 
+<script> 
+$(function() {
+	$('#menu-ior').siblings().removeClass("active");
+	    $('#menu-ior').addClass('active');
+	});
+</script>
 
 {% endblock %}

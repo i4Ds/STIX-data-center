@@ -66,7 +66,7 @@
 	position: sticky;
 	position: -webkit-sticky;
 	bottom: 0;
-	margin-left: 2px;
+	margin-left: 1px;
 	border: 2px solid #ccc;
 	padding: 1px;
 	z-index:999;

@@ -151,9 +151,16 @@ $(function() {
 				break;
 		}
 
-		var timeRangeString=startUTC+' - ' + endUTC;
-		$('#status').html('Showing data from '+timeRangeString);
+	
+		var timeRangeString=startUTC+' to ' + endUTC;
+		var dataInfo=timeRangeString;
+		if(window.run>=0){
+			dataInfo+='  (File #'+window.run +')';
+		}
+		$('#status').html('Showing data from '+dataInfo);
+
 		var ylabel='Counts in '+ data.integrationTime +' s';
+
 
 
 

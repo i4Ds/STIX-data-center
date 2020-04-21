@@ -5,13 +5,13 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta http-equiv="Cache-control" content="no-cache">
 		<title>{% block title %}{% endblock %}  </title>
-        {% assets "baseplot_css" %}
-            <link rel="stylesheet" href="{{ ASSET_URL }}" />
-        {% endassets %}
+		{% assets "baseplot_css" %}
+		<link rel="stylesheet" href="{{ ASSET_URL }}" />
+		{% endassets %}
 
 		{% assets "baseplot_js" %}
-            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-        {% endassets %}
+		<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+		{% endassets %}
 
 		{% block head %} {% endblock %}
 
@@ -21,18 +21,17 @@
 			{% include "sidebar.html" %}
 			<div id="content">
 				<div class="container-fluid">
-						<nav class="navbar navbar-expand-lg navbar-light bg-light">
+					<nav class="navbar navbar-expand-lg navbar-light bg-light">
 						<button type="button" id="sidebarCollapse" class="btn btn-secondary mr-1">
 							<i class="fas fa-list-ul"></i>
 							<span></span>
 						</button>
-						<button class=" btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" 
-							data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<button class=" btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"   data-target="#navbarSupportedContent" >
 							<i class="fas fa-align-justify"></i>
 						</button>
 						<div class="collapse navbar-collapse" id="navbarSupportedContent">
-							<form id="reqform" class="form-inline">
-								<div class="btn-toolbar">
+							<div class="btn-toolbar">
+								<form id="reqform" class="form-inline">
 									<div class="btn-group  btn-group-sm mr-1">
 										{% for key, value in button_groups.items() %}	
 										<button type="button" class="btn btn-outline-success last-data " value="{{value}}">{{key}}</button>
@@ -45,14 +44,16 @@
 											<button class="btn btn-outline-success" type="submit">Query</button>
 										</div>
 									</div>
+								</form>		
+								{%block top_nav_bar %} {%endblock%}
+							</div>
 
-								</div>
-							</form>		
-										<ul class="breadCrumb nav navbar-nav ml-auto">
-											<li  class="nav-link">{{currentPage}}</li>
-										</ul>	
+
+							<ul class="breadCrumb nav navbar-nav ml-auto">
+								<li  class="nav-link">{{currentPage}}</li>
+							</ul>	
 						</div>
-						</nav>
+					</nav>
 
 
 
@@ -78,8 +79,10 @@
 							</a>
 						</div>
 					</div><!--end of  info bar-->
+					<div style="overflow-x:auto;">
 
-					{% block main_container%} {% endblock %}
+						{% block main_container%} {% endblock %}
+					</div>
 
 				</div> <!-- end of fluid-->
 
@@ -88,8 +91,8 @@
 		</div> <!-- end of all -->
 		{% block before_js%}  	{% endblock %}
 		{% assets "stix_js" %}
-            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-        {% endassets %}
+		<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+		{% endassets %}
 
 		{% block after_js%}  	{% endblock %}
 		<script>

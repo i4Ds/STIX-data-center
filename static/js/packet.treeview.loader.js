@@ -6,10 +6,10 @@ var lastDepth={};
 
 var lastPacketID=0;
 
+var currentDepth=DEFAULT_MAX_DEPTH;
+
 
 function nodeExpand () {
-	// alert("Expanded: " + this.id);
-	//	getNodeViaAjax(this.id);  
 }
 
 
@@ -22,6 +22,7 @@ function displayHeaderInPacketView(selector, parentId, parentNode, header)
 
 	var i=0;
 	var nodeToAdd, row,newId;
+
 	for (var key in header )
 	{
 		if (key=='_id')continue;
@@ -129,7 +130,7 @@ function displayParametersInPacketView(selector, parentId,  childArray, packetId
 			}
 			row += "<td>" + paramName+ "</td>";
 			row += "<td>" + paramDescr+ "</td>";
-			row+ ='<td ><a href="#" data-toogle="tooltip" title="'+hex+'" >'+paramRaw+'</a></td>';
+			row +='<td ><a href="#" data-toogle="tooltip" title="'+hex+'" >'+paramRaw+'</a></td>';
 			row += "<td>" + paramEng+ "</td>";
 			row += "<td>" + paramUnit+ "</td>";
 			row +="</tr>";
@@ -137,10 +138,10 @@ function displayParametersInPacketView(selector, parentId,  childArray, packetId
 
 			if(level>0 &&childlength>maxDepth&& i==(maxDepth-1))
 			{
-				
-			row ='<tr  data-name="more.'+paramName+'"  data-tt-id="more-' + 
-				newId + '" data-tt-parent-id="' +parentId + '"> ';
-			
+
+				row ='<tr  data-name="more.'+paramName+'"  data-tt-id="more-' + 
+					newId + '" data-tt-parent-id="' +parentId + '"> ';
+
 				var moreLink='<a class="load-more" href="#" data-istart="'+iStart+'" data-pid="'+parentId+'" data-pktid="'+packetId+'" data-level="'+level+'">More ('+maxDepth+'/'+childlength+')...</a>'; 
 				lastPacketData[parentId]=childArray;
 				lastDepth['p'+packetId+'.'+parentId]=maxDepth;
@@ -156,23 +157,25 @@ function displayParametersInPacketView(selector, parentId,  childArray, packetId
 		}
 	}
 }
-	$(document).on('click', '.load-more', function(e){ 
-		e.preventDefault();
-		var id=$(this).data('pktid');
-		var level=$(this).data('level');
-		var parentId=$(this).data('pid');
-		var iStart=$(this).data('istart');
-		var selector="#packetTreeView";
-		var paramRootId=2;
-		var depth=	lastDepth['p'+packetId+'.'+parentId]+DEFAULT_MAX_DEPTH;
-		displayParametersInPacketView(selector, parentId,  lastPacketData[parentId],id, level,depth,iStart);
-		lastPacketID=id;
-		$(this).closest('tr').hide();
-	});
+$(document).on('click', '.load-more', function(e){ 
+	e.preventDefault();
+	var id=$(this).data('pktid');
+	var level=$(this).data('level');
+	var parentId=$(this).data('pid');
+	var iStart=$(this).data('istart');
+	var selector="#packetTreeView";
+	var paramRootId=2;
+	var depth=	lastDepth['p'+packetId+'.'+parentId]+currentDepth;
+	displayParametersInPacketView(selector, parentId,  lastPacketData[parentId],id, level,depth,iStart);
+	currentDepth+=40;
+	lastPacketID=id;
+	$(this).closest('tr').hide();
+});
 
 
 function displayPacket(data, depth) 
 {
+	currentDepth=DEFAULT_MAX_DEPTH;
 	packet=data[0];
 	var selector="#packetTreeView";
 	var headerRootId=1;
@@ -214,6 +217,8 @@ function displayStixHeaders(data)
 	//clear the array
 
 	var tableRows='';
+	//var rawSize=0;
+
 	for( var i=0; i< packets.length;i++){
 		var packet=packets[i];
 		window.packetIDList.push(packet[0]);
@@ -295,7 +300,7 @@ $("#download").on('click',function(e){
 });
 
 var downloadJSON=function(jsonData){
-	
+
 	var data=new Blob([JSON.stringify(jsonData)], {type: "application/json"});
 	var a = document.createElement('a');
 	var url = window.URL.createObjectURL(data);

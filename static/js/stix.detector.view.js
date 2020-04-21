@@ -135,7 +135,7 @@ var StixDetectorView={
 			x=X0+ i* W *1.05;
 			
 			path+='<rect class="pixel" onClick="plotCounts('+i
-				+')" id="sbspec-'+i+'" x="'+x+'" y="'+y+'" width="'+W+'" height="'+W+'"  style="fill:'+StixCommon.viridis[k][1]+'; stroke-width:1;stroke:rgb(0,0,255)" ><title> Subspectrum '+i+': '+count+' counts</title></rect>';
+				+')" id="sbspec-'+i+'" x="'+x+'" y="'+y+'" width="'+W+'" height="'+W+'"  style="fill:'+StixCommon.viridis[k][1]+'; stroke-width:2;stroke:rgb(100,100,150)" ><title> Subspectrum '+i+': '+count+' counts</title></rect>';
 		}
 		path+= '<text x="'+(X0+3*W)+'" y="'+(Y0+1.5*W)+'" > Sbspec</text>';
 		return path;

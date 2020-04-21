@@ -1,10 +1,11 @@
 /*!
  * stix.datatime..0.1
- * Author: Hualin Xiao 
+ * Author: Hualin Xiao (hualin.xiao@fhnw.ch)
+ * Date: Sept. 2019
  */
-//var SCET_OFFSET=946727931;
-//var SCET_OFFSET=946684800;
-var SCET_OFFSET=946727930.8147931;
+//var SCET_OFFSET=946727930.8147931;
+var SCET_OFFSET=946684809.144;
+//updated on April 14
 
 var StixDateTime={
 

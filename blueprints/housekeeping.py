@@ -9,6 +9,25 @@ STIX_MDB = mongodb_api.MongoDB()
 
 #housekeeping data viewer
 
+@housekeeping.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+@housekeeping.route("/plot/housekeeping/file", methods=['GET'])
+def view_housekeeping_file_url():
+    file_id=-1
+    message=""
+    if request.method == 'GET':
+        try:
+            file_id= int(request.args['file_id'])
+            message = 'Requesting data of file # {}'.format(file_id)
+        except:
+            message='Invalid request'
+
+    return render_template('plot-housekeeping.html', 
+                           file_id=file_id,
+                           message=message)
+
 
 @housekeeping.route("/plot/housekeeping/file/<int:file_id>")
 def view_file_housekeeping(file_id):

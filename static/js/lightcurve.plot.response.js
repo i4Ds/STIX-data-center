@@ -168,7 +168,11 @@ $(function() {
 		}
 
 		var timeRangeString=startUTC+' to ' + endUTC;
-		$('#status').html('Showing data from '+timeRangeString);
+		var dataInfo=timeRangeString;
+		if(window.run>=0){
+			dataInfo+='  (File #'+window.run +')';
+		}
+		$('#status').html('Showing data from '+dataInfo);
 		var ylabel='Number of counts in '+ data.integrationTime +' s';
 
 
@@ -335,7 +339,7 @@ $(function() {
 
 	function requestLightCurvePacketsOfRun(run)
 	{
-		$('#status').html('Requesting lightcurves of run '+run);
+		$('#status').html('Requesting lightcurves of File #'+run);
 
 
 		$.ajax({

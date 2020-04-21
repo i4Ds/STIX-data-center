@@ -94,7 +94,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm">Filter</span>
 					</div>
-					<input id="search" placeholder="Search..." type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+					<input id="search" placeholder="Filter by..." type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
 				</div>
 			</div>
 		</div>
@@ -131,5 +131,14 @@ var calibrationId={{calibration_id}};
 {% assets "packetview_js" %}
 	<script type="text/javascript" src="{{ ASSET_URL }}"></script>
 {% endassets %}
+
+
+<script>
+	$(function () {
+		$('.form_datetime').datetimepicker( {format: "yyyy-mm-ddThh:ii:ss"});
+	$('#menu-req').siblings().removeClass("active");
+	    $('#menu-req').addClass('active');
+	});
+</script>
 {% endblock %}
 

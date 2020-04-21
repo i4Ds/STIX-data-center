@@ -145,19 +145,21 @@ def request_packets():
 def load_packet_headers_of_file(file_id):
     status, packets = STIX_MDB.select_packets_by_run(file_id, header_only=True)
     data = format_packet_headers(packets)
-    info=STIX_MDB.get_run_info(file_id)
+    info=STIX_MDB.get_raw_file_info(file_id)
     idb_version='unknown'
     filename=''
+    filesize=0
     try:
         idb_version=info['idb_version']
         filename=info['filename']
+        filesize=info['summary']['total_length']
     except KeyError:
         pass
-    result = {'status': status, 'data': data, 'filename':filename, 'idb':idb_version}
+    result = {'status': status, 'data': data, 'filename':filename, 'idb':idb_version, 'filesize':filesize}
     return json_util.dumps(result)
 
 
-@packet_requests.route("/request/packets/file/<int:file_id>/<group>")
+@packet_requests.route("/request/packets/file/<int(signed=True):file_id>/<group>")
 def load_packets_of_file(file_id, group):
     spids = get_group_spids(group)
     status, packets = STIX_MDB.select_packets_by_run(file_id,

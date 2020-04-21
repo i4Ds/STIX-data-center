@@ -325,12 +325,11 @@ var StixCommon={
 		document.body.removeChild(element);
 	},
 
-	downloadArrayAsCSV:function(filename, dataArray){
-		var csv ;
-		header= 'detector, pixel, sbspec ID, ADC start, ADC step, spectral data,\n';
-		csv=dataArray.map(row => row.map(item => (typeof item === 'string' && item.indexOf(',') >= 0) ? `"${item}"`: String(item)).join(',')).join('\n');
-		var data = encodeURI('data:text/csv;charset=utf-8,' +header+ csv);
-		console.log(data);
+	downloadArrayAsCSV:function(filename, dataArray, header){
+		var csv;
+		if(header)csv=header;
+		csv+=dataArray.map(row => row.map(item => (typeof item === 'string' && item.indexOf(',') >= 0) ? `"${item}"`: String(item)).join(',')).join('\n');
+		var data = encodeURI('data:text/csv;charset=utf-8,' + csv);
 
 		const link = document.createElement('a');
 		link.setAttribute('href', data);

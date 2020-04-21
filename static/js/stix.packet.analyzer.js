@@ -79,6 +79,7 @@ class StixPacketAnalyzer
 	{
 		this._parameters=[];
 		this._parameter_vector={};
+		this._time_vector={};
 		this._header={};
 		this._value_type={};
 	}
@@ -95,6 +96,7 @@ class StixPacketAnalyzer
 	reset(){
 		this._parameters=[];
 		this._parameter_vector={};
+		this._time_vector={};
 		this._header={};
 		this._value_type={};
 	}
@@ -167,10 +169,12 @@ class StixPacketAnalyzer
 			if (name in this._parameter_vector)
 			{
 				this._parameter_vector[name].push(value);
+				this._time_vector[name].push(unixTimestamp);
 			}
 			else
 			{
 				this._parameter_vector[name]=[value];
+				this._time_vector[name]=[unixTimestamp];
 			}
 			var children=this.getChildren(param);
 			if (children.length>0)
@@ -183,6 +187,10 @@ class StixPacketAnalyzer
 	getAllParameters()
 	{
 		return this._parameter_vector;
+	}
+	getAllParameterTimeSeries()
+	{
+		return {time: this._time_vector, parameters: this._parameter_vector};
 	}
 
 	getParameterType(pName){

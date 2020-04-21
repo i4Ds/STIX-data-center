@@ -23,21 +23,32 @@ td th {
 		<i class="fas fa-align-justify"></i>
 	</button>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<form id="reqform" class="form-inline">
-			<div class="btn-toolbar">
-				<div class="input-group input-group-sm mr-auto">
+		<div class="btn-toolbar form-inline">
+			<div class="input-group input-group-sm mr-auto">
 				<div class="input-group-prepend">
-						<span class="input-group-text" >Time range</span>
-			  </div>					
-  <input type="text"  id="utc-input" class=" form-control form_datetime" placeholder="Start UTC" name="dates" id="start-input">
-				</div>
+					<span class="input-group-text" >Time range</span>
+				</div>					
+				<input type="text"  id="utc-input" class=" form-control form_datetime" placeholder="Start UTC" name="dates" >
+				<form class="form-inline ml-3">
+					<div class="input-group input-group-sm mr-auto">
+						<div class="input-group-prepend ">
+							<span class="input-group-text" >Or</span>
+						</div>					
+
+				<input type="text"  id="input-filename" class="  form-control form-control-sm " placeholder="Search by filename" name="filename" >
+				<button id="btn-search-files" type="submit" class="btn btn-sm ml-1 btn-outline-secondary">Query</button>
+					</div>
+				</form>
+
+
 
 			</div>
-		</form>		
+
+		</div>
 		<ul class="breadCrumb nav navbar-nav ml-auto">
 			<li  class="nav-link">{{currentPage}}</li>
 			<!--
-			<li class="nav-link" > <a href="/upload/raw"> Upload </a> </li>
+	   <li class="nav-link" > <a href="/upload/raw"> Upload </a> </li>
 			-->
 		</ul>	
 	</div>
@@ -45,51 +56,87 @@ td th {
 
 <div class="container-fluid bg-light "> 
 	<div class="bg-white shadow p-3 ">
-<h4 id="table-caption"> </h4>
-<div class="row clearfix"> 
-	<div class="col-md-12 mr-3  ml-1 column">
-		<table  class="table table-stripped table-bordered hover compact" id="raw-table" >
-			<thead>
-				<tr class="">
-					<th  class="sortable-column sort-desc">ID</th>
-					<th >Filename</th>
-					<th >Arrival time</th>
-					<th >Start UTC</th>
-					<th >Span (min)</th>
-					<th>
-						<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Packet browser" >Packets</span>
-					</th>
-					<th> 	
-						<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Plot housekeeping parameters" >HK</span>
-					</th>
-					<th>
-						<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Plot Quicklook Light Curves" >QLLC</span>
-					</th>
-					<th>
-						<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Plot Quicklook Background Monitor Light Curves" >BKGLC</span>
-					</th>
-					<th>
-						<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Plot Quicklook Background Spectra" >Spectra</span>
-					</th>
-					<th>
-						<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Plot calibration spectra" >CAL</span>
-					</th>
-					<th >Remarks</th>
-				</tr>
-			</thead>
-			<tbody >
-			</tbody>
-		</table>
-	</div>
-</div>
+
+		<div class="d-flex ">
+
+			<h4 class="p-2" id="table-caption"> </h4>
+			<div class="ml-auto p-2">
+				<ul class="pagination pagination-sm">
+					<li class="page-item"><a class="page-link" id="previous" href="#">Previous</a></li>
+					<li class="page-item"><a class="page-link" id="next" href="#">Next</a></li>
+				</ul>			
+			</div>
+		</div>
+
+		<div class="row "> 
+			<div class="col-md-12" >
+				<div style="overflow-x:auto;">
+					<table  class="table table-stripped table-bordered hover compact" id="raw-table" >
+						<thead>
+							<tr class="">
+								<th  class="sortable-column sort-desc">ID</th>
+								<th >Filename</th>
+								<th >Arrival time</th>
+								<th >Start UTC</th>
+								<th >
+									<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Raw data file time span" >DUR(HH:MM)
+									</span>
+									
+								</th>
+								<th>
+									<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Packet browser" >PKTS</span>
+								</th>
+				<th> 	
+					<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Plot housekeeping parameters" >HK</span>
+				</th>
+				<th>
+					<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Plot Quicklook Light Curves" >QLLC</span>
+				</th>
+				<th>
+					<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Click the links in the column to plot plot quicklook background monitor light Curves" >BKGLC</span>
+				</th>
+				<th>
+					<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Click the links in this column to plot quicklook background spectra" >QLSPEC</span>
+				</th>
+				<th>
+					<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Click the links in this column to plot calibration spectra" >CAL</span>
+				</th>
+				<!--
+		<th>
+		<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Plot bulk science data" >BSD</span>
+		</th>
+				-->
+				<th>
+					<span class="d-inline-block text-truncate" data-toggle="tooltip" title="click the links in this column to download FITS files" >FITS</span>
+				</th>
+				<th>
+					<span class="d-inline-block text-truncate" data-toggle="tooltip" title="Data continuity betwen a file and its previous file. Positive for gaps; Negative for overlaps" >DGAP(HH:MM)</span>
+				</th>
+							</tr>
+						</thead>
+						<tbody >
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
 {% endblock %}
 {% block jscript %}
 
+<script> 
+	$(function() {
+		$('#menu-files').siblings().removeClass("active");
+		$('#menu-files').addClass('active');
+	});
+</script>
+
+
+
 {% assets "listfile_js" %}
-	<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+<script type="text/javascript" src="{{ ASSET_URL }}"></script>
 {% endassets %}
 
 

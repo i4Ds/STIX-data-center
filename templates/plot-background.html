@@ -19,6 +19,16 @@ Quicklook background monitor
 {% set button_groups=({"Last 12 hrs": 12,"Last day": 24,"Last 3 days":72}) %}
 
 
+{%block top_nav_bar %} 
+
+	  <form class="form-inline" action="/plot/background"> 
+		  <div class="form-group ml-3">
+				 <input type="number"  id="input-file-id" class="  form-control form-control-sm " placeholder="Or by file Id" name="run" >
+				<button  type="submit" class="btn btn-sm ml-1 btn-outline-success">Load</button>
+		  </div>
+		  </form>
+{%endblock%}
+
 
 {% block  main_container%} 
 
@@ -71,6 +81,14 @@ window.run={{run}};
 {% endblock %}
 
 {% block after_js %}
+
+<script> 
+$(function() {
+	$('#menu-bkg').siblings().removeClass("active");
+	    $('#menu-bkg').addClass('active');
+	});
+</script>
+
 
 
 {% assets "qlbkg_js" %}

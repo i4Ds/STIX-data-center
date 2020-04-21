@@ -54,7 +54,17 @@ $(function() {
 					window.calibratinRunInfo=data[0];
 					plotCountMap(0);
 					window.calibrationId=data[0]._id;
-					$('#download').show();
+					$('#download-spectra').show();
+					if (window.calibratinRunInfo['analysis_report']==1)
+					{
+						$('#open-report').show();
+						$('#download-elut').show();
+					}
+					else{
+						$('#open-report').hide();
+						$('#download-elut').hide();
+					}
+					
 
 				}
 				else
@@ -107,7 +117,7 @@ $(function() {
 		}
 
 		$('#share').attr('href','/plot/calibration/'+data._id);
-		var msg='Showing calibration run # '+data._id +'; Subspectrum '+ window.currentSpectrumId+
+		var msg='Showing calibration run # '+data._id +' (<a href="/view/packet/file/'+data.run_id+'">file ID:'+data.run_id+'</a>); Subspectrum '+ window.currentSpectrumId+
 			',  Starts at '+StixDateTime.unixTime2ISOstring(data.start_unix_time) +', duration: '+ data.duration +' s' ;
 		$('#status').html(msg);
 		$("#packet").prop("href",'/view/packet/calibration/'+data._id);
@@ -456,8 +466,18 @@ $(function() {
 
 	}
 
+	$("#show-modal").click(function(){
+		$("#cal-info-modal").modal();
+	});
 
-	$('#download').on('click', function(e){
+	$('#open-report').on('click', function(e){
+		e.preventDefault();
+		var url="/request/calibration/pdf/"+window.calibrationId;
+	    var redirectWindow = window.open(url, '_blank');
+		redirectWindow.location;
+	});
+
+	$('#download-spectra').on('click', function(e){
 		e.preventDefault();
 		$('#status').html('Requesting spectrum data from server');
 		var URL="/request/calibration/spectra/"+window.calibrationId;
@@ -468,7 +488,8 @@ $(function() {
 				if(data.length>0){
 					var spectra=data[0]['spectra'];
 					if (spectra!=null && spectra!=undefined){
-						StixCommon.downloadArrayAsCSV('calibration_run_'+window.calibrationId+'.csv', spectra);
+						var header= 'detector, pixel, sbspec ID, ADC start, ADC step, spectral data,\n';
+						StixCommon.downloadArrayAsCSV('calibration_run_'+window.calibrationId+'.csv', spectra, header);
 						$('#status').html('');
 					}
 					else{
@@ -479,9 +500,31 @@ $(function() {
 
 		});
 	});
-	$("#show-modal").click(function(){
-		$("#cal-info-modal").modal();
-	});
+	$('#download-elut').on('click', function(e){
+		e.preventDefault();
+		$('#status').html('Requesting ELUT data...');
+		var URL="/request/calibration/elut/"+window.calibrationId;
+		$.ajax({
+			url: URL,
+			dataType:"json",
+			success: function (data) {
+				if(data.length>0){
+					var header='detector, pixel,E4keV,E5keV,E6keV,E7keV,E8keV,E9keV,E10keV,'+
+						'E11keV,E12keV,E13keV,E14keV,E15keV,E16keV,E18keV,E20keV,E22keV,E25keV,E28keV,E32keV,E36keV,E40keV,'+
+						'E45keV,E50keV,E56keV,E63keV,E70keV,E76keV,E84keV,E100keV,E120keV,E150keV\n';
+						StixCommon.downloadArrayAsCSV('elut_run_'+window.calibrationId+'.csv', data, header);
+						$('#status').html('');
+					}
+					else{
+						$('#status').html('Elut not available');
+					}
+				}
+			});
+
+		});
+
+
+
 
 
 });

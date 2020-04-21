@@ -28,7 +28,7 @@ def request_file_info(start, num):
     """
      return the last N entries if start <0
     """
-    result = STIX_MDB.get_processing_runs(start, num)
+    result = STIX_MDB.get_raw_files(start, num)
     return json_util.dumps(result)
 
 
@@ -41,24 +41,45 @@ def request_list_of_files_by_tw():
             end = request.form['end']
             start_unix = utils.to_unix_time(start)
             end_unix = utils.to_unix_time(end)
-            result = STIX_MDB.select_processing_runs_by_tw(
+            result = STIX_MDB.select_raw_files_by_tw(
                 start_unix, end_unix)
         except (TypeError, ValueError, IndexError):
             pass
-
     return json_util.dumps(result)
 
 
 @raw_manager.route("/download/rawfile/<int:fid>")
 def download_rawfile(fid):
-    processing_runs = STIX_MDB.get_run_info(fid)
-    if not processing_runs:
+    file_infos= STIX_MDB.get_raw_file_info(fid)
+    if not file_infos:
         return page_not_found(404)
-    path = processing_runs['path']
-    filename = processing_runs['filename']
-    print(path, filename)
+    path = file_infos['path']
+    filename = file_infos['filename']
     try:
         return send_from_directory(path, filename, as_attachment=True)
     except Exception as e:
-        print(e)
+        #print(e)
         return page_not_found(404)
+
+
+
+
+@raw_manager.route("/request/file/info/filename", methods=['POST'])
+def request_list_of_files_by_filename():
+    result = []
+    if request.method == 'POST':
+        try:
+            filename= request.form['filename']
+            result = STIX_MDB.select_raw_files_by_filename(filename)
+        except (TypeError, ValueError, IndexError):
+            pass
+    return json_util.dumps(result)
+
+
+@raw_manager.route("/request/file/maxid")
+def request_file_maxid():
+    max_id=-1
+    max_id= STIX_MDB.get_last_file_id()
+    return json_util.dumps([max_id])
+
+

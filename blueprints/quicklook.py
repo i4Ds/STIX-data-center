@@ -31,6 +31,22 @@ def view_lightcurves():
 
 #quick-look specific spectra
 
+@quicklook.route("/plot/qlspectra", methods=['GET'])
+def view_qlspec_file():
+    file_id = -1
+    packet_id=-1
+    message = ''
+    try:
+        file_id= int(request.values['file_id'])
+        message = 'Requesting quicklook spectra of file: {}'.format(file_id)
+    except:
+        pass
+    return render_template('plot-qlspectra.html',
+                           packet_id=packet_id,
+                           file_id=file_id,
+                           message=message)
+
+
 
 @quicklook.route("/plot/qlspectra/", defaults={'file_id': -1, 'packet_id': -1})
 @quicklook.route("/plot/qlspectra/packet/<int:packet_id>",

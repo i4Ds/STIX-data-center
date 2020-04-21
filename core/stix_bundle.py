@@ -35,6 +35,7 @@ def set_bundles(app):
                'vendor/css/jquery.mCustomScrollbar.min.css',
                'vendor/css/jquery.dataTables.min.css',
                'vendor/css/bootstrap-datetimepicker.min.css',
+                'vendor/css/jquery-ui.min.css',
                'css/layout.css',
                'css/detector.view.css',
                output='gen/baseplot.css',
@@ -47,6 +48,7 @@ def set_bundles(app):
                'vendor/js/is.js',
                'vendor/js/solid.js',
                'vendor/js/fontawesome.js',
+                'vendor/js/jquery-ui.min.js',
                'vendor/js/jquery.mCustomScrollbar.concat.min.js',
                'vendor/js/jquery.dataTables.min.js',
                'vendor/js/bootstrap-datetimepicker.js',
@@ -85,7 +87,8 @@ def set_bundles(app):
                'vendor/js/jquery.mCustomScrollbar.concat.min.js',
                'vendor/js/bootstrap-datetimepicker.js',
                output='gen/basepacket.header.js',
-               filters='jsmin'),
+               filters='jsmin'
+               ),
         'basepacket_js_bottom':
         Bundle('js/layout.js',
                'js/stix.datetime.js',
@@ -178,7 +181,7 @@ def set_bundles(app):
                'js/stix.datetime.js',
                'js/stix.idb.js',
                'js/ior.overview.js',
-               output='gen/ior.viewer.js',
+               output='gen/ior.overviewer.js',
                filters='jsmin'
                ),
    'ior_overview_latex_js':
@@ -187,7 +190,7 @@ def set_bundles(app):
                'js/stix.idb.js',
                'js/stix.common.js',
                'js/ior.overview.latex.js',
-               output='gen/ior.viewer.js',
+               output='gen/ior.latex.overviewer.js',
                filters='jsmin'
                ),
 

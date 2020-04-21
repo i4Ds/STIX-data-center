@@ -26,10 +26,6 @@ $(function() {
 
 			$('#headerTreeView tbody').empty();
 			$('#leftloader').show();
-			/*
-			var formData= JSON.stringify($('#reqform').serializeArray());
-			console.log(formData);
-			*/
 			$('#msg').html('Requesting packets ...');
 			$.ajax({
 				url: '/request/headers/pid-tw',
@@ -79,21 +75,7 @@ $(function() {
 		loadStixPacket(headerId);
 		$('#msg').html("Packet #"+($(this).index()+1));
 	});
-	/*
-	$(document).keydown(function(e) {
-			var row=$(this).closest("tr");
-			if(e.keyCode == 38) {
-			var preId=row.id;
-			console.log(preId);
 
-		}
-		else if(e.keyCode==40){
-			var nextRow=$(this).parent('tr').next('tr');
-			var nextId=nextRow.id;
-			console.log(nextId);
-		}
-	});
-	*/
 	$("#packetTreeView").treetable({
 		expandable:     true,
 		onNodeExpand:   nodeExpand,
@@ -108,14 +90,37 @@ $(function() {
 		$(this).toggleClass("selected");
 	});
 
-	if(packetId>=0)
-	{
+	function loadPacketsOfFile(fileId){
+		$('#msg').html('Requesting packets of file #'+fileId+'...');
+		$('#leftloader').show();
+		$.ajax({
+			url: '/request/headers/file/'+fileId,
+			type:"GET",
+			dataType:"json",
+			success: function (data) {
+				$('#leftloader').hide();
 
-		loadStixPacket(packetId,true);
+				$('#file-info').html('File:'+data['filename']);
+				if(data['idb']!='unknown'){
+					$('#file-info').append(', IDB:'+data['idb']);
+				}
+				if(data['filesize']){
+
+					if(data['filesize']>0)
+					{
+						filesize=Math.floor(data['filesize']/1024.)
+						$('#file-info').append(', size '+filesize+' kiB');
+					}
+				}
+
+				$('#file-info').append('; ');
+				displayStixHeaders(data,'#headerTreeView');
+
+			}
+		});
+
 	}
-	else if(calibrationId>=0)
-	{
-
+	function loadPacketsOfCalibrationRun(calibrationId){
 		$('#msg').html('Requesting packets of calibration run #'+calibrationId+'...');
 		$('#leftloader').show();
 		$.ajax({
@@ -130,33 +135,28 @@ $(function() {
 			}
 
 		});
+
+	}
+
+
+
+	if(packetId>=0)
+	{
+
+		loadStixPacket(packetId,true);
+	}
+	else if(calibrationId>=0)
+	{
+		loadPacketsOfCalibrationRun(calibrationId);
+
 	}
 	else if(fileId>=0)
 	{
-
-		$('#msg').html('Requesting packets of file #'+fileId+'...');
-		$('#leftloader').show();
-		$.ajax({
-			url: '/request/headers/file/'+fileId,
-			type:"GET",
-			dataType:"json",
-			success: function (data) {
-				$('#leftloader').hide();
-
-				$('#file-info').html('File:'+data['filename']);
-				if(data['idb']!='unknown'){
-					$('#file-info').append(', IDB:'+data['idb']);
-				}
-				$('#file-info').append('; ');
-				displayStixHeaders(data,'#headerTreeView');
-			}
-
-		});
+		loadPacketsOfFile(fileId);
 	}
 	else
 	{
 		loadStixLatestPacketHeaders(5,200);
-
 	}
 
 

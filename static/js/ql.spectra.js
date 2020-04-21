@@ -112,7 +112,6 @@ $(function() {
 			dataType:"json",
 			data:dataForm ,
 			success: function (data) {
-				//console.log(data);
 				if(data['status']!='OK')
 				{
 					$('#status').html(data['status']);
@@ -174,14 +173,17 @@ $(function() {
 		var ydata=[];
 		for(var i=0;i<data.length;i++)
 		{
-
 			var row=data[i];
+
+
+				var numGroups=row['parameters'][14][1];
 			var duration=0.1*(parseInt(row['parameters'][3][1])+1); 
 			var tableRows=[ 
 				row._id , 
 				StixDateTime.unixTime2ISOstring(row['header']['unix_time']),  
 				StixDateTime.SCET2ISOString(row['parameters'][1][1]), 
 				duration,
+				numGroups,
 				'<a class="badge badge-success" href="/view/packet/id/'+row._id+'"><i class="fas fa-list"></i></a></td>',
 				'<a class="plot-spectra badge badge-success"  data-id="'+row._id+'" href="#" ><i class="fas fa-chart-line"></i></a>'];
 			ydata.push(tableRows);
@@ -224,87 +226,178 @@ $(function() {
 		var numSamples=groupData.length;
 		var numGroups=data['parameters'][14][1];
 		var spectra={};
-		var detectorChannels=[];
+		var binOrder=[];
+		var xBinLowEdge=[];
 		var triggers=[];
-		var numSum=[];
-		var allSpectrum={};
+		var numSpectra=[];
+		var detectorSpectra={};
+		var i;
+		var j;
+		for(i=0;i<=32;i++)
+		{
+			detectorSpectra[i]=[];
+			for(j=0;j<=32;j++)detectorSpectra[i][j]=0;
+			binOrder[i]=i;
+			xBinLowEdge[i]=i+0.;
+			numSpectra[i]=0;
+			triggers[i]=0;
+		}
+
 		for( i =0; i< numGroups;i++)
 		{
 			var detector=groupData[i*35][1]
-			allSpectrum[detector]=[];
 
 			for(j=1;j<=32;j++){
-				allSpectrum[detector].push(groupData[i*35+j][2]);
+				detectorSpectra[detector][j]+=groupData[i*35+j][2];
 			}
-			triggers.push(groupData[i*35+33][2]);
-			detectorChannels.push(detector);
-			numSum.push((groupData[i*35+34][1]+1)*duration);
+
+			detectorSpectra[detector][32]== detectorSpectra[detector][31];
+			//set the last two bins the same
+
+			triggers[detector]+=groupData[i*35+33][2];
+			numSpectra[detector]++;
 		}
+		numSpectra[32]=numSpectra[31];
+		triggers[32]=triggers[31];
 
 		var spectraTraces=[];
 		var trigTrace=[];
 		var integrationsTrace=[];
+		var sumSpectrum=[];
+		var countSum;
 
-		for (var ii=0;ii<numGroups;ii++)
+		for (i=0;i<32;i++)
 		{
-			var name="Detector "+detectorChannels[ii];
+			countSum=0;
+			for(j=0;j<32;j++){
+				countSum+=detectorSpectra[j][i];
+			}
+			sumSpectrum.push(countSum);
+		}
+		sumSpectrum.push(countSum);
+		//fix the plotly bug when using hvh
+
+		//console.log(sumSpectrum);
+		var sumSpectrumTrace=[{
+			x: xBinLowEdge, 
+			y:sumSpectrum,
+			line:{shape:'hv'},
+			name:  'Sum spec.',
+			type: 'Scatter+Lines'
+		}];
+
+		for (i=0;i<32;i++)
+		{
+			var name="Detector "+binOrder[i];
 			spectraTraces.push({
-				x: detectorChannels,
-				y: allSpectrum[detectorChannels[ii]],
-				line:{shape:'hvh'},
+				x: xBinLowEdge,
+				y: detectorSpectra[i],
+				line:{shape:'hv'},
 				name:  name,
 				type: 'Scatter+Lines'
 			});
 		}
-		trigTrace=[{x: detectorChannels,	y: triggers,line:{shape:'hvh'},
-			name: "Triggers in "+duration+ ' s',
-			type: 'Scatter+Lines'	}];
-		integrationsTrace=[{x: detectorChannels,y: numSum,line:{shape:'hvh'},
-			type: 'Scatter+Lines' }];
+		trigTrace=[{x: xBinLowEdge,
+			y: triggers,
+			line:{shape:'hv'},
+			name: "Total number of triggers",
+			type: 'Scatter+Lines'	
+		}];
+	  var numSpectrumTrace=[
+			{x: xBinLowEdge,
+				y: numSpectra,
+				line:{shape:'hv'},
+			name: "Number of spectra",
+			type: 'Scatter+Lines' 
+			}
 
-		var plotTitle='Detector specific spectra('+ startUTC+'+ '+duration+ ')';
+		];
 
-		var xAxisConfig={title: 'Energy channel',
+		//var plotTitle='Detector specific spectra('+ startUTC+'+ '+numGroups+'*'+duration+ ')';
+
+		var Ebins=[0, 4,5,6,7,8,9,10,11,12,13,14,15,16,18,20,22,25,28,32,36,40,45,50,56,63,70,76,84,100,120,150,'Emax'];
+		var energyChannels=[];
+		var k=0;
+		for(k=0;k<=32;k++)energyChannels.push(k);
+		//also 0-32
+		
+		var xAxisConfig={title: 'Energy (keV)',
+			mirror: 'ticks',
+			showline:true,
+			range:[0,32],
+			tickvals:energyChannels,
+			ticktext:Ebins,
+		};
+		var yAxisConfig={title: "Counts ",
 			mirror: 'ticks',
 			showline:true,
 		};
-		var yAxisConfig={title: "Counts in "+duration+"s",
-			mirror: 'ticks',
-			showline:true,
-		};
 
-		var xAxisConfigTrig={title: 'Detector #',
+
+			var xAxisConfigTrig={title: 'Detector ',
 			mirror: 'ticks',
+			range:[0,32],
 			showline:true,
 		};
 		var yAxisConfigInt={title: 'Wait time(s)',
 			mirror: 'ticks',
+			range:[0,32],
+			showline:true,
+		};
+		var yAxisConfigNumSpectra={title: 'Number of spectra',
+			mirror: 'ticks',
+			range:[0,32],
 			showline:true,
 		};
 
+
+
+		var sumSpectrumLayout = { 
+			showlegend: true, 	
+			xaxis: xAxisConfig,
+			yaxis: yAxisConfig,
+			title: '32 detector sum spectrum (sum of '+numGroups+' spectra, each duration '+duration+' s)'
+		};
 
 
 		var spectraLayout = { 
 			showlegend: true, 	
 			xaxis: xAxisConfig,
-			yaxis: yAxisConfig};
+			yaxis: yAxisConfig,
+			title: 'Detector individual spectra'
+		};
+
 		var trigLayout = {
 			showlegend: true, 	
 			xaxis: xAxisConfigTrig,
-			yaxis: yAxisConfig
+			yaxis: yAxisConfig,
+			title: 'Accumulated counts'
 		};
-		var integrationLayout = {
+		var numSpectrumLayout = {
+			showlegend: true, 	
+			xaxis: xAxisConfigTrig,
+			yaxis: yAxisConfigNumSpectra,
+			title: 'Number of energy spectra in the packet'
+		};
+
+
+
+
+
+
+	/*	var integrationLayout = {
 			showlegend: true, 	
 			xaxis: xAxisConfigTrig,
 			yaxis: yAxisConfigInt
 		};
+		*/
 
-		Plotly.newPlot('spectra', spectraTraces, spectraLayout, config=StixCommon.plotlyConfigAllowSharing);
-		Plotly.newPlot('triggers', trigTrace, trigLayout, config=StixCommon.plotlyConfigAllowSharing);
-		Plotly.newPlot('integrations', integrationsTrace, integrationLayout,    config=StixCommon.plotlyConfigAllowSharing);
+		Plotly.newPlot('spec-sum', sumSpectrumTrace, sumSpectrumLayout, config=StixCommon.plotlyConfigCloud);
+		Plotly.newPlot('spectra', spectraTraces, spectraLayout, config=StixCommon.plotlyConfigCloud);
+		Plotly.newPlot('spec-num', numSpectrumTrace, numSpectrumLayout, config=StixCommon.plotlyConfigCloud);
+		Plotly.newPlot('triggers', trigTrace, trigLayout, config=StixCommon.plotlyConfigCloud);
 
 	}
-
 
 
 

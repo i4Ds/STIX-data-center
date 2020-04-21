@@ -28,7 +28,7 @@ detector test data
 
 
 <button type="button" class="btn btn-success btn-sm" id="btn-detector-test-run" data-toggle="collapse" data-target="#detector-test-run-list" style="display:none;" >
-	Show calibration runs 
+	Show detector test reports
 </button>
 
 <div class="collapse" id="detector-test-run-list">
@@ -98,6 +98,8 @@ window.testId={{test_id}};
 		$(function () {
 			$('.form_datetime').datetimepicker( {format: "yyyy-mm-ddThh:ii:ss"});
 
+	$('#menu-det-tests').siblings().removeClass("active");
+	    $('#menu-det-tests').addClass('active');
 
 		});
 

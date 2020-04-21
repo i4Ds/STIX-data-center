@@ -1,116 +1,89 @@
 
 <nav id="sidebar">
-	<div class="sidebar-header">
-		<h3>STIX </h3>
+	<div class="sidebar-header"> 
+	<h1 > STIX </h1><strong>Data browser</strong>
 	</div>
-
-	<ul class="list-unstyled components">
+	<ul class="list-unstyled components" id="sidebar-menu">
 		<!--<li class="active">
 		-->
-		<li class="">
-			<a href="/">Home</a>
-		</li>
-	<li >
+		<li id="menu-files">
 			<a  href="/view/list/files">
 				Telemetry files
 			</a>
 		</li>
-				<li >
-					<a  href="/view/list/operation-requests">
-						Operation requests
-					</a>
-				</li>
+		<li id="menu-req">
+			<a href="/view/packet/request">
+				Packet browser
+			</a>
+		</li>
 
-		<li >
+
+		<li id="menu-hk">
 			<a  href="/plot/housekeeping">
 				Housekeeping
 			</a>
 		</li>
 
-		<li >
-			<a href="#qlPageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Quicklook</a>
-			<ul class="collapse list-unstyled" id="qlPageSubmenu">
-				<li>
-					<a  href="/plot/lightcurves">
-						Light curves
-					</a>
-				</li>
-				<li >
-					<a href="/plot/background">
-						Background 
-					</a>
-				</li>
-				<li >
-					<a href="/plot/qlspectra/">
-						Specific spectra 
-					</a>
-				</li>
-			</ul>
+		<li id="menu-lc">
+			<a  href="/plot/lightcurves">
+				QL	light curves
+			</a>
+		</li>
+		<li  id="menu-bkg">
+			<a href="/plot/background">
+				QL background monitor
+			</a>
+		</li>
+		<li id="menu-spec">
+			<a href="/plot/qlspectra/">
+				QL	energy spectra
+			</a>
 		</li>
 
-		<li >
+		<li id="menu-cal">
 			<a href="/plot/calibration">
 				Calibration data
 			</a>
 		</li>
-		<li >
+			<li id="menu-det-tests">
 			<a  href="/plot/detector/tests">
 				Detector tests
 			</a>
 		</li>
 
-		<li >
-			<a href="/view/packet/request">
-				Packet browser
-
+		<li id="menu-ior">
+			<a  href="/view/list/operation-requests">
+				Operation requests
 			</a>
 		</li>
-			<li >
+		<li id="menu-elog">
 			<a href="https://www.cs.technik.fhnw.ch/elog">
-				Elog
+				STIX Elog 
 			</a>
 		</li>
+
+		<li class="line"></li>
+
 		<li >
-			<a href="#tobePageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">To be developed</a>
-			<ul class="collapse list-unstyled" id="tobePageSubmenu">
+			<a href="#tobePageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">External Links</a>
+			<ul class="list-unstyled" id="tobePageSubmenu">
 				<li >
-					<a  href="/plot/aspect">
-						Aspect data
+					<a  href="https://www.fhnw.ch/de/die-fhnw/hochschulen/ht/institute/forschungsprojekte/stix">
+					  STIX at FHNW
 					</a>
 				</li>
 				<li >
-					<a  href="/plot/bulkscience">
-						Bulk science
+					<a  href="https://www.swpc.noaa.gov/products/goes-x-ray-flux#">
+						GOES X-ray flux
 					</a>
 				</li>
-
-
-				<li >
-					<a  href="/plot/orbit">
-						Spacecraft orbit
-					</a>
-				</li>
-				<li >
-					<a href="/plot/orbit">
-						Solar Flare list
-					</a>
-				</li>
-
-				<li >
-					<a  href="/plot/orbit">
-						Data product request
-					</a>
-				</li>
-
-
-
 			</ul>
 
 		</li>
 
 	</ul>
-	<div style="bottom:0px; position:fixed;">
-		 <a href="mailto:hualin.xiao@fhnw.ch">by STIX @ FHNW</a>.
+	<div style="bottom:0px; position:fixed;" class="small text-muted mb-2">
+		<a href="mailto:hualin.xiao@fhnw.ch">&copy;Copyright 2020, STIX Team</a>
 	</div>
 
 </nav>

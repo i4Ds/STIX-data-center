@@ -19,34 +19,43 @@ td th {
 		<span></span>
 	</button>
 	<button class=" btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" 
-		data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+																				 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<i class="fas fa-align-justify"></i>
 	</button>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<form id="reqform" class="form-inline">
-			<div class="btn-toolbar">
-			<div class="ml-1 form-check form-check-inline">
-	  <input class="form-check-input" type="radio" name="time-type" id="genTime" value="1">
-	  <label class="form-check-label" for="genTime">Generation Time</label>
-	</div>
-	<div class="form-check form-check-inline mr-2">
-	  <input class="form-check-input" type="radio" name="time-type" id="startTime" value="2">
-	  <label class="form-check-label" for="StartTime">Start time</label>
-	</div>
+		<div class="btn-toolbar">
 
-				<div class="input-group input-group-sm mr-auto">
-				<div class="input-group-prepend">
-						<span class="input-group-text" >Time range</span>
-			  </div>					
-			  <input type="text"  id="utc-input" class=" form-control form_datetime" placeholder="Start UTC" name="dates" id="start-input">
+			<form id="reqform" class="form-inline">
+				<div class="ml-1 form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="time-type" id="genTime" value="1">
+					<label class="form-check-label" for="genTime">Generation Time</label>
+				</div>
+				<div class="form-check form-check-inline mr-2">
+					<input class="form-check-input" type="radio" name="time-type" id="startTime" value="2">
+					<label class="form-check-label" for="StartTime">Start time</label>
 				</div>
 
+				<div class="input-group input-group-sm mr-auto">
+					<div class="input-group-prepend">
+						<span class="input-group-text" >Time range</span>
+					</div>					
+					<input type="text"  id="utc-input" class=" form-control form_datetime" placeholder="Start UTC" name="dates" id="start-input">
+				</div>
 
-				
-	
-			</div>
+			</form>		
+			<form class="form-inline ml-3" action="#">
+				<div class="input-group input-group-sm mr-auto">
+					<div class="input-group-prepend ">
+						<span class="input-group-text" >Or</span>
+					</div>					
+					<input type="text"  id="input-filename" class="  form-control form-control-sm " placeholder="Search by filename" name="filename" >
+					<button id="btn-search-iors" type="submit" class="btn btn-sm ml-1 btn-outline-secondary">Query</button>
+				</div>
+			</form>
 
-		</form>		
+
+		</div>
+
 		<ul class="breadCrumb nav navbar-nav ml-auto">
 			<li  class="nav-link">{{currentPage}}</li>
 		</ul>	
@@ -55,36 +64,42 @@ td th {
 
 <div class="container-fluid bg-light "> 
 	<div class="bg-white shadow p-3">
-<h4> STIX operation requests</h4>
-<div class=" row"> 
-	<div class="col mr-3  ml-1">
-		<table  class="table-striped table-bordered hover compact" id="ior-table" >
-			<thead>
-				<tr class="active">
-					<th  class="sortable-column sort-desc">ID</th>
-					<th>Filename</th>
-					<th>Creation Time</th>
-					<th>Start UTC</th>
-					<th >Stop UTC</th>
-					<th >Occurrences</th>
-					<th >Overview</th>
-					<th >Mission phase</th>
-					<th >Description</th>
-				</tr>
-			</thead>
-			<tbody >
-			</tbody>
-		</table>
-	</div>
-</div>
+		<h4> STIX operation requests</h4>
+		<div class=" row"> 
+			<div class="col mr-3  ml-1">
+				<table  class="table-striped table-bordered hover compact" id="ior-table" >
+					<thead>
+						<tr class="active">
+							<th  class="sortable-column sort-desc">ID</th>
+							<th>Filename</th>
+							<th>Creation Time</th>
+							<th>Start UTC</th>
+							<th >Stop UTC</th>
+							<th >Occurrences</th>
+							<th >Overview</th>
+							<th >Mission phase</th>
+							<th >Description</th>
+						</tr>
+					</thead>
+					<tbody >
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 </div>
 
 {% endblock %}
 {% block jscript %}
+<script> 
+	$(function() {
+		$('#menu-ior').siblings().removeClass("active");
+		$('#menu-ior').addClass('active');
+	});
+</script>
 
 {% assets "listior_js" %}
-	<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+<script type="text/javascript" src="{{ ASSET_URL }}"></script>
 {% endassets %}
 
 
