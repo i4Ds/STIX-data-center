@@ -1,4 +1,4 @@
-# STIX  data web browsers 
+# STIX  data center
 
 STIX web data browsers built with MongoDB, Python-Flask, bootstrap4  and JQuery.
 
